@@ -1,0 +1,3 @@
+[submodule "vendor/roact"]
+	path = vendor/roact
+	url = https://github.com/Roblox/roact
