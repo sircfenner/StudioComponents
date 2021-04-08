@@ -11,7 +11,8 @@ function Wrapper:render()
 	return Roact.createElement(Checkbox, {
 		Value = self.state.Value,
 		Disabled = false,
-		Label = "Checkbox.Label",
+		Label = "Lorem ipsum dolor sit amet",
+		Alignment = Checkbox.Alignment.Left,
 		OnActivated = function()
 			local was = self.state.Value
 			if was == true then

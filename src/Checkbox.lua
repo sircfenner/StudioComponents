@@ -8,6 +8,17 @@ local INDICATOR_IMAGE = "rbxassetid://6652838434"
 
 Checkbox.Indeterminate = "Indeterminate"
 
+Checkbox.Alignment = {
+	Left = "Left",
+	Right = "Right",
+}
+
+Checkbox.defaultProps = {
+	LayoutOrder = 0,
+	Disabled = false,
+	Alignment = Checkbox.Alignment.Left,
+}
+
 function Checkbox:init()
 	self:setState({ Hover = false })
 	self.onInputBegan = function(_, inputObject)
@@ -46,6 +57,15 @@ function Checkbox:render()
 		backModifier = Enum.StudioStyleGuideModifier.Selected
 	end
 
+	local boxPositionX = 0
+	local textPositionX = 1
+	local textAlign = Enum.TextXAlignment.Left
+	if self.props.Alignment == Checkbox.Alignment.Right then
+		boxPositionX = 1
+		textPositionX = 0
+		textAlign = Enum.TextXAlignment.Right
+	end
+
 	return withTheme(function(theme)
 		local rectOffset = Vector2.new(0, 0)
 		if self.props.Value == Checkbox.Indeterminate then
@@ -64,6 +84,7 @@ function Checkbox:render()
 		return Roact.createElement("Frame", {
 			Size = UDim2.new(1, 0, 0, 23),
 			BackgroundTransparency = 1,
+			LayoutOrder = self.props.LayoutOrder,
 		}, {
 			Padding = Roact.createElement("UIPadding", {
 				PaddingLeft = UDim.new(0, 5),
@@ -80,6 +101,8 @@ function Checkbox:render()
 				[Roact.Event.Activated] = self.onActivated,
 			}),
 			Box = Roact.createElement("ImageLabel", {
+				AnchorPoint = Vector2.new(boxPositionX, 0),
+				Position = UDim2.fromScale(boxPositionX, 0),
 				BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldBackground, backModifier),
 				BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldBorder, mainModifier),
 				Size = UDim2.fromOffset(13, 13),
@@ -91,9 +114,10 @@ function Checkbox:render()
 			}),
 			Label = self.props.Label and Roact.createElement("TextLabel", {
 				BackgroundTransparency = 1,
-				Position = UDim2.fromOffset(19, -1),
+				AnchorPoint = Vector2.new(textPositionX, 0),
+				Position = UDim2.fromScale(textPositionX, 0),
 				Size = UDim2.new(1, -19, 1, 0),
-				TextXAlignment = Enum.TextXAlignment.Left,
+				TextXAlignment = textAlign,
 				TextTruncate = Enum.TextTruncate.AtEnd,
 				Text = self.props.Label,
 				Font = Enum.Font.SourceSans,
