@@ -22,6 +22,14 @@ return function(target)
 		Button1 = Roact.createElement(MainButton, {
 			LayoutOrder = 1,
 			Size = UDim2.fromOffset(100, 32),
+			Text = "Selected",
+			Selected = true,
+			OnActivated = function()
+			end,
+		}),
+		Button2 = Roact.createElement(MainButton, {
+			LayoutOrder = 2,
+			Size = UDim2.fromOffset(100, 32),
 			Text = "Disabled",
 			Disabled = true,
 		}),

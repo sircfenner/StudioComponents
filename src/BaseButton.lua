@@ -9,6 +9,7 @@ local Constants = require(script.Parent.Constants)
 BaseButton.defaultProps = {
 	LayoutOrder = 0,
 	Disabled = false,
+	Selected = false,
 	Position = UDim2.fromScale(0, 0),
 	AnchorPoint = Vector2.new(0, 0),
 	Size = UDim2.fromScale(1, 1),
@@ -52,6 +53,8 @@ function BaseButton:render()
 	local modifier = Enum.StudioStyleGuideModifier.Default
 	if self.props.Disabled then
 		modifier = Enum.StudioStyleGuideModifier.Disabled
+	elseif self.props.Selected then
+		modifier = Enum.StudioStyleGuideModifier.Selected
 	elseif self.state.Pressed then
 		modifier = Enum.StudioStyleGuideModifier.Pressed
 	elseif self.state.Hover then

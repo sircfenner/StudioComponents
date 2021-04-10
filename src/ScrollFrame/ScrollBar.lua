@@ -21,19 +21,24 @@ end
 
 function ScrollBar:render()
 	local modifier = Enum.StudioStyleGuideModifier.Default
-	if self.state.Hover then
+	if self.props.Disabled then
+		modifier = Enum.StudioStyleGuideModifier.Disabled
+	elseif self.state.Hover then
 		modifier = Enum.StudioStyleGuideModifier.Hover
 	end
 	return withTheme(function(theme)
-		return Roact.createElement("Frame", {
+		local newProps = {
 			Position = self.props.Position,
 			AnchorPoint = self.props.AnchorPoint,
 			Size = self.props.Size,
 			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.ScrollBar, modifier),
-			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
-			[Roact.Event.InputBegan] = self.onInputBegan,
-			[Roact.Event.InputEnded] = self.onInputEnded,
-		})
+			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
+		}
+		if not self.props.Disabled then
+			newProps[Roact.Event.InputBegan] = self.onInputBegan
+			newProps[Roact.Event.InputEnded] = self.onInputEnded
+		end
+		return Roact.createElement("Frame", newProps)
 	end)
 end
 

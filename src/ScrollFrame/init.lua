@@ -18,6 +18,7 @@ ScrollFrame.defaultProps = {
 	Position = UDim2.fromScale(0, 0),
 	Size = UDim2.fromScale(1, 1),
 	AnchorPoint = Vector2.new(0, 0),
+	Disabled = false,
 }
 
 function ScrollFrame:init()
@@ -57,18 +58,23 @@ function ScrollFrame:init()
 		return math.max(33, data.barSizeAlpha * (data.windowSize.y - BAR_SIZE * 2))
 	end)
 	self.barVisible = barSizeAlpha:map(function(size)
-		return size < 1
+		return size > 0 and size < 1
 	end)
 end
 
 function ScrollFrame:render()
+	local modifier = Enum.StudioStyleGuideModifier.Default
+	if self.props.Disabled then
+		modifier = Enum.StudioStyleGuideModifier.Disabled
+	end
+
 	return withTheme(function(theme)
 		return Roact.createElement("Frame", {
 			AnchorPoint = self.props.AnchorPoint,
 			Size = self.props.Size,
 			Position = self.props.Position,
-			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainBackground),
-			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
+			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainBackground, modifier),
+			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
 			BorderMode = Enum.BorderMode.Inset,
 			LayoutOrder = self.props.LayoutOrder,
 			ZIndex = self.props.ZIndex,
@@ -88,6 +94,7 @@ function ScrollFrame:render()
 					Position = UDim2.fromOffset(0, BAR_SIZE),
 					Size = UDim2.new(1, 0, 1, -BAR_SIZE * 2),
 					ClipsDescendants = false,
+					ScrollingEnabled = not self.props.Disabled,
 					ScrollBarThickness = BAR_SIZE,
 					ScrollingDirection = Enum.ScrollingDirection.Y,
 					VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar,
@@ -124,10 +131,11 @@ function ScrollFrame:render()
 				BarBackground = Roact.createElement("Frame", {
 					Position = UDim2.fromOffset(0, BAR_SIZE),
 					Size = UDim2.new(1, 0, 1, -BAR_SIZE * 2),
-					BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.ScrollBarBackground),
-					BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
+					BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.ScrollBarBackground, modifier),
+					BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
 				}, {
 					Bar = Roact.createElement(ScrollBar, {
+						Disabled = self.props.Disabled,
 						Position = self.barPosScale:map(function(scale)
 							return UDim2.fromScale(0, scale)
 						end),
@@ -140,6 +148,7 @@ function ScrollFrame:render()
 					}),
 				}),
 				UpButton = Roact.createElement(ScrollArrow, {
+					Disabled = self.props.Disabled,
 					Direction = ScrollArrow.Direction.Up,
 					OnActivated = function()
 						local rbx = self.scrollFrameRef:getValue()
@@ -147,6 +156,7 @@ function ScrollFrame:render()
 					end,
 				}),
 				DownButton = Roact.createElement(ScrollArrow, {
+					Disabled = self.props.Disabled,
 					Direction = ScrollArrow.Direction.Down,
 					OnActivated = function()
 						local rbx = self.scrollFrameRef:getValue()

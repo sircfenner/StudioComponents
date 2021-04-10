@@ -1,6 +1,7 @@
 local Vendor = script.Parent.Parent.Parent
 local Roact = require(Vendor.Roact)
 
+local joinDictionaries = require(script.Parent.Parent.joinDictionaries)
 local withTheme = require(script.Parent.Parent.withTheme)
 
 local ScrollArrow = Roact.Component:extend("ScrollArrow")
@@ -32,7 +33,9 @@ end
 
 function ScrollArrow:render()
 	local modifier = Enum.StudioStyleGuideModifier.Default
-	if self.state.Pressed then
+	if self.props.Disabled then
+		modifier = Enum.StudioStyleGuideModifier.Disabled
+	elseif self.state.Pressed then
 		modifier = Enum.StudioStyleGuideModifier.Pressed
 	end
 
@@ -46,20 +49,27 @@ function ScrollArrow:render()
 	end
 
 	return withTheme(function(theme)
-		return Roact.createElement("ImageButton", {
-			AutoButtonColor = false,
+		local baseProps = {
 			AnchorPoint = anchor,
 			Position = position,
 			Size = UDim2.fromOffset(BAR_SIZE, BAR_SIZE),
 			Image = ARROW_IMAGE,
 			ImageRectSize = Vector2.new(BAR_SIZE, BAR_SIZE),
 			ImageRectOffset = imageOffset,
-			ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.TitlebarText),
+			ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.TitlebarText, modifier),
 			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.ScrollBar, modifier),
-			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
-			[Roact.Event.InputBegan] = self.onInputBegan,
-			[Roact.Event.InputEnded] = self.onInputEnded,
-		})
+			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
+		}
+		return self.props.Disabled
+			and Roact.createElement("ImageLabel", baseProps)
+			or Roact.createElement(
+				"ImageButton",
+				joinDictionaries(baseProps, {
+					AutoButtonColor = false,
+					[Roact.Event.InputBegan] = self.onInputBegan,
+					[Roact.Event.InputEnded] = self.onInputEnded,
+				})
+			)
 	end)
 end
 
