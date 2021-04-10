@@ -4,10 +4,11 @@ local Roact = require(Vendor.Roact)
 local withTheme = require(script.Parent.withTheme)
 local Checkbox = Roact.Component:extend("Checkbox")
 
+local Constants = require(script.Parent.Constants)
+
 local INDICATOR_IMAGE = "rbxassetid://6652838434"
 
 Checkbox.Indeterminate = "Indeterminate"
-
 Checkbox.Alignment = {
 	Left = "Left",
 	Right = "Right",
@@ -121,8 +122,8 @@ function Checkbox:render()
 				TextXAlignment = textAlign,
 				TextTruncate = Enum.TextTruncate.AtEnd,
 				Text = self.props.Label,
-				Font = Enum.Font.SourceSans,
-				TextSize = 14,
+				Font = Constants.Font,
+				TextSize = Constants.TextSize,
 				TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, mainModifier),
 			}),
 		})

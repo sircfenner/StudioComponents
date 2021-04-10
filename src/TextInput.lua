@@ -1,20 +1,12 @@
 local Vendor = script.Parent.Parent
 local Roact = require(Vendor.Roact)
 
+local joinDictionaries = require(script.Parent.joinDictionaries)
 local withTheme = require(script.Parent.withTheme)
+
 local TextInput = Roact.Component:extend("TextInput")
 
 local PLACEHOLDER_TEXT_COLOR = Color3.fromRGB(102, 102, 102) -- works for both themes
-
-local function joinDictionaries(...)
-	local out = {}
-	for i = 1, select("#", ...) do
-		for key, val in pairs(select(i, ...)) do
-			out[key] = val
-		end
-	end
-	return out
-end
 
 local noop = function()
 end

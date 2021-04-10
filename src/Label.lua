@@ -2,16 +2,9 @@ local Vendor = script.Parent.Parent
 local Roact = require(Vendor.Roact)
 
 local withTheme = require(script.Parent.withTheme)
+local joinDictionaries = require(script.Parent.joinDictionaries)
 
-local function joinDictionaries(...)
-	local out = {}
-	for i = 1, select("#", ...) do
-		for key, val in pairs(select(i, ...)) do
-			out[key] = val
-		end
-	end
-	return out
-end
+local Constants = require(script.Parent.Constants)
 
 local defaultProps = {
 	LayoutOrder = 0,
@@ -20,8 +13,8 @@ local defaultProps = {
 	AnchorPoint = Vector2.new(0, 0),
 	Size = UDim2.fromScale(1, 1),
 	Text = "Label.defaultProps.Text",
-	Font = Enum.Font.SourceSans,
-	TextSize = 14,
+	Font = Constants.Font,
+	TextSize = Constants.TextSize,
 	BackgroundTransparency = 1,
 	Disabled = false,
 	StyleColor = Enum.StudioStyleGuideColor.MainText,
