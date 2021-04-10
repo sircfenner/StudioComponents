@@ -15,27 +15,39 @@ return function(target)
 		}),
 		Checkbox0 = Roact.createElement(Checkbox, {
 			LayoutOrder = 0,
-			Value = false,
-			Label = "Checkbox0",
+			Value = true,
+			Label = "Enabled, true",
 			OnActivated = onActivated,
 		}),
 		Checkbox1 = Roact.createElement(Checkbox, {
 			LayoutOrder = 1,
-			Value = true,
-			Label = "Checkbox1",
+			Value = false,
+			Label = "Enabled, false",
 			OnActivated = onActivated,
 		}),
 		Checkbox2 = Roact.createElement(Checkbox, {
 			LayoutOrder = 2,
 			Value = Checkbox.Indeterminate,
-			Label = "Checkbox2",
+			Label = "Enabled, indeterminate",
 			OnActivated = onActivated,
 		}),
 		Checkbox3 = Roact.createElement(Checkbox, {
 			LayoutOrder = 3,
 			Value = true,
 			Disabled = true,
-			Label = "Checkbox3",
+			Label = "Disabled, true",
+		}),
+		Checkbox4 = Roact.createElement(Checkbox, {
+			LayoutOrder = 4,
+			Value = false,
+			Disabled = true,
+			Label = "Disabled, false",
+		}),
+		Checkbox5 = Roact.createElement(Checkbox, {
+			LayoutOrder = 5,
+			Value = Checkbox.Indeterminate,
+			Disabled = true,
+			Label = "Disabled, indeterminate",
 		}),
 	})
 	local handle = Roact.mount(element, target)

@@ -9,18 +9,20 @@ return function(target)
 			Padding = UDim.new(0, 5),
 			SortOrder = Enum.SortOrder.LayoutOrder,
 			FillDirection = Enum.FillDirection.Vertical,
+			HorizontalAlignment = Enum.HorizontalAlignment.Center,
+			VerticalAlignment = Enum.VerticalAlignment.Center,
 		}),
 		Button0 = Roact.createElement(Button, {
 			LayoutOrder = 0,
-			Size = UDim2.fromOffset(120, 35),
-			Text = "Button0",
+			Size = UDim2.fromOffset(100, 32),
+			Text = "Enabled",
 			OnActivated = function()
 			end,
 		}),
 		Button1 = Roact.createElement(Button, {
 			LayoutOrder = 1,
-			Size = UDim2.fromOffset(120, 35),
-			Text = "Button1",
+			Size = UDim2.fromOffset(100, 32),
+			Text = "Disabled",
 			Disabled = true,
 		}),
 	})

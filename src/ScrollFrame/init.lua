@@ -15,6 +15,9 @@ local ARROW_BUMP_AMOUNT = 20
 ScrollFrame.defaultProps = {
 	LayoutOrder = 0,
 	ZIndex = 0,
+	Position = UDim2.fromScale(0, 0),
+	Size = UDim2.fromScale(1, 1),
+	AnchorPoint = Vector2.new(0, 0),
 }
 
 function ScrollFrame:init()
@@ -61,9 +64,9 @@ end
 function ScrollFrame:render()
 	return withTheme(function(theme)
 		return Roact.createElement("Frame", {
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			Size = UDim2.fromOffset(200, 300),
-			Position = UDim2.fromScale(0.5, 0.5),
+			AnchorPoint = self.props.AnchorPoint,
+			Size = self.props.Size,
+			Position = self.props.Position,
 			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainBackground),
 			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
 			BorderMode = Enum.BorderMode.Inset,
@@ -116,6 +119,7 @@ function ScrollFrame:render()
 				Size = UDim2.new(0, BAR_SIZE, 1, 0),
 				BackgroundTransparency = 1,
 				Visible = self.barVisible,
+				ZIndex = 1,
 			}, {
 				BarBackground = Roact.createElement("Frame", {
 					Position = UDim2.fromOffset(0, BAR_SIZE),

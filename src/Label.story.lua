@@ -9,22 +9,24 @@ return function(target)
 			Padding = UDim.new(0, 5),
 			SortOrder = Enum.SortOrder.LayoutOrder,
 			FillDirection = Enum.FillDirection.Vertical,
+			HorizontalAlignment = Enum.HorizontalAlignment.Center,
+			VerticalAlignment = Enum.VerticalAlignment.Center,
 		}),
 		Label0 = Roact.createElement(Label, {
 			LayoutOrder = 0,
 			Size = UDim2.fromOffset(120, 20),
-			Text = "Label0",
+			Text = "Default",
 		}),
 		Label1 = Roact.createElement(Label, {
 			LayoutOrder = 0,
 			Size = UDim2.fromOffset(120, 20),
-			Text = "Label1",
+			Text = "SubText",
 			StyleColor = Enum.StudioStyleGuideColor.SubText,
 		}),
 		Label2 = Roact.createElement(Label, {
 			LayoutOrder = 1,
 			Size = UDim2.fromOffset(120, 20),
-			Text = "Label2",
+			Text = "Disabled",
 			Disabled = true,
 		}),
 	})
