@@ -76,22 +76,17 @@ function Checkbox:render()
 			end
 		end
 
-		local indicatorColor = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldIndicator, mainModifier)
+		local indicatorColor =
+			theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldIndicator, mainModifier)
 		if self.props.Value == Checkbox.Indeterminate then
 			indicatorColor = Color3.fromRGB(255, 255, 255)
 		end
 
 		return Roact.createElement("Frame", {
-			Size = UDim2.new(1, 0, 0, 23),
+			Size = UDim2.new(1, 0, 0, 15),
 			BackgroundTransparency = 1,
 			LayoutOrder = self.props.LayoutOrder,
 		}, {
-			Padding = Roact.createElement("UIPadding", {
-				PaddingLeft = UDim.new(0, 5),
-				PaddingRight = UDim.new(0, 5),
-				PaddingTop = UDim.new(0, 5),
-				PaddingBottom = UDim.new(0, 5),
-			}),
 			Button = Roact.createElement("TextButton", {
 				Text = "",
 				Size = UDim2.fromScale(1, 1),
@@ -100,23 +95,29 @@ function Checkbox:render()
 				[Roact.Event.InputEnded] = self.onInputEnded,
 				[Roact.Event.Activated] = self.onActivated,
 			}),
-			Box = Roact.createElement("ImageLabel", {
+			Box = Roact.createElement("Frame", {
 				AnchorPoint = Vector2.new(boxPositionX, 0),
 				Position = UDim2.fromScale(boxPositionX, 0),
 				BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldBackground, backModifier),
 				BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldBorder, mainModifier),
-				Size = UDim2.fromOffset(13, 13),
-				Image = INDICATOR_IMAGE,
-				ImageColor3 = indicatorColor,
-				ImageTransparency = self.props.Value == false and 1 or 0,
-				ImageRectOffset = rectOffset,
-				ImageRectSize = Vector2.new(13, 13),
+				BorderMode = Enum.BorderMode.Inset,
+				Size = UDim2.fromOffset(15, 15),
+			}, {
+				Indicator = self.props.Value ~= false and Roact.createElement("ImageLabel", {
+					Position = UDim2.fromOffset(0, 0),
+					BackgroundTransparency = 1,
+					Size = UDim2.fromOffset(13, 13),
+					Image = INDICATOR_IMAGE,
+					ImageColor3 = indicatorColor,
+					ImageRectOffset = rectOffset,
+					ImageRectSize = Vector2.new(13, 13),
+				}),
 			}),
 			Label = self.props.Label and Roact.createElement("TextLabel", {
 				BackgroundTransparency = 1,
 				AnchorPoint = Vector2.new(textPositionX, 0),
 				Position = UDim2.fromScale(textPositionX, 0),
-				Size = UDim2.new(1, -19, 1, 0),
+				Size = UDim2.new(1, -20, 1, 0),
 				TextXAlignment = textAlign,
 				TextTruncate = Enum.TextTruncate.AtEnd,
 				Text = self.props.Label,

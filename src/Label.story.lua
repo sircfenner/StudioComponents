@@ -1,7 +1,7 @@
 local Vendor = script.Parent.Parent
 local Roact = require(Vendor.Roact)
 
-local TextInput = require(script.Parent.TextInput)
+local Label = require(script.Parent.Label)
 
 return function(target)
 	local element = Roact.createFragment({
@@ -10,14 +10,22 @@ return function(target)
 			SortOrder = Enum.SortOrder.LayoutOrder,
 			FillDirection = Enum.FillDirection.Vertical,
 		}),
-		Input0 = Roact.createElement(TextInput, {
+		Label0 = Roact.createElement(Label, {
 			LayoutOrder = 0,
-			PlaceholderText = "TextInput0",
+			Size = UDim2.fromOffset(120, 20),
+			Text = "Label0",
 		}),
-		TextInput1 = Roact.createElement(TextInput, {
+		Label1 = Roact.createElement(Label, {
+			LayoutOrder = 0,
+			Size = UDim2.fromOffset(120, 20),
+			Text = "Label1",
+			StyleColor = Enum.StudioStyleGuideColor.SubText,
+		}),
+		Label2 = Roact.createElement(Label, {
 			LayoutOrder = 1,
+			Size = UDim2.fromOffset(120, 20),
+			Text = "Label2",
 			Disabled = true,
-			PlaceholderText = "TextInput1",
 		}),
 	})
 	local handle = Roact.mount(element, target)

@@ -79,7 +79,7 @@ function TextInput:render()
 	end
 	return withTheme(function(theme)
 		local textFieldProps = {
-			Size = UDim2.new(1, -5, 0, 21), -- temp
+			Size = UDim2.new(1, 0, 0, 21),
 			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.InputFieldBackground, mainModifier),
 			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.InputFieldBorder, borderModifier),
 			BorderMode = Enum.BorderMode.Inset,

@@ -3,31 +3,41 @@ local Roact = require(Vendor.Roact)
 
 local Checkbox = require(script.Parent.Checkbox)
 
-local Wrapper = Roact.Component:extend("CheckboxWrapper")
-function Wrapper:init()
-	self:setState({ Value = true })
-end
-function Wrapper:render()
-	return Roact.createElement(Checkbox, {
-		Value = self.state.Value,
-		Disabled = false,
-		Label = "Lorem ipsum dolor sit amet",
-		Alignment = Checkbox.Alignment.Left,
-		OnActivated = function()
-			local was = self.state.Value
-			if was == true then
-				self:setState({ Value = false })
-			elseif was == false then
-				self:setState({ Value = Checkbox.Indeterminate })
-			else
-				self:setState({ Value = true })
-			end
-		end,
-	})
+local onActivated = function()
 end
 
 return function(target)
-	local element = Roact.createElement(Wrapper)
+	local element = Roact.createFragment({
+		Layout = Roact.createElement("UIListLayout", {
+			Padding = UDim.new(0, 5),
+			SortOrder = Enum.SortOrder.LayoutOrder,
+			FillDirection = Enum.FillDirection.Vertical,
+		}),
+		Checkbox0 = Roact.createElement(Checkbox, {
+			LayoutOrder = 0,
+			Value = false,
+			Label = "Checkbox0",
+			OnActivated = onActivated,
+		}),
+		Checkbox1 = Roact.createElement(Checkbox, {
+			LayoutOrder = 1,
+			Value = true,
+			Label = "Checkbox1",
+			OnActivated = onActivated,
+		}),
+		Checkbox2 = Roact.createElement(Checkbox, {
+			LayoutOrder = 2,
+			Value = Checkbox.Indeterminate,
+			Label = "Checkbox2",
+			OnActivated = onActivated,
+		}),
+		Checkbox3 = Roact.createElement(Checkbox, {
+			LayoutOrder = 3,
+			Value = true,
+			Disabled = true,
+			Label = "Checkbox3",
+		}),
+	})
 	local handle = Roact.mount(element, target)
 	return function()
 		Roact.unmount(handle)
