@@ -27,7 +27,7 @@ function VerticalExpandingList:render()
 			AnchorPoint = Vector2.new(0, 0),
 			Position = UDim2.fromScale(0, 0),
 			Size = self.contentSize:map(function(size)
-				return UDim2.new(1, 0, 0, size.y)
+				return UDim2.new(1, 0, 0, size.y + self.props.BorderSizePixel * 2)
 			end),
 			BackgroundTransparency = self.props.BackgroundTransparency,
 			BackgroundColor3 = theme:GetColor(self.props.BackgroundColorStyle),

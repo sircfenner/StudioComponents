@@ -9,15 +9,19 @@ local Constants = require(script.Parent.Constants)
 local defaultProps = {
 	LayoutOrder = 0,
 	ZIndex = 0,
+	Disabled = false,
 	Position = UDim2.fromScale(0, 0),
 	AnchorPoint = Vector2.new(0, 0),
 	Size = UDim2.fromScale(1, 1),
 	Text = "Label.defaultProps.Text",
 	Font = Constants.Font,
 	TextSize = Constants.TextSize,
-	BackgroundTransparency = 1,
-	Disabled = false,
 	TextColorStyle = Enum.StudioStyleGuideColor.MainText,
+	BackgroundTransparency = 1,
+	BorderSizePixel = 0,
+	BorderMode = Enum.BorderMode.Inset,
+	-- BackColorStyle?
+	-- BorderColorStyle?
 }
 
 local function Label(props)

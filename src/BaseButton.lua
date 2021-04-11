@@ -61,6 +61,7 @@ function BaseButton:render()
 		modifier = Enum.StudioStyleGuideModifier.Hover
 	end
 	return withTheme(function(theme)
+		-- extract and join props? (allows children, alignments, etc)
 		return Roact.createElement("TextButton", {
 			Size = self.props.Size,
 			Position = self.props.Position,

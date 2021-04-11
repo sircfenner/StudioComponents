@@ -6,5 +6,6 @@ return {
 	MainButton = require(script.MainButton),
 	ScrollFrame = require(script.ScrollFrame),
 	TextInput = require(script.TextInput),
+	VerticalCollapsibleSection = require(script.VerticalCollapsibleSection),
 	VerticalExpandingList = require(script.VerticalExpandingList),
 }

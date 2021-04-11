@@ -114,7 +114,7 @@ function ScrollFrame:render()
 						SortOrder = Enum.SortOrder.LayoutOrder,
 						FillDirection = Enum.FillDirection.Vertical,
 						[Roact.Change.AbsoluteContentSize] = function(rbx)
-							self.setContentSize(rbx.AbsoluteContentSize)
+							self.setContentSize(rbx.AbsoluteContentSize + Vector2.new(0, 2)) -- bordersizepixel
 						end,
 					}),
 					Content = Roact.createFragment(self.props[Roact.Children]),
