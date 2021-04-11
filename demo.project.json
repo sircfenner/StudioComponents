@@ -7,10 +7,10 @@
 			"Vendor": {
 				"$className": "Folder",
 				"Roact": {
-					"$path": "../vendor/roact"
+					"$path": "vendor/roact"
 				},
 				"StudioComponents": {
-					"$path": "../src"
+					"$path": "src"
 				}
 			}
 		}
