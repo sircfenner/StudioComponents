@@ -6,4 +6,5 @@ return {
 	MainButton = require(script.MainButton),
 	ScrollFrame = require(script.ScrollFrame),
 	TextInput = require(script.TextInput),
+	VerticalExpandingList = require(script.VerticalExpandingList),
 }

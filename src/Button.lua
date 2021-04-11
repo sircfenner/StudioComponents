@@ -8,9 +8,9 @@ local function Button(props)
 	return Roact.createElement(
 		BaseButton,
 		joinDictionaries(props, {
-			TextStyleColor = Enum.StudioStyleGuideColor.ButtonText,
-			BackgroundStyleColor = Enum.StudioStyleGuideColor.Button,
-			BorderStyleColor = Enum.StudioStyleGuideColor.ButtonBorder,
+			TextColorStyle = Enum.StudioStyleGuideColor.ButtonText,
+			BackgroundColorStyle = Enum.StudioStyleGuideColor.Button,
+			BorderColorStyle = Enum.StudioStyleGuideColor.ButtonBorder,
 		})
 	)
 end

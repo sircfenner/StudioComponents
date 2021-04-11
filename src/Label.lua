@@ -17,7 +17,7 @@ local defaultProps = {
 	TextSize = Constants.TextSize,
 	BackgroundTransparency = 1,
 	Disabled = false,
-	StyleColor = Enum.StudioStyleGuideColor.MainText,
+	TextColorStyle = Enum.StudioStyleGuideColor.MainText,
 }
 
 local function Label(props)
@@ -27,9 +27,9 @@ local function Label(props)
 		if joinedProps.Disabled then
 			modifier = Enum.StudioStyleGuideModifier.Disabled
 		end
-		joinedProps.TextColor3 = theme:GetColor(joinedProps.StyleColor, modifier)
+		joinedProps.TextColor3 = theme:GetColor(joinedProps.TextColorStyle, modifier)
 		joinedProps.Disabled = nil
-		joinedProps.StyleColor = nil
+		joinedProps.TextColorStyle = nil
 		return Roact.createElement("TextLabel", joinedProps)
 	end)
 end

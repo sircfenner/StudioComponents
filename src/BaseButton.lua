@@ -14,9 +14,9 @@ BaseButton.defaultProps = {
 	AnchorPoint = Vector2.new(0, 0),
 	Size = UDim2.fromScale(1, 1),
 	Text = "Button.defaultProps.Text",
-	TextStyleColor = Enum.StudioStyleGuideColor.ButtonText,
-	BackgroundStyleColor = Enum.StudioStyleGuideColor.Button,
-	BorderStyleColor = Enum.StudioStyleGuideColor.ButtonBorder,
+	TextColorStyle = Enum.StudioStyleGuideColor.ButtonText,
+	BackgroundColorStyle = Enum.StudioStyleGuideColor.Button,
+	BorderColorStyle = Enum.StudioStyleGuideColor.ButtonBorder,
 }
 
 function BaseButton:init()
@@ -69,9 +69,9 @@ function BaseButton:render()
 			Text = self.props.Text,
 			Font = Constants.Font,
 			TextSize = Constants.TextSize,
-			TextColor3 = theme:GetColor(self.props.TextStyleColor, modifier),
-			BackgroundColor3 = theme:GetColor(self.props.BackgroundStyleColor, modifier),
-			BorderColor3 = theme:GetColor(self.props.BorderStyleColor, modifier),
+			TextColor3 = theme:GetColor(self.props.TextColorStyle, modifier),
+			BackgroundColor3 = theme:GetColor(self.props.BackgroundColorStyle, modifier),
+			BorderColor3 = theme:GetColor(self.props.BorderColorStyle, modifier),
 			AutoButtonColor = false,
 			[Roact.Event.InputBegan] = self.onInputBegan,
 			[Roact.Event.InputEnded] = self.onInputEnded,
