@@ -6,60 +6,150 @@ local withTheme = require(script.Parent.withTheme)
 local ScrollFrame = Roact.Component:extend("ScrollFrame")
 
 local ScrollArrow = require(script.ScrollArrow)
-local ScrollBar = require(script.ScrollBar)
+local ScrollBarHandle = require(script.ScrollBarHandle)
 
 local Constants = require(script.Parent.Constants)
-local BAR_SIZE = Constants.ScrollBarWidth
-local ARROW_BUMP_AMOUNT = 20
+local BAR_SIZE = Constants.ScrollBarSize
+local SCROLL_STEP = Constants.ScrollStep
 
 ScrollFrame.defaultProps = {
+	ScrollingDirection = Enum.ScrollingDirection.Y,
+	BorderSizePixel = 1,
 	LayoutOrder = 0,
 	ZIndex = 0,
-	Position = UDim2.fromScale(0, 0),
-	Size = UDim2.fromScale(1, 1),
-	AnchorPoint = Vector2.new(0, 0),
 	Disabled = false,
+	OnScrolled = function()
+	end,
 }
+
+local function maxVector(vec, limit)
+	return Vector2.new(math.max(vec.x, limit.x), math.max(vec.y, limit.y))
+end
+
+local function clampVector(vec, min, max)
+	return Vector2.new(math.clamp(vec.x, min.x, max.x), math.clamp(vec.y, min.y, max.y))
+end
 
 function ScrollFrame:init()
 	self.scrollFrameRef = Roact.createRef()
 
-	self.windowSize, self.setWindowSize = Roact.createBinding(Vector2.new())
-	self.contentSize, self.setContentSize = Roact.createBinding(Vector2.new())
-	self.canvasPosition, self.setCanvasPosition = Roact.createBinding(Vector2.new())
+	self.windowSize, self.setWindowSize = Roact.createBinding(Vector2.new(0, 0))
+	self.contentSize, self.setContentSize = Roact.createBinding(Vector2.new(0, 0))
+
+	local canvasPosition, setCanvasPosition = Roact.createBinding(Vector2.new(0, 0))
+	self.canvasPosition = canvasPosition
+	self.setCanvasPosition = function(pos)
+		self.props.OnScrolled(pos)
+		setCanvasPosition(pos)
+	end
 
 	self.barPosScale = Roact.joinBindings({
 		windowSize = self.windowSize,
 		contentSize = self.contentSize,
 		canvasPosition = self.canvasPosition,
 	}):map(function(data)
-		local alpha = data.canvasPosition.y / (data.contentSize.y - data.windowSize.y - 2)
-		if alpha ~= alpha then
-			return 0
-		end
-		return math.clamp(alpha, 0, 1)
+		local windowSize = self:getInnerSize()
+		local region = data.contentSize - windowSize
+		return Vector2.new(
+			region.x > 0 and data.canvasPosition.x / region.x or 0,
+			region.y > 0 and data.canvasPosition.y / region.y or 0
+		)
 	end)
 
-	local barSizeAlpha = Roact.joinBindings({
+	self.barSizeScale = Roact.joinBindings({ -- todo: handle x
 		windowSize = self.windowSize,
 		contentSize = self.contentSize,
 	}):map(function(data)
-		local alpha = (data.windowSize.y - BAR_SIZE * 2 - 2)
-			/ (data.contentSize.y - BAR_SIZE * 2)
-		if alpha ~= alpha then
-			return 0
+		local contentSize = data.contentSize
+		local windowSize = self:getInnerSize()
+		local region = contentSize - windowSize
+		return Vector2.new(
+			region.x > 0 and windowSize.x / contentSize.x or 0,
+			region.y > 0 and windowSize.y / contentSize.y or 0
+		)
+	end)
+
+	self.barVisible = self.barSizeScale:map(function(size)
+		local direction = self.props.ScrollingDirection
+		local hasX = direction ~= Enum.ScrollingDirection.Y
+		local hasY = direction ~= Enum.ScrollingDirection.X
+		return {
+			x = hasX and size.x > 0 and size.x < 1,
+			y = hasY and size.y > 0 and size.y < 1,
+		}
+	end)
+
+	self.maybeScrollInput = function(_, inputObject)
+		if self.props.Disabled then
+			return
+		elseif inputObject.UserInputType == Enum.UserInputType.MouseWheel then
+			local factor = -inputObject.Position.z
+			local visible = self.barVisible:getValue()
+			if visible.y then
+				self:scroll(Vector2.new(0, factor))
+			elseif visible.x then
+				self:scroll(Vector2.new(factor, 0))
+			end
 		end
-		return math.clamp(alpha, 0, 1)
-	end)
-	self.barSizeOffset = Roact.joinBindings({
-		windowSize = self.windowSize,
-		barSizeAlpha = barSizeAlpha,
-	}):map(function(data)
-		return math.max(33, data.barSizeAlpha * (data.windowSize.y - BAR_SIZE * 2))
-	end)
-	self.barVisible = barSizeAlpha:map(function(size)
-		return size > 0 and size < 1
-	end)
+	end
+
+	self.onDragBegan = function()
+		self._dragBegin = self.canvasPosition:getValue()
+	end
+
+	self.onDragEnded = function()
+		self._dragBegin = nil
+	end
+
+	self.onDragChanged = function(amount)
+		local windowSize = self:getInnerSize()
+		local contentSize = self.contentSize:getValue()
+		local region = maxVector(contentSize - windowSize, Vector2.new(0, 0))
+		local barAreaSize = windowSize - 2 * Vector2.new(BAR_SIZE, BAR_SIZE) -- buttons
+		local alpha = amount / barAreaSize
+		local pos = self._dragBegin + alpha * contentSize
+		self.setCanvasPosition(clampVector(pos, Vector2.new(0, 0), region))
+	end
+end
+
+function ScrollFrame:getInnerSize()
+	local direction = self.props.ScrollingDirection
+	local hasX = direction ~= Enum.ScrollingDirection.Y
+	local hasY = direction ~= Enum.ScrollingDirection.X
+	local windowSize = self.windowSize:getValue()
+	local sizeX = windowSize.x - (hasY and BAR_SIZE + 1 or 0)
+	local sizeY = windowSize.y - (hasX and BAR_SIZE + 1 or 0)
+	return maxVector(Vector2.new(sizeX, sizeY), Vector2.new(0, 0))
+end
+
+function ScrollFrame:scroll(dir)
+	local contentSize = self.contentSize:getValue()
+	local windowSize = self:getInnerSize()
+	local max = Vector2.new(
+		math.max(0, contentSize.x - windowSize.x),
+		math.max(0, contentSize.y - windowSize.y)
+	)
+	local current = self.canvasPosition:getValue()
+	local amount = dir * SCROLL_STEP
+	self.setCanvasPosition(clampVector(current + amount, Vector2.new(0, 0), max))
+end
+
+function ScrollFrame:refreshCanvasPosition()
+	local contentSize = self.contentSize:getValue()
+	local windowSize = self:getInnerSize()
+	local max = Vector2.new(
+		math.max(0, contentSize.x - windowSize.x),
+		math.max(0, contentSize.y - windowSize.y)
+	)
+	local current = self.canvasPosition:getValue()
+	local target = clampVector(current, Vector2.new(0, 0), max)
+	self.setCanvasPosition(target)
+end
+
+function ScrollFrame:didUpdate(prevProps)
+	if prevProps.ScrollingDirection ~= self.props.ScrollingDirection then
+		self:refreshCanvasPosition()
+	end
 end
 
 function ScrollFrame:render()
@@ -67,101 +157,170 @@ function ScrollFrame:render()
 	if self.props.Disabled then
 		modifier = Enum.StudioStyleGuideModifier.Disabled
 	end
-
 	return withTheme(function(theme)
 		return Roact.createElement("Frame", {
-			AnchorPoint = self.props.AnchorPoint,
-			Size = self.props.Size,
-			Position = self.props.Position,
-			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainBackground, modifier),
-			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
-			BorderMode = Enum.BorderMode.Inset,
 			LayoutOrder = self.props.LayoutOrder,
 			ZIndex = self.props.ZIndex,
+			AnchorPoint = self.props.AnchorPoint,
+			Position = self.props.Position,
+			Size = self.props.Size,
+			BorderMode = Enum.BorderMode.Inset,
+			BorderSizePixel = self.props.BorderSizePixel,
+			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainBackground, modifier),
+			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
 			[Roact.Change.AbsoluteSize] = function(rbx)
-				self.setWindowSize(rbx.AbsoluteSize)
+				local border = self.props.BorderSizePixel * Vector2.new(2, 2)
+				self.setWindowSize(rbx.AbsoluteSize - border)
+				self:refreshCanvasPosition()
 			end,
+			[Roact.Event.InputBegan] = self.maybeScrollInput,
+			[Roact.Event.InputChanged] = self.maybeScrollInput,
 		}, {
+			Cover = self.props.Disabled and Roact.createElement("Frame", {
+				ZIndex = 1,
+				Size = self.barVisible:map(function(visible)
+					return UDim2.new(
+						UDim.new(1, visible.y and -BAR_SIZE or 0),
+						UDim.new(1, visible.x and -BAR_SIZE or 0)
+					)
+				end),
+				BorderSizePixel = 0,
+				BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainBackground),
+				BackgroundTransparency = 0.25,
+			}),
 			Clipping = Roact.createElement("Frame", {
-				BackgroundTransparency = 1,
-				Size = UDim2.fromScale(1, 1),
-				ClipsDescendants = true,
 				ZIndex = 0,
+				Size = self.barVisible:map(function(visible)
+					return UDim2.new(
+						UDim.new(1, visible.y and -BAR_SIZE or 0),
+						UDim.new(1, visible.x and -BAR_SIZE or 0)
+					)
+				end),
+				BackgroundTransparency = 1,
+				ClipsDescendants = true,
 			}, {
-				ScrollFrame = Roact.createElement("ScrollingFrame", {
+				ContentHolder = Roact.createElement("Frame", {
 					BackgroundTransparency = 1,
-					BorderSizePixel = 0,
-					Position = UDim2.fromOffset(0, BAR_SIZE),
-					Size = UDim2.new(1, 0, 1, -BAR_SIZE * 2),
-					ClipsDescendants = false,
-					ScrollingEnabled = not self.props.Disabled,
-					ScrollBarThickness = BAR_SIZE,
-					ScrollingDirection = Enum.ScrollingDirection.Y,
-					VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar,
-					CanvasSize = self.contentSize:map(function(size)
-						return UDim2.fromOffset(0, size.y - BAR_SIZE * 2)
+					Size = UDim2.fromScale(1, 1),
+					Position = self.canvasPosition:map(function(pos)
+						return UDim2.fromOffset(-pos.x, -pos.y)
 					end),
-					[Roact.Change.CanvasPosition] = function(rbx)
-						self.setCanvasPosition(rbx.CanvasPosition)
-					end,
-					[Roact.Ref] = self.scrollFrameRef,
 				}, {
-					Padding = Roact.createElement("UIPadding", {
-						PaddingTop = UDim.new(0, -BAR_SIZE),
-						PaddingBottom = UDim.new(0, -BAR_SIZE),
-					}),
-					Layout = Roact.createElement("UIListLayout", {
+					-- todo: layout needs to be supplied / merged in
+					TempLayout = Roact.createElement("UIListLayout", {
 						SortOrder = Enum.SortOrder.LayoutOrder,
-						FillDirection = Enum.FillDirection.Vertical,
 						[Roact.Change.AbsoluteContentSize] = function(rbx)
-							self.setContentSize(rbx.AbsoluteContentSize + Vector2.new(0, 2)) -- bordersizepixel
+							self.setContentSize(rbx.AbsoluteContentSize)
+							self:refreshCanvasPosition()
 						end,
 					}),
 					Content = Roact.createFragment(self.props[Roact.Children]),
 				}),
 			}),
-			Side = Roact.createElement("Frame", {
+			Vertical = Roact.createElement("Frame", {
+				ZIndex = 2,
 				AnchorPoint = Vector2.new(1, 0),
 				Position = UDim2.fromScale(1, 0),
-				Size = UDim2.new(0, BAR_SIZE, 1, 0),
-				BackgroundTransparency = 1,
-				Visible = self.barVisible,
-				ZIndex = 1,
+				BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.ScrollBarBackground, modifier),
+				BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
+				BorderSizePixel = 1,
+				Size = self.barVisible:map(function(visible)
+					local shift = visible.x and (-BAR_SIZE - 1) or 0
+					return UDim2.new(0, BAR_SIZE, 1, shift)
+				end),
+				Visible = self.barVisible:map(function(visible)
+					return visible.y
+				end),
 			}, {
-				BarBackground = Roact.createElement("Frame", {
-					Position = UDim2.fromOffset(0, BAR_SIZE),
-					Size = UDim2.new(1, 0, 1, -BAR_SIZE * 2),
-					BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.ScrollBarBackground, modifier),
-					BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
-				}, {
-					Bar = Roact.createElement(ScrollBar, {
-						Disabled = self.props.Disabled,
-						Position = self.barPosScale:map(function(scale)
-							return UDim2.fromScale(0, scale)
-						end),
-						AnchorPoint = self.barPosScale:map(function(scale)
-							return Vector2.new(0, scale)
-						end),
-						Size = self.barSizeOffset:map(function(offset)
-							return UDim2.new(1, 0, 0, offset)
-						end),
-					}),
-				}),
-				UpButton = Roact.createElement(ScrollArrow, {
+				UpArrow = Roact.createElement(ScrollArrow, {
 					Disabled = self.props.Disabled,
 					Direction = ScrollArrow.Direction.Up,
 					OnActivated = function()
-						local rbx = self.scrollFrameRef:getValue()
-						rbx.CanvasPosition -= Vector2.new(0, ARROW_BUMP_AMOUNT)
+						self:scroll(Vector2.new(0, -0.25))
 					end,
 				}),
-				DownButton = Roact.createElement(ScrollArrow, {
+				DownArrow = Roact.createElement(ScrollArrow, {
 					Disabled = self.props.Disabled,
 					Direction = ScrollArrow.Direction.Down,
 					OnActivated = function()
-						local rbx = self.scrollFrameRef:getValue()
-						rbx.CanvasPosition += Vector2.new(0, ARROW_BUMP_AMOUNT)
+						self:scroll(Vector2.new(0, 0.25))
 					end,
+				}),
+				BarBackground = Roact.createElement("Frame", {
+					Position = UDim2.fromOffset(0, BAR_SIZE + 1),
+					Size = UDim2.new(1, 0, 1, -BAR_SIZE * 2 - 2),
+					BackgroundTransparency = 1,
+				}, {
+					Bar = Roact.createElement(ScrollBarHandle, {
+						Disabled = self.props.Disabled,
+						Position = self.barPosScale:map(function(scale)
+							return UDim2.fromScale(0, scale.y)
+						end),
+						AnchorPoint = self.barPosScale:map(function(scale)
+							return Vector2.new(0, scale.y)
+						end),
+						Size = self.barSizeScale:map(function(scale)
+							return UDim2.fromScale(1, scale.y)
+						end),
+						OnDragBegan = self.onDragBegan,
+						OnDragEnded = self.onDragEnded,
+						OnDragChanged = function(amount)
+							self.onDragChanged(amount * Vector2.new(0, 1))
+						end,
+					}),
+				}),
+			}),
+			Horizontal = Roact.createElement("Frame", {
+				ZIndex = 2,
+				AnchorPoint = Vector2.new(0, 1),
+				Position = UDim2.fromScale(0, 1),
+				BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.ScrollBarBackground, modifier),
+				BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
+				BorderSizePixel = 1,
+				Size = self.barVisible:map(function(visible)
+					local shift = visible.y and (-BAR_SIZE - 1) or 0
+					return UDim2.new(1, shift, 0, BAR_SIZE)
+				end),
+				Visible = self.barVisible:map(function(visible)
+					return visible.x
+				end),
+			}, {
+				LeftArrow = Roact.createElement(ScrollArrow, {
+					Disabled = self.props.Disabled,
+					Direction = ScrollArrow.Direction.Left,
+					OnActivated = function()
+						self:scroll(Vector2.new(-0.25, 0))
+					end,
+				}),
+				RightArrow = Roact.createElement(ScrollArrow, {
+					Disabled = self.props.Disabled,
+					Direction = ScrollArrow.Direction.Right,
+					OnActivated = function()
+						self:scroll(Vector2.new(0.25, 0))
+					end,
+				}),
+				BarBackground = Roact.createElement("Frame", {
+					Position = UDim2.fromOffset(BAR_SIZE + 1, 0),
+					Size = UDim2.new(1, -BAR_SIZE * 2 - 2, 1, 0),
+					BackgroundTransparency = 1,
+				}, {
+					Bar = Roact.createElement(ScrollBarHandle, {
+						Disabled = self.props.Disabled,
+						Position = self.barPosScale:map(function(scale)
+							return UDim2.fromScale(scale.x, 0)
+						end),
+						AnchorPoint = self.barPosScale:map(function(scale)
+							return Vector2.new(scale.x, 0)
+						end),
+						Size = self.barSizeScale:map(function(scale)
+							return UDim2.fromScale(scale.x, 1)
+						end),
+						OnDragBegan = self.onDragBegan,
+						OnDragEnded = self.onDragEnded,
+						OnDragChanged = function(amount)
+							self.onDragChanged(amount * Vector2.new(1, 0))
+						end,
+					}),
 				}),
 			}),
 		})
