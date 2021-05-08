@@ -9,4 +9,5 @@ return {
 	VerticalCollapsibleSection = require(script.VerticalCollapsibleSection),
 	VerticalExpandingList = require(script.VerticalExpandingList),
 	Widget = require(script.Widget),
+	withTheme = require(script.withTheme),
 }
