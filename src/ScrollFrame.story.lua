@@ -8,7 +8,7 @@ local ScrollFrame = require(script.Parent.ScrollFrame)
 local numRows = 16
 local numCols = 16
 
-local size = Vector2.new(75, 50)
+local size = Vector2.new(48, 32)
 local fmt = "%i,%i"
 
 local function Row(props)
@@ -16,11 +16,11 @@ local function Row(props)
 	for i = 1, numCols do
 		children[i] = Roact.createElement(Label, {
 			LayoutOrder = i,
-			Text = string.format(fmt, i, props.Row),
+			Text = string.format(fmt, i - 1, props.Row - 1),
 			Size = UDim2.new(0, size.x, 1, 0),
 			BorderSizePixel = 0,
 			BackgroundTransparency = 0,
-			BackgroundColor3 = Color3.fromHSV((i + props.Row) % 2 * 0.5, 0.7, 0.6),
+			BackgroundColor3 = Color3.fromHSV((i + props.Row) % 4 * 0.25, 0.7, 0.6),
 		})
 	end
 	return Roact.createElement("Frame", {
@@ -40,7 +40,7 @@ local Wrapper = Roact.Component:extend("ScrollFrameWrapper")
 
 function Wrapper:init()
 	self:setState({
-		ModeX = false,
+		ModeX = true,
 		ModeY = true,
 		Enabled = true,
 	})
@@ -60,6 +60,7 @@ function Wrapper:render()
 	end
 
 	return Roact.createElement("Frame", {
+		Active = true,
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Position = UDim2.fromScale(0.5, 0.5),
 		Size = UDim2.fromScale(0.5, 0.5),

@@ -8,4 +8,5 @@ return {
 	TextInput = require(script.TextInput),
 	VerticalCollapsibleSection = require(script.VerticalCollapsibleSection),
 	VerticalExpandingList = require(script.VerticalExpandingList),
+	Widget = require(script.Widget),
 }

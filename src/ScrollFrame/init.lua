@@ -2,6 +2,7 @@ local Vendor = script.Parent.Parent
 local Roact = require(Vendor.Roact)
 
 local withTheme = require(script.Parent.withTheme)
+local joinDictionaries = require(script.Parent.joinDictionaries)
 
 local ScrollFrame = Roact.Component:extend("ScrollFrame")
 
@@ -12,6 +13,11 @@ local Constants = require(script.Parent.Constants)
 local BAR_SIZE = Constants.ScrollBarSize
 local SCROLL_STEP = Constants.ScrollStep
 
+local defaultLayout = {
+	ClassName = "UIListLayout",
+	SortOrder = Enum.SortOrder.LayoutOrder,
+}
+
 ScrollFrame.defaultProps = {
 	ScrollingDirection = Enum.ScrollingDirection.Y,
 	BorderSizePixel = 1,
@@ -20,6 +26,7 @@ ScrollFrame.defaultProps = {
 	Disabled = false,
 	OnScrolled = function()
 	end,
+	Layout = defaultLayout,
 }
 
 local function maxVector(vec, limit)
@@ -117,18 +124,21 @@ function ScrollFrame:getInnerSize()
 	local hasX = direction ~= Enum.ScrollingDirection.Y
 	local hasY = direction ~= Enum.ScrollingDirection.X
 	local windowSize = self.windowSize:getValue()
-	local sizeX = windowSize.x - (hasY and BAR_SIZE + 1 or 0)
-	local sizeY = windowSize.y - (hasX and BAR_SIZE + 1 or 0)
+	local windowSizeWithBars = windowSize - Vector2.new(BAR_SIZE + 1, BAR_SIZE + 1)
+	local contentSize = self.contentSize:getValue()
+	local barVisible = {
+		x = hasX and contentSize.x > windowSizeWithBars.x,
+		y = hasY and contentSize.y > windowSizeWithBars.y,
+	}
+	local sizeX = windowSize.x - (barVisible.y and BAR_SIZE + 1 or 0) -- +1 for inner bar border
+	local sizeY = windowSize.y - (barVisible.x and BAR_SIZE + 1 or 0) -- as above
 	return maxVector(Vector2.new(sizeX, sizeY), Vector2.new(0, 0))
 end
 
 function ScrollFrame:scroll(dir)
 	local contentSize = self.contentSize:getValue()
 	local windowSize = self:getInnerSize()
-	local max = Vector2.new(
-		math.max(0, contentSize.x - windowSize.x),
-		math.max(0, contentSize.y - windowSize.y)
-	)
+	local max = maxVector(contentSize - windowSize, Vector2.new(0, 0))
 	local current = self.canvasPosition:getValue()
 	local amount = dir * SCROLL_STEP
 	self.setCanvasPosition(clampVector(current + amount, Vector2.new(0, 0), max))
@@ -137,10 +147,7 @@ end
 function ScrollFrame:refreshCanvasPosition()
 	local contentSize = self.contentSize:getValue()
 	local windowSize = self:getInnerSize()
-	local max = Vector2.new(
-		math.max(0, contentSize.x - windowSize.x),
-		math.max(0, contentSize.y - windowSize.y)
-	)
+	local max = maxVector(contentSize - windowSize, Vector2.new(0, 0))
 	local current = self.canvasPosition:getValue()
 	local target = clampVector(current, Vector2.new(0, 0), max)
 	self.setCanvasPosition(target)
@@ -157,6 +164,15 @@ function ScrollFrame:render()
 	if self.props.Disabled then
 		modifier = Enum.StudioStyleGuideModifier.Disabled
 	end
+
+	local layoutProps = joinDictionaries(defaultLayout, self.props.Layout)
+	local layoutClass = layoutProps.ClassName
+	layoutProps.ClassName = nil
+	layoutProps[Roact.Change.AbsoluteContentSize] = function(rbx)
+		self.setContentSize(rbx.AbsoluteContentSize)
+		self:refreshCanvasPosition()
+	end
+
 	return withTheme(function(theme)
 		return Roact.createElement("Frame", {
 			LayoutOrder = self.props.LayoutOrder,
@@ -169,7 +185,7 @@ function ScrollFrame:render()
 			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainBackground, modifier),
 			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
 			[Roact.Change.AbsoluteSize] = function(rbx)
-				local border = self.props.BorderSizePixel * Vector2.new(2, 2)
+				local border = self.props.BorderSizePixel * Vector2.new(2, 2) -- each border
 				self.setWindowSize(rbx.AbsoluteSize - border)
 				self:refreshCanvasPosition()
 			end,
@@ -199,25 +215,18 @@ function ScrollFrame:render()
 				BackgroundTransparency = 1,
 				ClipsDescendants = true,
 			}, {
-				ContentHolder = Roact.createElement("Frame", {
+				Holder = Roact.createElement("Frame", {
 					BackgroundTransparency = 1,
 					Size = UDim2.fromScale(1, 1),
 					Position = self.canvasPosition:map(function(pos)
 						return UDim2.fromOffset(-pos.x, -pos.y)
 					end),
 				}, {
-					-- todo: layout needs to be supplied / merged in
-					TempLayout = Roact.createElement("UIListLayout", {
-						SortOrder = Enum.SortOrder.LayoutOrder,
-						[Roact.Change.AbsoluteContentSize] = function(rbx)
-							self.setContentSize(rbx.AbsoluteContentSize)
-							self:refreshCanvasPosition()
-						end,
-					}),
+					Layout = Roact.createElement(layoutClass, layoutProps),
 					Content = Roact.createFragment(self.props[Roact.Children]),
 				}),
 			}),
-			Vertical = Roact.createElement("Frame", {
+			BarVertical = Roact.createElement("Frame", {
 				ZIndex = 2,
 				AnchorPoint = Vector2.new(1, 0),
 				Position = UDim2.fromScale(1, 0),
@@ -270,7 +279,7 @@ function ScrollFrame:render()
 					}),
 				}),
 			}),
-			Horizontal = Roact.createElement("Frame", {
+			BarHorizontal = Roact.createElement("Frame", {
 				ZIndex = 2,
 				AnchorPoint = Vector2.new(0, 1),
 				Position = UDim2.fromScale(0, 1),

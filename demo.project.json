@@ -2,13 +2,11 @@
 	"name": "StudioComponentsDemo",
 	"tree": {
 		"$className": "DataModel",
-		"ServerScriptService": {
-			"$className": "ServerScriptService",
+		"ServerStorage": {
+			"$className": "ServerStorage",
 			"Vendor": {
 				"$className": "Folder",
-				"Roact": {
-					"$path": "vendor/roact"
-				},
+				"$path": "vendor",
 				"StudioComponents": {
 					"$path": "src"
 				}

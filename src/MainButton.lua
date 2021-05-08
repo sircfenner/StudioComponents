@@ -7,11 +7,11 @@ local BaseButton = require(script.Parent.BaseButton)
 local function MainButton(props)
 	return Roact.createElement(
 		BaseButton,
-		joinDictionaries(props, {
+		joinDictionaries({
 			TextColorStyle = Enum.StudioStyleGuideColor.DialogMainButtonText,
 			BackgroundColorStyle = Enum.StudioStyleGuideColor.DialogMainButton,
 			BorderColorStyle = Enum.StudioStyleGuideColor.ButtonBorder,
-		})
+		}, props)
 	)
 end
 

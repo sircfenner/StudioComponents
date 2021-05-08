@@ -17,6 +17,8 @@ BaseButton.defaultProps = {
 	TextColorStyle = Enum.StudioStyleGuideColor.ButtonText,
 	BackgroundColorStyle = Enum.StudioStyleGuideColor.Button,
 	BorderColorStyle = Enum.StudioStyleGuideColor.ButtonBorder,
+	OnActivated = function()
+	end,
 }
 
 function BaseButton:init()
@@ -44,6 +46,10 @@ function BaseButton:init()
 	end
 	self.onActivated = function()
 		if not self.props.Disabled then
+			self:setState({
+				Hover = false,
+				Pressed = false,
+			})
 			self.props.OnActivated()
 		end
 	end
@@ -73,11 +79,12 @@ function BaseButton:render()
 			TextColor3 = theme:GetColor(self.props.TextColorStyle, modifier),
 			BackgroundColor3 = theme:GetColor(self.props.BackgroundColorStyle, modifier),
 			BorderColor3 = theme:GetColor(self.props.BorderColorStyle, modifier),
+			BorderMode = Enum.BorderMode.Inset,
 			AutoButtonColor = false,
 			[Roact.Event.InputBegan] = self.onInputBegan,
 			[Roact.Event.InputEnded] = self.onInputEnded,
 			[Roact.Event.Activated] = self.onActivated,
-		})
+		}, self.props[Roact.Children]) -- fork
 	end)
 end
 
