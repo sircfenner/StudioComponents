@@ -24,8 +24,7 @@ ScrollFrame.defaultProps = {
 	LayoutOrder = 0,
 	ZIndex = 0,
 	Disabled = false,
-	OnScrolled = function()
-	end,
+	OnScrolled = function() end,
 	Layout = defaultLayout,
 }
 
@@ -63,7 +62,7 @@ function ScrollFrame:init()
 		)
 	end)
 
-	self.barSizeScale = Roact.joinBindings({ -- todo: handle x
+	self.barSizeScale = Roact.joinBindings({
 		windowSize = self.windowSize,
 		contentSize = self.contentSize,
 	}):map(function(data)
