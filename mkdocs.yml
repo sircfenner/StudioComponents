@@ -1,0 +1,15 @@
+site_name: StudioComponents
+site_url: https://sircfenner.github.io/StudioComponents/
+
+repo_name: sircfenner/StudioComponents
+repo_url: https://github.com/sircfenner/StudioComponents
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: blue
+    accent: blue
+
+nav:
+  - Home: index.md
