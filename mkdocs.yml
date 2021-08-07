@@ -8,8 +8,26 @@ theme:
   name: material
   palette:
     scheme: slate
-    primary: blue
-    accent: blue
+    primary: teal
+    accent: teal
 
 nav:
   - Home: index.md
+  - Guide:
+    - Installation: guide/installation.md
+    - Usage: guide/usage.md
+  - Components:
+    - Background: components/background.md
+    - Button: components/button.md
+    - Checkbox: components/checkbox.md
+    - Label: components/label.md
+    - MainButton: components/mainbutton.md
+    - ScrollFrame: components/scrollframe.md
+    - Slider: components/slider.md
+    - TextInput: components/textinput.md
+    - VerticalCollapsibleSection: components/verticalcollapsiblesection.md
+    - VerticalExpandingList: components/verticalexpandinglist.md
+    - Widget: components/widget.md
+
+markdown_extensions:
+  - admonition

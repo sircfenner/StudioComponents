@@ -1,8 +1,7 @@
 local Vendor = script.Parent.Parent
 local Roact = require(Vendor.Roact)
 
--- selene: allow(undefined_variable) [temporary]
-local plugin = script:FindFirstAncestorWhichIsA("Plugin") or PluginManager():CreatePlugin()
+local plugin = script:FindFirstAncestorWhichIsA("Plugin")
 local withTheme = require(script.Parent.withTheme)
 
 local Widget = Roact.Component:extend("Widget")
@@ -13,8 +12,7 @@ Widget.defaultProps = {
 	InitialDockState = Enum.InitialDockState.Float,
 	FloatingWindowSize = Vector2.new(300, 200),
 	MinimumWindowSize = Vector2.new(0, 0),
-	OnClosed = function()
-	end,
+	OnClosed = function() end,
 }
 
 function Widget:init()
@@ -23,8 +21,8 @@ function Widget:init()
 	local id = initProps.Id
 	local info = DockWidgetPluginGuiInfo.new(
 		initProps.InitialDockState,
-		true, -- InitialEnabled
-		true, -- InitialEnabledShouldOverrideRestore
+		true, -- InitialEnabled (TODO)
+		true, -- InitialEnabledShouldOverrideRestore (TODO)
 		initProps.FloatingWindowSize.x,
 		initProps.FloatingWindowSize.y,
 		initProps.MinimumWindowSize.x,
@@ -52,7 +50,7 @@ end
 function Widget:didUpdate(prevProps)
 	local nextProps = self.props
 	if prevProps.Title ~= nextProps.Title then
-		self.widget.Title = nextProps.Title
+		self.widget.Title = nextProps.Title -- TODO: clean this up
 	end
 end
 

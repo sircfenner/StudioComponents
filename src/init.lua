@@ -5,6 +5,7 @@ return {
 	Label = require(script.Label),
 	MainButton = require(script.MainButton),
 	ScrollFrame = require(script.ScrollFrame),
+	Slider = require(script.Slider),
 	TextInput = require(script.TextInput),
 	VerticalCollapsibleSection = require(script.VerticalCollapsibleSection),
 	VerticalExpandingList = require(script.VerticalExpandingList),
