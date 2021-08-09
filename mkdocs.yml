@@ -11,6 +11,9 @@ theme:
     primary: teal
     accent: teal
 
+extra_css:
+  - extra.css
+
 nav:
   - Home: index.md
   - Guide:

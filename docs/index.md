@@ -10,7 +10,7 @@ Designing a plugin to fit in seamlessly with the rest of Studio also offers a mo
 
 ## Plugins created with StudioComponents
 
-The coherence benefit also applies between multiple developer plugins. It is preferable for user plugins to share a general appearance rather than every plugin being visually different.
+The coherence benefit also applies between multiple user plugins. It is preferable for user plugins to share a general appearance rather than every plugin being visually different.
 
 Using StudioComponents will align the appearance of a plugin with existing plugins, including:
 

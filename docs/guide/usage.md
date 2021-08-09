@@ -9,6 +9,9 @@ StudioComponents must be a sibling of [Roact](https://github.com/Roblox/roact/) 
 
 ## Notes
 
+### Default props
+Default props are listed only where they deviate from the Roblox defaults for instance properties
+
 ### BorderMode
 Generally inset: easier to reason about total size + any outer padding
 

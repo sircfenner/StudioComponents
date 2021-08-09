@@ -1,0 +1,33 @@
+/* mkdocs-material/blob/master/src/assets/stylesheets/main/_typeset.scss */
+
+.md-typeset img, .swatch {
+	box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
+	vertical-align: middle;
+}
+
+.md-typeset table {
+	--special-border: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.md-typeset table:not([class]) {
+	border: var(--special-border);
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	line-height: 28px;
+}
+
+.md-typeset table:not([class]) td {
+	background: rgba(0, 0, 0, 0.07);
+	border-top: var(--special-border);
+	border-left: var(--special-border);
+	vertical-align: middle;
+}
+
+.md-typeset table:not([class]) td:last-child {
+	border-right: var(--special-border);
+}
+
+.md-typeset table:not([class]) th {
+	font-weight: bold;
+}
