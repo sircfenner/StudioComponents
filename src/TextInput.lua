@@ -4,12 +4,12 @@ local Roact = require(Vendor.Roact)
 local joinDictionaries = require(script.Parent.joinDictionaries)
 local withTheme = require(script.Parent.withTheme)
 
+local Constants = require(script.Parent.Constants)
 local TextInput = Roact.Component:extend("TextInput")
 
 local PLACEHOLDER_TEXT_COLOR = Color3.fromRGB(102, 102, 102) -- works for both themes
 
-local noop = function()
-end
+local noop = function() end
 
 TextInput.defaultProps = {
 	LayoutOrder = 0,
@@ -76,14 +76,13 @@ function TextInput:render()
 			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.InputFieldBorder, borderModifier),
 			BorderMode = Enum.BorderMode.Inset,
 			LayoutOrder = self.props.LayoutOrder,
-			Font = Enum.Font.SourceSans,
+			Font = Constants.Font,
 			Text = self.props.Text,
-			TextSize = 14,
+			TextSize = Constants.TextSize,
 			TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, mainModifier),
 			TextXAlignment = Enum.TextXAlignment.Left,
 		}
-		return self.props.Disabled
-			and Roact.createElement("TextLabel", textFieldProps, { Padding = padding })
+		return self.props.Disabled and Roact.createElement("TextLabel", textFieldProps, { Padding = padding })
 			or Roact.createElement(
 				"TextBox",
 				joinDictionaries(textFieldProps, {

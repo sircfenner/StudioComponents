@@ -14,8 +14,7 @@ VerticalCollapsibleSection.defaultProps = {
 	-- OnToggle must exist
 }
 
-function VerticalCollapsibleSection:init()
-end
+function VerticalCollapsibleSection:init() end
 
 function VerticalCollapsibleSection:render()
 	return Roact.createElement(VerticalExpandingList, {

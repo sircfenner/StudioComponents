@@ -77,8 +77,7 @@ function Checkbox:render()
 			end
 		end
 
-		local indicatorColor =
-			theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldIndicator, mainModifier)
+		local indicatorColor = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldIndicator, mainModifier)
 		if self.props.Value == Checkbox.Indeterminate then
 			indicatorColor = Color3.fromRGB(255, 255, 255)
 		end

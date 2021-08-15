@@ -23,6 +23,7 @@ nav:
     - Background: components/background.md
     - Button: components/button.md
     - Checkbox: components/checkbox.md
+    - Dropdown: components/dropdown.md
     - Label: components/label.md
     - MainButton: components/mainbutton.md
     - ScrollFrame: components/scrollframe.md

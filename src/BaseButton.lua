@@ -17,8 +17,7 @@ BaseButton.defaultProps = {
 	TextColorStyle = Enum.StudioStyleGuideColor.ButtonText,
 	BackgroundColorStyle = Enum.StudioStyleGuideColor.Button,
 	BorderColorStyle = Enum.StudioStyleGuideColor.ButtonBorder,
-	OnActivated = function()
-	end,
+	OnActivated = function() end,
 }
 
 function BaseButton:init()

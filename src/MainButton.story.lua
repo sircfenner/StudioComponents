@@ -16,16 +16,14 @@ return function(target)
 			LayoutOrder = 0,
 			Size = UDim2.fromOffset(100, 32),
 			Text = "Enabled",
-			OnActivated = function()
-			end,
+			OnActivated = function() end,
 		}),
 		Button1 = Roact.createElement(MainButton, {
 			LayoutOrder = 1,
 			Size = UDim2.fromOffset(100, 32),
 			Text = "Selected",
 			Selected = true,
-			OnActivated = function()
-			end,
+			OnActivated = function() end,
 		}),
 		Button2 = Roact.createElement(MainButton, {
 			LayoutOrder = 2,

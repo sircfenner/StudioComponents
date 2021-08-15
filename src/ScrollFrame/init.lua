@@ -9,9 +9,9 @@ local ScrollFrame = Roact.Component:extend("ScrollFrame")
 local ScrollArrow = require(script.ScrollArrow)
 local ScrollBarHandle = require(script.ScrollBarHandle)
 
-local Constants = require(script.Parent.Constants)
-local BAR_SIZE = Constants.ScrollBarSize
-local SCROLL_STEP = Constants.ScrollStep
+local ScrollConstants = require(script.Constants)
+local BAR_SIZE = ScrollConstants.ScrollBarSize
+local SCROLL_STEP = ScrollConstants.ScrollStep
 
 local defaultLayout = {
 	ClassName = "UIListLayout",

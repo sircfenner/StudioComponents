@@ -8,10 +8,10 @@ local withTheme = require(script.Parent.Parent.withTheme)
 
 local ScrollArrow = Roact.Component:extend("ScrollArrow")
 
-local Constants = require(script.Parent.Parent.Constants)
+local ScrollConstants = require(script.Parent.Constants)
 
 local ARROW_IMAGE = "rbxassetid://6677623152"
-local BAR_SIZE = Constants.ScrollBarSize
+local BAR_SIZE = ScrollConstants.ScrollBarSize
 
 ScrollArrow.Direction = {
 	Up = "Up",
@@ -107,8 +107,7 @@ function ScrollArrow:render()
 			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.ScrollBar, modifier),
 			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
 		}
-		return self.props.Disabled
-			and Roact.createElement("ImageLabel", baseProps)
+		return self.props.Disabled and Roact.createElement("ImageLabel", baseProps)
 			or Roact.createElement(
 				"ImageButton",
 				joinDictionaries(baseProps, {

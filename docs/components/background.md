@@ -9,26 +9,20 @@ This is commonly used for containing the main contents of a plugin, for example 
 ```
 🖥️ Widget
 └───🖼️ Background
-    └───📝 ...
-    └───📝 ...
+    └───🔠 ...
+    └───🔠 ...
 ```
 
 ## API & Usage 
 
-This component will render all children passed to it.
+This component renders a single frame. Any children passed to it will be rendered as children of the frame.
 
 ### Default props
 
-| Property | Value |
-| -------- | ----- |
-| Size     | `UDim2.fromScale(1, 1)` |
-
-### Other props
-
-These map directly to instance properties of the Frame:
-
-- Position
-- AnchorPoint
-- LayoutOrder
-- ZIndex
-
+| Property    | Value                   |
+| ----------- | ----------------------- |
+| Size        | `UDim2.fromScale(1, 1)` |
+| Position    | `UDim2.fromScale(0, 0)` |
+| AnchorPoint | `Vector2.new(0, 0)`     |
+| LayoutOrder | 0                       |
+| ZIndex      | 1                       |

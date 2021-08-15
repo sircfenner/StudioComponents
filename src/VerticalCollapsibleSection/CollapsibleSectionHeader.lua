@@ -7,7 +7,7 @@ local Label = require(script.Parent.Parent.Label)
 local CollapsibleSectionHeader = Roact.Component:extend("CollapsibleSectionHeader")
 
 local Constants = require(script.Parent.Parent.Constants)
-local HEADER_HEIGHT = Constants.SectionHeaderHeight
+local HEADER_HEIGHT = 24
 
 function CollapsibleSectionHeader:init()
 	self:setState({ Hover = false })
@@ -43,7 +43,6 @@ function CollapsibleSectionHeader:render()
 			Icon = Roact.createElement("ImageLabel", {
 				AnchorPoint = Vector2.new(0, 0.5),
 				Position = UDim2.new(0, 7, 0.5, 0),
-				Size = UDim2.fromOffset(16, 16),
 				Size = UDim2.fromOffset(10, 10),
 				Image = "rbxassetid://5607705156",
 				ImageColor3 = Color3.fromRGB(170, 170, 170),

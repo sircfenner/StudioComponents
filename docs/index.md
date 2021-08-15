@@ -2,6 +2,9 @@ StudioComponents is a collection of [Roact](https://github.com/Roblox/roact) imp
 
 These components also leverage the theming API to dynamically recolor according to the user's theme setting in Studio. 
 
+!!! warning
+    This project is a work in progress - expect breaking changes!
+
 ## Why recreate the Studio interface?
 
 Closely replicating the built-in user interface gives user plugins a familiar feel. Studio users already recognise these interface items and understand both what they signify and how to use them. 
