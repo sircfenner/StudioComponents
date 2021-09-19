@@ -2,6 +2,7 @@ return {
 	Background = require(script.Background),
 	Button = require(script.Button),
 	Checkbox = require(script.Checkbox),
+	ColorPicker = require(script.ColorPicker),
 	Label = require(script.Label),
 	MainButton = require(script.MainButton),
 	ScrollFrame = require(script.ScrollFrame),
