@@ -13,7 +13,7 @@ local function Background(props)
 			ZIndex = props.ZIndex or 1,
 			BorderSizePixel = 0,
 			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainBackground),
-		})
+		}, props[Roact.Children])
 	end)
 end
 
