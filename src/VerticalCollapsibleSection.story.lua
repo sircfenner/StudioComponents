@@ -1,5 +1,5 @@
-local Vendor = script.Parent.Parent
-local Roact = require(Vendor.Roact)
+local Packages = script.Parent.Parent
+local Roact = require(Packages.Roact)
 
 local Label = require(script.Parent.Label)
 local VerticalCollapsibleSection = require(script.Parent.VerticalCollapsibleSection)

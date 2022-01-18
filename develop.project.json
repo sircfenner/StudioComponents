@@ -4,9 +4,9 @@
 		"$className": "DataModel",
 		"ServerStorage": {
 			"$className": "ServerStorage",
-			"Vendor": {
+			"Packages": {
 				"$className": "Folder",
-				"$path": "vendor",
+				"$path": "Packages",
 				"StudioComponents": {
 					"$path": "src"
 				}
