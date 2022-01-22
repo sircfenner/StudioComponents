@@ -9,5 +9,5 @@ dependencies = []
 
 [[package]]
 name = "u-train/studiocomponents"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [["Roact", "roblox/roact@1.4.2"]]
