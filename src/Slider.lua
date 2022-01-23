@@ -1,8 +1,8 @@
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
-local Vendor = script.Parent.Parent
-local Roact = require(Vendor.Roact)
+local Packages = script.Parent.Parent
+local Roact = require(Packages.Roact)
 
 local withTheme = require(script.Parent.withTheme)
 local Slider = Roact.Component:extend("Slider")

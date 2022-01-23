@@ -1,5 +1,5 @@
-local Vendor = script.Parent.Parent
-local Roact = require(Vendor.Roact)
+local Packages = script.Parent.Parent
+local Roact = require(Packages.Roact)
 
 local TextInput = require(script.Parent.TextInput)
 

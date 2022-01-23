@@ -1,5 +1,5 @@
-local Vendor = script.Parent.Parent
-local Roact = require(Vendor.Roact)
+local Packages = script.Parent.Parent
+local Roact = require(Packages.Roact)
 
 local joinDictionaries = require(script.Parent.joinDictionaries)
 local withTheme = require(script.Parent.withTheme)
@@ -12,6 +12,7 @@ local PLACEHOLDER_TEXT_COLOR = Color3.fromRGB(102, 102, 102) -- works for both t
 local noop = function() end
 
 TextInput.defaultProps = {
+	Size = UDim2.new(1, 0, 0, 21),
 	LayoutOrder = 0,
 	Disabled = false,
 	Text = "",
@@ -71,7 +72,8 @@ function TextInput:render()
 	end
 	return withTheme(function(theme)
 		local textFieldProps = {
-			Size = UDim2.new(1, 0, 0, 21),
+			Size = self.props.Size,
+			Position = self.props.Position,
 			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.InputFieldBackground, mainModifier),
 			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.InputFieldBorder, borderModifier),
 			BorderMode = Enum.BorderMode.Inset,

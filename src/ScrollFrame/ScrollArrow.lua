@@ -1,5 +1,5 @@
-local Vendor = script.Parent.Parent.Parent
-local Roact = require(Vendor.Roact)
+local Packages = script.Parent.Parent.Parent
+local Roact = require(Packages.Roact)
 
 local RunService = game:GetService("RunService")
 

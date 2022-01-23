@@ -1,6 +1,13 @@
+# Roblox
+/Packages
+/*.rbxm
+
+# Dev
+/.vscode
 /roblox.toml
+
+# Docs
 /assets
 /out
 /site
 /archived
-/*.rbxm
