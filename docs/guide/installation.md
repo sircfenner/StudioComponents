@@ -1,11 +1,17 @@
+## Wally package
+
+Add this package to your project using [Wally](https://wally.run/install).
+
+	studiocomponents = "sircfenner/studiocomponents@0.1.1"
+<br>
+
+## Build from source
+
+Install the dependencies using [Wally](https://wally.run/install), then build the project using [Rojo](https://github.com/rojo-rbx/rojo).
+
+	rojo build -o release.rbxm
+<br>
+
 ## Model file
 
-Either build the project from source using [Rojo](https://github.com/rojo-rbx/rojo) or download the latest [release](https://github.com/sircfenner/StudioComponents/releases), then simply drag and drop the file into Studio or integrate it with a Rojo project. 
-
-    rojo build -o release.rbxm
-
-## Git submodule
-
-Add this repository to your project as a submodule.
-
-    git submodule add https://github.com/sircfenner/StudioComponents
+Grab the latest `rbxm` file from [releases](https://github.com/sircfenner/StudioComponents/releases) then drag and drop into Roblox Studio.
