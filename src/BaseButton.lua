@@ -1,6 +1,7 @@
 local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
 
+local joinDictionaries = require(script.Parent.joinDictionaries)
 local withTheme = require(script.Parent.withTheme)
 local BaseButton = Roact.Component:extend("BaseButton")
 
@@ -66,8 +67,7 @@ function BaseButton:render()
 		modifier = Enum.StudioStyleGuideModifier.Hover
 	end
 	return withTheme(function(theme)
-		-- extract and join props? (allows children, alignments, etc)
-		return Roact.createElement("TextButton", {
+		local props = joinDictionaries({
 			Size = self.props.Size,
 			Position = self.props.Position,
 			AnchorPoint = self.props.AnchorPoint,
@@ -83,7 +83,17 @@ function BaseButton:render()
 			[Roact.Event.InputBegan] = self.onInputBegan,
 			[Roact.Event.InputEnded] = self.onInputEnded,
 			[Roact.Event.Activated] = self.onActivated,
-		}, self.props[Roact.Children]) -- fork
+		}, self.props)
+
+		props.Disabled = nil
+		props.Selected = nil
+		props.TextColorStyle = nil
+		props.BackgroundColorStyle = nil
+		props.BorderColorStyle = nil
+		props.OnActivated = nil
+
+		-- extract and join props? (allows children, alignments, etc)
+		return Roact.createElement("TextButton", props)
 	end)
 end
 
