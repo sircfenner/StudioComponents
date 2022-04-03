@@ -94,7 +94,6 @@ function BaseButton:render()
 			[Roact.Event.Activated] = self.onActivated,
 		})
 
-		-- extract and join props? (allows children, alignments, etc)
 		return Roact.createElement("TextButton", scrubbedProps)
 	end)
 end
