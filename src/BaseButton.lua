@@ -21,6 +21,15 @@ BaseButton.defaultProps = {
 	OnActivated = function() end,
 }
 
+local propsToScrub = {
+	Disabled = Roact.None,
+	Selected = Roact.None,
+	TextColorStyle = Roact.None,
+	BackgroundColorStyle = Roact.None,
+	BorderColorStyle = Roact.None,
+	OnActivated = Roact.None,
+}
+
 function BaseButton:init()
 	self:setState({
 		Hover = false,
@@ -67,7 +76,7 @@ function BaseButton:render()
 		modifier = Enum.StudioStyleGuideModifier.Hover
 	end
 	return withTheme(function(theme)
-		local props = joinDictionaries({
+		local scrubbedProps = joinDictionaries(self.props, propsToScrub, {
 			Size = self.props.Size,
 			Position = self.props.Position,
 			AnchorPoint = self.props.AnchorPoint,
@@ -83,17 +92,10 @@ function BaseButton:render()
 			[Roact.Event.InputBegan] = self.onInputBegan,
 			[Roact.Event.InputEnded] = self.onInputEnded,
 			[Roact.Event.Activated] = self.onActivated,
-		}, self.props)
-
-		props.Disabled = nil
-		props.Selected = nil
-		props.TextColorStyle = nil
-		props.BackgroundColorStyle = nil
-		props.BorderColorStyle = nil
-		props.OnActivated = nil
+		})
 
 		-- extract and join props? (allows children, alignments, etc)
-		return Roact.createElement("TextButton", props)
+		return Roact.createElement("TextButton", scrubbedProps)
 	end)
 end
 
