@@ -77,11 +77,6 @@ function BaseButton:render()
 	end
 	return withTheme(function(theme)
 		local scrubbedProps = joinDictionaries(self.props, propsToScrub, {
-			Size = self.props.Size,
-			Position = self.props.Position,
-			AnchorPoint = self.props.AnchorPoint,
-			LayoutOrder = self.props.LayoutOrder,
-			Text = self.props.Text,
 			Font = Constants.Font,
 			TextSize = Constants.TextSize,
 			TextColor3 = theme:GetColor(self.props.TextColorStyle, modifier),
