@@ -1,6 +1,7 @@
 local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
 
+local joinDictionaries = require(script.Parent.joinDictionaries)
 local withTheme = require(script.Parent.withTheme)
 local BaseButton = Roact.Component:extend("BaseButton")
 
@@ -18,6 +19,15 @@ BaseButton.defaultProps = {
 	BackgroundColorStyle = Enum.StudioStyleGuideColor.Button,
 	BorderColorStyle = Enum.StudioStyleGuideColor.ButtonBorder,
 	OnActivated = function() end,
+}
+
+local propsToScrub = {
+	Disabled = Roact.None,
+	Selected = Roact.None,
+	TextColorStyle = Roact.None,
+	BackgroundColorStyle = Roact.None,
+	BorderColorStyle = Roact.None,
+	OnActivated = Roact.None,
 }
 
 function BaseButton:init()
@@ -66,13 +76,7 @@ function BaseButton:render()
 		modifier = Enum.StudioStyleGuideModifier.Hover
 	end
 	return withTheme(function(theme)
-		-- extract and join props? (allows children, alignments, etc)
-		return Roact.createElement("TextButton", {
-			Size = self.props.Size,
-			Position = self.props.Position,
-			AnchorPoint = self.props.AnchorPoint,
-			LayoutOrder = self.props.LayoutOrder,
-			Text = self.props.Text,
+		local scrubbedProps = joinDictionaries(self.props, propsToScrub, {
 			Font = Constants.Font,
 			TextSize = Constants.TextSize,
 			TextColor3 = theme:GetColor(self.props.TextColorStyle, modifier),
@@ -83,7 +87,9 @@ function BaseButton:render()
 			[Roact.Event.InputBegan] = self.onInputBegan,
 			[Roact.Event.InputEnded] = self.onInputEnded,
 			[Roact.Event.Activated] = self.onActivated,
-		}, self.props[Roact.Children]) -- fork
+		})
+
+		return Roact.createElement("TextButton", scrubbedProps)
 	end)
 end
 
