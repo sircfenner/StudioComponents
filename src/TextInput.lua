@@ -46,9 +46,9 @@ function TextInput:init()
 		self:setState({ Focused = true })
 		self.props.OnFocused()
 	end
-	self.onFocusLost = function(_, enterPressed, inputObject)
+	self.onFocusLost = function(rbx, enterPressed, inputObject)
 		self:setState({ Focused = false })
-		self.props.OnFocusLost(enterPressed, inputObject)
+		self.props.OnFocusLost(rbx.Text, enterPressed, inputObject)
 	end
 	self.onChanged = function(rbx)
 		self.props.OnChanged(rbx.Text)
