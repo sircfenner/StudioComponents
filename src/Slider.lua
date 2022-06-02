@@ -151,8 +151,7 @@ function Slider:render()
 			AnchorPoint = props.AnchorPoint,
 			LayoutOrder = props.LayoutOrder,
 			ZIndex = props.ZIndex,
-			BorderSizePixel = 0,
-			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.InputFieldBackground, mainModifier),
+			BackgroundTransparency = 1,
 			[Roact.Event.InputBegan] = function(_, input)
 				if props.Disabled then
 					return
@@ -171,8 +170,13 @@ function Slider:render()
 				end
 			end,
 		}, {
+			Background = self.props.Background or Roact.createElement("Frame", {
+				BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.InputFieldBackground, mainModifier),
+				Size = UDim2.fromScale(1, 1),
+				BorderSizePixel = 0,
+			}),
 			Bar = Roact.createElement("Frame", {
-				ZIndex = 0,
+				ZIndex = 1,
 				Position = UDim2.fromOffset(PADDING_BAR_SIDE, 10),
 				Size = UDim2.new(1, -PADDING_BAR_SIDE * 2, 0, 2),
 				BorderSizePixel = 0,
@@ -184,7 +188,7 @@ function Slider:render()
 				),
 			}),
 			HandleRegion = Roact.createElement("Frame", {
-				ZIndex = 1,
+				ZIndex = 2,
 				Position = UDim2.fromOffset(PADDING_REGION_SIDE, PADDING_REGION_TOP),
 				Size = UDim2.new(1, -PADDING_REGION_SIDE * 2, 1, -PADDING_REGION_TOP * 2),
 				BackgroundTransparency = 1,

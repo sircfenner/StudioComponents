@@ -42,10 +42,26 @@ function Wrapper:render()
 			Min = MIN,
 			Max = MAX,
 			Step = STEP,
+			Value = self.state.Value,
+			OnChange = function(newValue)
+				self:setState({ Value = newValue })
+			end,
+			Background = Roact.createElement("Frame", {
+				BackgroundColor3 = Color3.fromHSV(210 / 360, self.state.Value / 10, 0.5),
+				Size = UDim2.fromScale(1, 1),
+				BorderSizePixel = 0,
+			}),
+			Disabled = false,
+			LayoutOrder = 2,
+		}),
+		Slider2 = Roact.createElement(Slider, {
+			Min = MIN,
+			Max = MAX,
+			Step = STEP,
 			Value = INIT,
 			OnChange = function() end,
 			Disabled = true,
-			LayoutOrder = 1,
+			LayoutOrder = 2,
 		}),
 	})
 end
