@@ -14,6 +14,20 @@ local PADDING_REGION_SIDE = 6
 Slider.defaultProps = {
 	Step = 0,
 	Disabled = false,
+	Background = function(props)
+		local mainModifier = Enum.StudioStyleGuideModifier.Default
+		if props.Disabled then
+			mainModifier = Enum.StudioStyleGuideModifier.Disabled
+		end
+
+		return withTheme(function(theme)
+			return Roact.createElement("Frame", {
+				BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.InputFieldBackground, mainModifier),
+				Size = UDim2.fromScale(1, 1),
+				BorderSizePixel = 0,
+			})
+		end)
+	end,
 }
 
 function Slider:init()
@@ -122,11 +136,6 @@ function Slider:render()
 	local range = props.Max - props.Min
 	local alpha = (props.Value - props.Min) / range
 
-	local mainModifier = Enum.StudioStyleGuideModifier.Default
-	if props.Disabled then
-		mainModifier = Enum.StudioStyleGuideModifier.Disabled
-	end
-
 	local handleModifier = Enum.StudioStyleGuideModifier.Default
 	if props.Disabled then
 		handleModifier = Enum.StudioStyleGuideModifier.Disabled
@@ -170,11 +179,15 @@ function Slider:render()
 				end
 			end,
 		}, {
-			Background = self.props.Background or Roact.createElement("Frame", {
-				BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.InputFieldBackground, mainModifier),
-				Size = UDim2.fromScale(1, 1),
-				BorderSizePixel = 0,
-			}),
+			Background = Roact.createElement(
+				self.props.Background,
+				{
+					Disabled = props.Disabled,
+					Hover = self.state.Hover,
+					Dragging = self.state.Dragging,
+					Value = self.props.Value,
+				}
+			),
 			Bar = Roact.createElement("Frame", {
 				ZIndex = 1,
 				Position = UDim2.fromOffset(PADDING_BAR_SIDE, 10),
