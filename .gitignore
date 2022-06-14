@@ -5,6 +5,7 @@
 # Dev
 /.vscode
 /roblox.toml
+sourcemap.json
 
 # Docs
 /assets

@@ -2,6 +2,7 @@ local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
 
 local Slider = require(script.Parent.Slider)
+local Checkbox = require(script.Parent.Checkbox)
 
 local MIN = 0
 local MAX = 10
@@ -11,7 +12,15 @@ local INIT = 3
 local Wrapper = Roact.Component:extend("Wrapper")
 
 function Wrapper:init()
-	self:setState({ Value = INIT })
+	self:setState({ Disabled = false, Value = INIT })
+end
+
+function Wrapper.renderCustomBackground(props)
+	return Roact.createElement("Frame", {
+		BackgroundColor3 = Color3.fromHSV(210 / 360, props.Value / 10, if props.Disabled then 0.25 else 0.8),
+		Size = UDim2.fromScale(1, 1),
+		BorderSizePixel = 0,
+	})
 end
 
 function Wrapper:render()
@@ -32,20 +41,32 @@ function Wrapper:render()
 			Max = MAX,
 			Step = STEP,
 			Value = self.state.Value,
+			Disabled = self.state.Disabled,
 			OnChange = function(newValue)
 				self:setState({ Value = newValue })
 			end,
-			Disabled = false,
 			LayoutOrder = 0,
 		}),
 		Slider1 = Roact.createElement(Slider, {
 			Min = MIN,
 			Max = MAX,
 			Step = STEP,
-			Value = INIT,
-			OnChange = function() end,
-			Disabled = true,
+			Background = self.renderCustomBackground,
+			Disabled = self.state.Disabled,
+			Value = self.state.Value,
+			OnChange = function(newValue)
+				self:setState({ Value = newValue })
+			end,
 			LayoutOrder = 1,
+		}),
+		Disabled = Roact.createElement(Checkbox, {
+			Value = self.state.Disabled,
+			Label = "Disabled",
+			Alignment = "Left",
+			OnActivated = function()
+				self:setState({ Disabled = not self.state.Disabled })
+			end,
+			LayoutOrder = 2,
 		}),
 	})
 end
