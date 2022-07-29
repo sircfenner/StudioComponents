@@ -6,6 +6,7 @@
 # Dev
 /.vscode
 /roblox.toml
+/plugin
 
 # Docs
 /assets
