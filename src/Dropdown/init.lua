@@ -1,14 +1,24 @@
 local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
 
-local DropdownConstants = require(script.Constants)
 local Constants = require(script.Parent.Constants)
 local withTheme = require(script.Parent.withTheme)
+local joinDictionaries = require(script.Parent.joinDictionaries)
+
+local dropdownConstants = {
+	TextPaddingLeft = 5,
+	TextPaddingRight = 3,
+}
+
+local dropdownDefaults = {
+	RowHeightTop = 20,
+	RowHeightItem = 15,
+	MaxVisibleRows = 6,
+}
 
 --[[
 todo:
 - props.Disabled
-- props for position/anchor/size
 - should it have a border?
 - close when clicked outside (preferably compatible with AutomaticSize - no big frame)
 - consider lifting open/closed state up (compatibility with mutually exclusive dropdowns)
@@ -56,27 +66,39 @@ function Dropdown:render()
 	end
 
 	return withTheme(function(theme)
+		local dropdownOptions = joinDictionaries(dropdownDefaults, {
+			Width = self.props.Width,
+			RowHeightTop = self.props.RowHeightTop,
+			RowHeightItem = self.props.RowHeightItem,
+			MaxVisibleRows = self.props.MaxVisibleRows,
+		})
+
 		local items = {}
 		if self.state.Open then
 			for i, item in ipairs(self.props.Items) do
 				items[i] = Roact.createElement(DropdownItem, {
 					Item = item,
 					LayoutOrder = i,
+					RowHeightItem = dropdownOptions.RowHeightItem,
+					TextPaddingLeft = dropdownConstants.TextPaddingLeft - 1,
+					TextPaddingRight = dropdownConstants.TextPaddingRight,
 					OnSelected = self.onSelectedItem,
 				})
 			end
 		end
 
 		local rowPadding = 1
-		local visibleItems = math.min(DropdownConstants.MaxVisibleRows, #items)
-		local scrollHeight = visibleItems * DropdownConstants.RowHeightItem -- item heights
+		local visibleItems = math.min(dropdownOptions.MaxVisibleRows, #items)
+		local scrollHeight = visibleItems * dropdownOptions.RowHeightItem -- item heights
 			+ (visibleItems - 1) * rowPadding -- row padding
 			+ 2 -- top and bottom borders
 
+		print(dropdownOptions.Width)
+
 		return Roact.createElement("Frame", {
-			Size = UDim2.fromOffset(100, DropdownConstants.RowHeightTop), -- prop (width - UDim?)
-			Position = UDim2.fromScale(0.5, 0.5), -- prop
-			AnchorPoint = Vector2.new(0.5, 0.5), -- prop
+			Size = UDim2.new(dropdownOptions.Width.Scale, dropdownOptions.Width.Offset, 0, dropdownOptions.RowHeightTop),
+			Position = self.props.Position,
+			AnchorPoint = self.props.AnchorPoint,
 			BackgroundTransparency = 1,
 			[Roact.Event.InputBegan] = self.onSelectedInputBegan,
 			[Roact.Event.InputEnded] = self.onSelectedInputEnded,
@@ -92,10 +114,11 @@ function Dropdown:render()
 				TextSize = Constants.TextSize,
 				TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, modifier),
 				TextXAlignment = Enum.TextXAlignment.Left,
+				TextTruncate = Enum.TextTruncate.AtEnd,
 			}, {
 				Padding = Roact.createElement("UIPadding", {
-					PaddingLeft = UDim.new(0, DropdownConstants.TextPaddingLeft),
-					PaddingRight = UDim.new(0, DropdownConstants.TextPaddingRight),
+					PaddingLeft = UDim.new(0, dropdownConstants.TextPaddingLeft),
+					PaddingRight = UDim.new(0, dropdownConstants.TextPaddingRight),
 				}),
 			}),
 			ArrowContainer = Roact.createElement("Frame", {

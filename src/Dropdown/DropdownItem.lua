@@ -1,7 +1,6 @@
 local Packages = script.Parent.Parent.Parent
 local Roact = require(Packages.Roact)
 
-local DropdownConstants = require(script.Parent.Constants)
 local Constants = require(script.Parent.Parent.Constants)
 local withTheme = require(script.Parent.Parent.withTheme)
 
@@ -31,7 +30,7 @@ function DropdownItem:render()
 		return Roact.createElement("TextButton", {
 			AutoButtonColor = false,
 			LayoutOrder = self.props.LayoutOrder,
-			Size = UDim2.new(1, 0, 0, DropdownConstants.RowHeightItem),
+			Size = UDim2.new(1, 0, 0, self.props.RowHeightItem),
 			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.EmulatorBar, modifier),
 			BorderSizePixel = 0,
 			Text = self.props.Item,
@@ -47,8 +46,8 @@ function DropdownItem:render()
 			end,
 		}, {
 			Padding = Roact.createElement("UIPadding", {
-				PaddingLeft = UDim.new(0, DropdownConstants.TextPaddingLeft - 1),
-				PaddingRight = UDim.new(0, DropdownConstants.TextPaddingRight),
+				PaddingLeft = UDim.new(0, self.props.TextPaddingLeft),
+				PaddingRight = UDim.new(0, self.props.TextPaddingRight),
 			}),
 		})
 	end)

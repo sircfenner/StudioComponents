@@ -6,7 +6,7 @@ local Dropdown = require(script.Parent.Dropdown)
 local Wrapper = Roact.Component:extend("Wrapper")
 
 local items = string.split(
-	"Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+	"Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua llllllllloooooooonnnnnnggggggggg",
 	" "
 )
 
@@ -18,6 +18,9 @@ function Wrapper:render()
 	return Roact.createElement(Dropdown, {
 		Items = items,
 		Item = self.state.Item,
+		Width = UDim.new(0, 100),
+		Position = UDim2.fromScale(0.5, 0.5),
+		AnchorPoint = Vector2.new(0.5, 0.5),
 		OnSelected = function(item)
 			self:setState({ Item = item })
 		end,
