@@ -93,8 +93,6 @@ function Dropdown:render()
 			+ (visibleItems - 1) * rowPadding -- row padding
 			+ 2 -- top and bottom borders
 
-		print(dropdownOptions.Width)
-
 		return Roact.createElement("Frame", {
 			Size = UDim2.new(dropdownOptions.Width.Scale, dropdownOptions.Width.Offset, 0, dropdownOptions.RowHeightTop),
 			Position = self.props.Position,
