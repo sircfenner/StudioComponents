@@ -12,5 +12,6 @@ return {
 	VerticalCollapsibleSection = require(script.VerticalCollapsibleSection),
 	VerticalExpandingList = require(script.VerticalExpandingList),
 	Widget = require(script.Widget),
+	ThemeContext = require(script.ThemeContext),
 	withTheme = require(script.withTheme),
 }
