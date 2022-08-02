@@ -9,31 +9,13 @@ function StudioThemeProvider:init()
 	local theme = self:GetContext(ThemeContext)
 	self:setState({ studioTheme = studioSettings.Theme })
 
-	if theme == nil then
-		self._changed = studioSettings.ThemeChanged:Connect(function()
-			self:setState({ studioTheme = studioSettings.Theme })
-		end)
-	end
+	self._changed = studioSettings.ThemeChanged:Connect(function()
+		self:setState({ studioTheme = studioSettings.Theme })
+	end)
 end
 
 function StudioThemeProvider:willUnmount()
-	if self._changed then
-		self._changed:Disconnect()
-	end
-end
-
-function StudioThemeProvider:willUpdate()
-	local theme = self:GetContext(ThemeContext)
-	if theme and self._changed then
-		self._changed:Disconnect()
-		self._changed = nil
-	elseif theme == nil then
-		self._changed = studioSettings.ThemeChanged:Connect(function()
-			self:setState({ studioTheme = studioSettings.Theme })
-		end)
-
-		task.defer(self.setState, self, { studioTheme = studioSettings.Theme })
-	end
+	self._changed:Disconnect()
 end
 
 function StudioThemeProvider:render()
