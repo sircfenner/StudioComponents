@@ -179,15 +179,18 @@ function Slider:render()
 				end
 			end,
 		}, {
-			Background = Roact.createElement(
-				self.props.Background,
-				{
+			BackgroundHolder = Roact.createElement("Frame", {
+				ZIndex = 0,
+				Size = UDim2.fromScale(1, 1),
+				BackgroundTransparency = 1,
+			}, {
+				Background = Roact.createElement(self.props.Background, {
 					Disabled = props.Disabled,
 					Hover = self.state.Hover,
 					Dragging = self.state.Dragging,
 					Value = self.props.Value,
-				}
-			),
+				}),
+			}),
 			Bar = Roact.createElement("Frame", {
 				ZIndex = 1,
 				Position = UDim2.fromOffset(PADDING_BAR_SIDE, 10),
