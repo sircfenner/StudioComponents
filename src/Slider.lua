@@ -14,6 +14,20 @@ local PADDING_REGION_SIDE = 6
 Slider.defaultProps = {
 	Step = 0,
 	Disabled = false,
+	Background = function(props)
+		local mainModifier = Enum.StudioStyleGuideModifier.Default
+		if props.Disabled then
+			mainModifier = Enum.StudioStyleGuideModifier.Disabled
+		end
+
+		return withTheme(function(theme)
+			return Roact.createElement("Frame", {
+				BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.InputFieldBackground, mainModifier),
+				Size = UDim2.fromScale(1, 1),
+				BorderSizePixel = 0,
+			})
+		end)
+	end,
 }
 
 function Slider:init()
@@ -122,11 +136,6 @@ function Slider:render()
 	local range = props.Max - props.Min
 	local alpha = (props.Value - props.Min) / range
 
-	local mainModifier = Enum.StudioStyleGuideModifier.Default
-	if props.Disabled then
-		mainModifier = Enum.StudioStyleGuideModifier.Disabled
-	end
-
 	local handleModifier = Enum.StudioStyleGuideModifier.Default
 	if props.Disabled then
 		handleModifier = Enum.StudioStyleGuideModifier.Disabled
@@ -151,8 +160,7 @@ function Slider:render()
 			AnchorPoint = props.AnchorPoint,
 			LayoutOrder = props.LayoutOrder,
 			ZIndex = props.ZIndex,
-			BorderSizePixel = 0,
-			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.InputFieldBackground, mainModifier),
+			BackgroundTransparency = 1,
 			[Roact.Event.InputBegan] = function(_, input)
 				if props.Disabled then
 					return
@@ -171,8 +179,20 @@ function Slider:render()
 				end
 			end,
 		}, {
-			Bar = Roact.createElement("Frame", {
+			BackgroundHolder = Roact.createElement("Frame", {
 				ZIndex = 0,
+				Size = UDim2.fromScale(1, 1),
+				BackgroundTransparency = 1,
+			}, {
+				Background = Roact.createElement(self.props.Background, {
+					Disabled = props.Disabled,
+					Hover = self.state.Hover,
+					Dragging = self.state.Dragging,
+					Value = self.props.Value,
+				}),
+			}),
+			Bar = Roact.createElement("Frame", {
+				ZIndex = 1,
 				Position = UDim2.fromOffset(PADDING_BAR_SIDE, 10),
 				Size = UDim2.new(1, -PADDING_BAR_SIDE * 2, 0, 2),
 				BorderSizePixel = 0,
@@ -184,7 +204,7 @@ function Slider:render()
 				),
 			}),
 			HandleRegion = Roact.createElement("Frame", {
-				ZIndex = 1,
+				ZIndex = 2,
 				Position = UDim2.fromOffset(PADDING_REGION_SIDE, PADDING_REGION_TOP),
 				Size = UDim2.new(1, -PADDING_REGION_SIDE * 2, 1, -PADDING_REGION_TOP * 2),
 				BackgroundTransparency = 1,
