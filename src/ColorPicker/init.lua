@@ -10,6 +10,16 @@ ColorPicker.defaultProps = {
 	Size = UDim2.fromOffset(250, 200),
 }
 
+local function generateHueKeypoints(value)
+	local keypoints = {}
+
+	for hue = 0, 6 do
+		table.insert(keypoints, ColorSequenceKeypoint.new(hue / 6, Color3.fromHSV((6 - hue) / 6, 1, value)))
+	end
+
+	return ColorSequence.new(keypoints)
+end
+
 function ColorPicker:init()
 	self.regionDrag = getDragInput(function(alpha)
 		-- hue is clamped to 0.0001 so that the indicator is visually on the right
@@ -77,7 +87,7 @@ function ColorPicker:render()
 				Active = false,
 				AutoButtonColor = false,
 				Size = UDim2.new(1, -30, 1, 0),
-				Image = "rbxassetid://2752294886",
+				Image = "",
 				ClipsDescendants = true,
 				BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
 				[Roact.Event.InputBegan] = self.regionDrag.began,
@@ -101,6 +111,24 @@ function ColorPicker:render()
 						Size = UDim2.new(1, 0, 0, 2),
 						BorderSizePixel = 0,
 						BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+					}),
+				}),
+				HueGradient = Roact.createElement("Frame", {
+					Size = UDim2.fromScale(1, 1),
+					ZIndex = -1
+				}, {
+					Gradient = Roact.createElement("UIGradient", {
+						Color = generateHueKeypoints(val),
+					}),
+				}),
+				SaturationGradient = Roact.createElement("Frame", {
+					Size = UDim2.fromScale(1, 1),
+					ZIndex = 0,
+				}, {
+					Gradient = Roact.createElement("UIGradient", {
+						Color = ColorSequence.new(Color3.fromHSV(1, 0, val)),
+						Transparency = NumberSequence.new(1, 0),
+						Rotation = 90,
 					}),
 				}),
 			}),
