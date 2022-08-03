@@ -6,7 +6,6 @@ local StudioThemeProvider = Roact.Component:extend("StudioThemeProvider")
 local studioSettings = settings().Studio
 
 function StudioThemeProvider:init()
-	local theme = self:GetContext(ThemeContext)
 	self:setState({ studioTheme = studioSettings.Theme })
 
 	self._changed = studioSettings.ThemeChanged:Connect(function()
@@ -37,7 +36,7 @@ end
 
 -- https://github.com/Kampfkarren/roact-hooks/blob/main/src/createUseContext.lua
 function StudioThemeProvider:GetContext(targetContext)
-	local contextValue = nil
+	local contextValue
 
 	local fakeConsumer = setmetatable({
 		props = {
