@@ -3,11 +3,17 @@ local Roact = require(Packages.Roact)
 
 local TextInput = require(script.Parent.TextInput)
 
-return function(target)
-	local element = Roact.createElement("Frame", {
+local Helper = Roact.Component:extend("Helper")
+
+function Helper:init()
+	self:setState({ text = ""})
+end
+
+function Helper:render()
+	return Roact.createElement("Frame", {
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Position = UDim2.fromScale(0.5, 0.5),
-		Size = UDim2.fromScale(0.7, 0.7),
+		Size = UDim2.fromScale(0.25, 0.7),
 		BackgroundTransparency = 1,
 	}, {
 		Layout = Roact.createElement("UIListLayout", {
@@ -20,6 +26,11 @@ return function(target)
 		Input0 = Roact.createElement(TextInput, {
 			LayoutOrder = 0,
 			PlaceholderText = "Enabled",
+			Text = self.state.text,
+			OnChanged = function(newText)
+				self:setState({text = newText})
+			end,
+			ClearTextOnFocus = false,
 		}),
 		TextInput1 = Roact.createElement(TextInput, {
 			LayoutOrder = 1,
@@ -28,6 +39,10 @@ return function(target)
 			Text = "Disabled",
 		}),
 	})
+end
+
+return function(target)
+	local element = Roact.createElement(Helper, {})
 	local handle = Roact.mount(element, target)
 	return function()
 		Roact.unmount(handle)
