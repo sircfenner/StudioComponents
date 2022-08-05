@@ -247,7 +247,7 @@ function TextInput:updateFirstVisibleByte()
 	if byteCursorAt > lastVisibleByte then
 		for _startingByte, endingByte in utf8.graphemes(currentText, firstVisibleByte) do
 			newFirstVisibleByte = getNextGrapheme(currentText, newFirstVisibleByte)
-			
+
 			local newLastVisibleByte = getLastVisibleGrapheme(
 				string.sub(currentText, newFirstVisibleByte, -1),
 				boundingBox
@@ -273,6 +273,11 @@ function TextInput:getPreviewText()
 
 	-- If the container exists, then the textBox does too.
 	local currentText = self.textBoxRef.current.Text
+
+	-- Makes no sense to try to figure out the preview of an empty string.
+	if currentText == "" then
+		return ""
+	end
 
 	local boundingBox = container.AbsoluteSize - CLIP_PADDING
 
@@ -300,6 +305,12 @@ function TextInput:textIsInBounds()
 
 	-- If the container exists, then the textBox does too.
 	local currentText = self.textBoxRef.current.Text
+
+	-- If the currentText is empty, then it definitively is in bounds.
+	-- Plus, makes no sense to get the last grapheme of it.
+	if currentText == "" then
+		return true
+	end
 
 	local boundingBox = container.AbsoluteSize - CLIP_PADDING
 
