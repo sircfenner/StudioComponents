@@ -135,6 +135,7 @@ function TextInput:init()
 		self.props.OnFocusLost(rbx.Text, enterPressed, inputObject)
 	end
 	self.onChanged = function(rbx)
+		-- No change is possible if the user isn't focused.
 		if not self.state.Focused then
 			return
 		end
