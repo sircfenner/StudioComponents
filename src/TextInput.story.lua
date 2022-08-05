@@ -6,7 +6,7 @@ local TextInput = require(script.Parent.TextInput)
 local Helper = Roact.Component:extend("Helper")
 
 function Helper:init()
-	self:setState({ text = ""})
+	self:setState({ text = "" })
 end
 
 function Helper:render()
