@@ -218,6 +218,11 @@ function TextInput:updateFirstVisibleByte()
 
 	local firstVisibleByte = self.state.FirstVisibleByte
 
+	-- It's possible for the text to change before the cursor changes correctly.
+	if firstVisibleByte > #currentText then
+		firstVisibleByte = getLastGrapheme(currentText)
+	end
+
 	-- Adding the firstVisibleByte because we effectively trimmed the string to it.
 	-- We have to account for those missing characters.
 	local lastVisibleByte = getLastVisibleGrapheme(string.sub(currentText, firstVisibleByte, -1), boundingBox)
@@ -234,6 +239,7 @@ function TextInput:updateFirstVisibleByte()
 		end
 
 		for i = #graphemes, 1, -1 do
+			print(i)
 			local startingByte = graphemes[i]
 
 			-- Either reached the last grapheme or we passed the cursor.
