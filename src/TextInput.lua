@@ -1,6 +1,5 @@
-local ContentProvider = game:GetService("ContentProvider")
-local LocalizationService = game:GetService("LocalizationService")
 local TextService = game:GetService("TextService")
+
 local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
 
@@ -239,7 +238,6 @@ function TextInput:updateFirstVisibleByte()
 		end
 
 		for i = #graphemes, 1, -1 do
-			print(i)
 			local startingByte = graphemes[i]
 
 			-- Either reached the last grapheme or we passed the cursor.
