@@ -247,12 +247,11 @@ function TextInput:updateFirstVisibleByte()
 	if byteCursorAt > lastVisibleByte then
 		for _startingByte, endingByte in utf8.graphemes(currentText, firstVisibleByte) do
 			newFirstVisibleByte = getNextGrapheme(currentText, newFirstVisibleByte)
+			
 			local newLastVisibleByte = getLastVisibleGrapheme(
 				string.sub(currentText, newFirstVisibleByte, -1),
 				boundingBox
 			) + newFirstVisibleByte
-
-			print(newFirstVisibleByte, newLastVisibleByte, string.sub(currentText, newFirstVisibleByte, -1))
 
 			-- Either reached the first grapheme or we passed the cursor.
 			if #currentText == endingByte or newLastVisibleByte > byteCursorAt then
@@ -404,7 +403,6 @@ function TextInput:render()
 							[Roact.Event.InputEnded] = self.onInputEnded,
 							[Roact.Change.Text] = self.onChanged,
 							[Roact.Change.CursorPosition] = function(_rbx)
-								print(_rbx.Text)
 								self:updateFirstVisibleByte()
 							end,
 						})
