@@ -145,6 +145,9 @@ function TextInput:init()
 
 		self.props.OnChanged(rbx.Text)
 	end
+	self.onCursorPositionChanged = function(_rbx)
+		self:updateFirstVisibleByte()
+	end
 end
 
 function TextInput:getPositionOffset()
@@ -418,9 +421,7 @@ function TextInput:render()
 							[Roact.Event.InputBegan] = self.onInputBegan,
 							[Roact.Event.InputEnded] = self.onInputEnded,
 							[Roact.Change.Text] = self.onChanged,
-							[Roact.Change.CursorPosition] = function(_rbx)
-								self:updateFirstVisibleByte()
-							end,
+							[Roact.Change.CursorPosition] = self.onCursorPositionChanged
 						})
 					),
 			}),
