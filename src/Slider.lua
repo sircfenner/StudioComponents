@@ -1,10 +1,9 @@
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
-
 local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
 
 local withTheme = require(script.Parent.withTheme)
+local getDragInput = require(script.Parent.getDragInput)
+
 local Slider = Roact.Component:extend("Slider")
 
 local PADDING_BAR_SIDE = 3
@@ -36,14 +35,19 @@ function Slider:init()
 		Dragging = false,
 	})
 
-	self.globalConnection = nil
 	self.regionRef = Roact.createRef()
 
-	self.onActivationInput = function(position)
+	self.sliderDrag = getDragInput(function(rbx, position)
+		if self.props.Disabled then
+			return
+		end
+
+		self:setState({ Dragging = true })
+
 		local props = self.props
 		local range = props.Max - props.Min
 		local region = self.regionRef:getValue()
-		local offset = position - region.AbsolutePosition.x
+		local offset = position.X - region.AbsolutePosition.x
 		local alpha = offset / region.AbsoluteSize.x
 
 		local value = range * alpha
@@ -55,70 +59,34 @@ function Slider:init()
 		if value ~= props.Value then
 			props.OnChange(value)
 		end
-	end
-
-	self.onDragStart = function(rbx)
-		-- globalConnection handles mouse drags anywhere, i.e. including outside the parent frame
-		-- we have to split this into two different cases (1: in a widget, 2: in coregui)
-		-- ... because userinputservice events do not fire in widgets, so we have to poll instead
-		-- ... which is not ideal because there is a 1 frame delay
-		local widget = rbx:FindFirstAncestorWhichIsA("DockWidgetPluginGui")
-		if widget ~= nil then
-			self.globalConnection = RunService.Heartbeat:Connect(function()
-				self.onActivationInput(widget:GetRelativeMousePosition().x)
-			end)
-		else
-			self.globalConnection = UserInputService.InputChanged:Connect(function(newInput)
-				if newInput.UserInputType == Enum.UserInputType.MouseMovement then
-					self.onActivationInput(newInput.Position.x)
-				end
-			end)
-		end
-	end
+	end)
 
 	self.onHandleInputBegan = function(rbx, input)
-		local t = input.UserInputType
 		if self.props.Disabled then
 			return
-		elseif t == Enum.UserInputType.MouseMovement then
+		elseif input.UserInputType == Enum.UserInputType.MouseMovement then
 			self:setState({ Hover = true })
-		elseif t == Enum.UserInputType.MouseButton1 then
-			if not self.state.Dragging then
-				self.onDragStart(rbx)
-				self:setState({ Dragging = true })
-			end
 		end
 	end
 
-	self.onHandleInputEnded = function(_rbx, input)
-		local t = input.UserInputType
+	self.onHandleInputEnded = function(rbx, input)
 		if self.props.Disabled then
 			return
-		elseif t == Enum.UserInputType.MouseMovement then
+		elseif input.UserInputType == Enum.UserInputType.MouseMovement then
 			self:setState({ Hover = false })
-		elseif t == Enum.UserInputType.MouseButton1 then
-			if self.state.Dragging then
-				self.globalConnection:Disconnect()
-				self.globalConnection = nil
-				self:setState({ Dragging = false })
-			end
 		end
 	end
 end
 
 function Slider:willUnmount()
-	if self.globalConnection then
-		self.globalConnection:Disconnect()
-		self.globalConnection = nil
-	end
+	self.sliderDrag.clean()
 end
 
 -- handles the case of a slider becoming disabled during a drag
 -- see also getDerivedStateFromProps
 function Slider:didUpdate()
-	if self.props.Disabled and self.globalConnection then
-		self.globalConnection:Disconnect()
-		self.globalConnection = nil
+	if self.props.Disabled then
+		self.sliderDrag.forceEnd()
 	end
 end
 
@@ -129,6 +97,8 @@ function Slider.getDerivedStateFromProps(nextProps)
 			Dragging = false,
 		}
 	end
+
+	return
 end
 
 function Slider:render()
@@ -161,23 +131,8 @@ function Slider:render()
 			LayoutOrder = props.LayoutOrder,
 			ZIndex = props.ZIndex,
 			BackgroundTransparency = 1,
-			[Roact.Event.InputBegan] = function(_, input)
-				if props.Disabled then
-					return
-				elseif input.UserInputType == Enum.UserInputType.MouseButton1 then
-					self.onActivationInput(input.Position.x)
-				end
-			end,
-			[Roact.Event.InputChanged] = function(_, input)
-				if props.Disabled then
-					return
-				elseif self.state.Dragging then
-					-- this handles drag inputs that happen strictly over the parent frame
-					-- this is advantageous in the widget-ancestor case as it prevents the delay
-					-- ... resulting from the heartbeat poll for widget input position changing
-					self.onActivationInput(input.Position.x)
-				end
-			end,
+			[Roact.Event.InputBegan] = self.sliderDrag.began,
+			[Roact.Event.InputEnded] = self.sliderDrag.ended,
 		}, {
 			BackgroundHolder = Roact.createElement("Frame", {
 				ZIndex = 0,

@@ -2,7 +2,7 @@ local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
 
 local withTheme = require(script.Parent.withTheme)
-local getDragInput = require(script.getDragInput)
+local getDragInput = require(script.Parent.getDragInput)
 
 local ColorPicker = Roact.Component:extend("ColorPicker")
 
@@ -10,19 +10,27 @@ ColorPicker.defaultProps = {
 	Size = UDim2.fromOffset(250, 200),
 }
 
+local function process(rbx, position)
+	local offset = position - rbx.AbsolutePosition
+	local alpha = offset / rbx.AbsoluteSize
+	return Vector2.new(math.clamp(alpha.x, 0, 1), math.clamp(alpha.y, 0, 1))
+end
+
 function ColorPicker:init()
-	self.regionDrag = getDragInput(function(alpha)
+	self.regionDrag = getDragInput(function(rbx, position)
 		-- hue is clamped to 0.0001 so that the indicator is visually on the right
 		-- ... when hue is near-zero (at 0, hue will cycle back to the left)
 		-- hue is still lost when sat = 0, but this is less important
+		local alpha = process(rbx, position)
 		local newHue = math.max(0.0001, 1 - alpha.x)
 		local newSat = 1 - alpha.y
 		local newVal = select(3, self.props.Color:ToHSV())
 		self.props.OnChange(Color3.fromHSV(newHue, newSat, newVal))
 	end)
-	self.barDrag = getDragInput(function(alpha)
+	self.barDrag = getDragInput(function(rbx, position)
 		-- clamping val prevents loss of selected hue/sat even though they aren't relevant
 		-- when val is 0, because the user might want to increase val again and keep hue/sat
+		local alpha = process(rbx, position)
 		local newVal = math.max(0.0001, 1 - alpha.y)
 		local newHue, newSat = self.props.Color:ToHSV()
 		self.props.OnChange(Color3.fromHSV(newHue, newSat, newVal))
@@ -30,8 +38,8 @@ function ColorPicker:init()
 end
 
 function ColorPicker:willUnmount()
-	self.regionDrag.cleanup()
-	self.barDrag.cleanup()
+	self.regionDrag.clean()
+	self.barDrag.clean()
 end
 
 function ColorPicker:render()
@@ -56,7 +64,6 @@ function ColorPicker:render()
 				BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
 				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 				[Roact.Event.InputBegan] = self.barDrag.began,
-				[Roact.Event.InputChanged] = self.barDrag.changed,
 				[Roact.Event.InputEnded] = self.barDrag.ended,
 			}, {
 				Gradient = Roact.createElement("UIGradient", {
@@ -81,7 +88,6 @@ function ColorPicker:render()
 				ClipsDescendants = true,
 				BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
 				[Roact.Event.InputBegan] = self.regionDrag.began,
-				[Roact.Event.InputChanged] = self.regionDrag.changed,
 				[Roact.Event.InputEnded] = self.regionDrag.ended,
 			}, {
 				Indicator = Roact.createElement("Frame", {
