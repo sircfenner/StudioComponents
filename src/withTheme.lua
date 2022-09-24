@@ -18,44 +18,28 @@ function StudioThemeProvider:willUnmount()
 end
 
 function StudioThemeProvider:render()
-	local theme = self:GetContext(ThemeContext)
 	local render = Roact.oneChild(self.props[Roact.Children])
 
-	if theme then
-		return render(theme)
-	else
-		return Roact.createElement(ThemeContext.Provider, {
-			value = self.state.studioTheme,
-		}, {
-			Consumer = Roact.createElement(ThemeContext.Consumer, {
-				render = render,
-			}),
-		})
-	end
-end
-
--- https://github.com/Kampfkarren/roact-hooks/blob/main/src/createUseContext.lua
-function StudioThemeProvider:GetContext(targetContext)
-	local contextValue
-
-	local fakeConsumer = setmetatable({
-		props = {
-			render = function(value)
-				contextValue = value
-			end,
-		},
+	return Roact.createElement(ThemeContext.Provider, {
+		value = self.state.studioTheme,
 	}, {
-		__index = self,
+		Consumer = Roact.createElement(ThemeContext.Consumer, {
+			render = render,
+		})
 	})
-
-	targetContext.Consumer.init(fakeConsumer)
-
-	return contextValue
 end
 
 local function withTheme(render)
-	return Roact.createElement(StudioThemeProvider, {}, {
-		render = render,
+	return Roact.createElement(ThemeContext.Consumer, {
+		render = function(theme)
+			if theme then
+				return render(theme)
+			else
+				return Roact.createElement(StudioThemeProvider, {}, {
+					render = render,
+				})
+			end
+		end
 	})
 end
 
