@@ -122,6 +122,7 @@ function ColorPicker:render()
 					}),
 				}),
 				SaturationGradient = Roact.createElement("Frame", {
+					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					Size = UDim2.fromScale(1, 1),
 					ZIndex = 0,
 				}, {
