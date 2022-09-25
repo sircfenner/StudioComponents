@@ -21,20 +21,31 @@ local function generateHueKeypoints(value)
 end
 
 function ColorPicker:init()
+	-- Color3 does not retain HSV data at all. For example:
+	-- Color3.fromHSV(1, 0, 0):ToHSV() -> (0, 0, 0)
+	-- or Color3.fromHSV(1, 1, 1):ToHSV() -> (0, 1, 1)
+	-- Since information is lost leads to cases like:
+	-- * value being zeroed causes the picker's position to snap a corner.
+	-- * leading the picker to the right side (sat = zero) causes the picker to wrap around.
+	-- * and more!
+
+	-- Using self.state isn't possible since :willUpdate() cannot change state.
+	self.hue, self.sat, self.val = self.props.Color:ToHSV()
+
 	self.regionDrag = getDragInput(function(alpha)
-		-- hue is clamped to 0.0001 so that the indicator is visually on the right
-		-- ... when hue is near-zero (at 0, hue will cycle back to the left)
-		-- hue is still lost when sat = 0, but this is less important
-		local newHue = math.max(0.0001, 1 - alpha.x)
+		local newHue = 1 - alpha.x
 		local newSat = 1 - alpha.y
-		local newVal = select(3, self.props.Color:ToHSV())
+		local newVal = self.val
+
+		self.hue = newHue
+		self.sat = newSat
 		self.props.OnChange(Color3.fromHSV(newHue, newSat, newVal))
 	end)
 	self.barDrag = getDragInput(function(alpha)
-		-- clamping val prevents loss of selected hue/sat even though they aren't relevant
-		-- when val is 0, because the user might want to increase val again and keep hue/sat
-		local newVal = math.max(0.0001, 1 - alpha.y)
-		local newHue, newSat = self.props.Color:ToHSV()
+		local newVal = 1 - alpha.y
+		local newHue, newSat = self.hue, self.sat
+
+		self.val = newVal
 		self.props.OnChange(Color3.fromHSV(newHue, newSat, newVal))
 	end)
 end
@@ -44,10 +55,18 @@ function ColorPicker:willUnmount()
 	self.barDrag.cleanup()
 end
 
+function ColorPicker:willUpdate(nextProp, _nextState)
+	-- This will always ensure we're never out of sync. Use a dead-simple check to see if our values don't match.
+	if Color3.fromHSV(self.hue, self.sat, self.val) ~= nextProp.Color then
+		self.hue, self.sat, self.val = nextProp.Color:ToHSV()
+	end
+end
+
 function ColorPicker:render()
 	local props = self.props
-	local hue, sat, val = props.Color:ToHSV()
+	local hue, sat, val = self.hue, self.sat, self.val
 	local indicatorBackground = if val > 0.4 then Color3.new() else Color3.fromRGB(200, 200, 200)
+
 
 	return withTheme(function(theme)
 		return Roact.createElement("Frame", {
