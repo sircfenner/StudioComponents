@@ -1,7 +1,9 @@
 local Packages = script.Parent.Parent
-local Roact = require(Packages.Roact)
 
-local withTheme = require(script.Parent.withTheme)
+local Roact = require(Packages.Roact)
+local Hooks = require(Packages.RoactHooks)
+
+local useTheme = require(script.Parent.useTheme)
 local joinDictionaries = require(script.Parent.joinDictionaries)
 
 local Constants = require(script.Parent.Constants)
@@ -24,18 +26,21 @@ local defaultProps = {
 	-- BorderColorStyle?
 }
 
-local function Label(props)
-	return withTheme(function(theme)
-		local joinedProps = joinDictionaries(defaultProps, props)
-		local modifier = Enum.StudioStyleGuideModifier.Default
-		if joinedProps.Disabled then
-			modifier = Enum.StudioStyleGuideModifier.Disabled
-		end
-		joinedProps.TextColor3 = theme:GetColor(joinedProps.TextColorStyle, modifier)
-		joinedProps.Disabled = nil
-		joinedProps.TextColorStyle = nil
-		return Roact.createElement("TextLabel", joinedProps)
-	end)
+local function Label(props, hooks)
+	local theme = useTheme(hooks)
+
+	local joinedProps = joinDictionaries(defaultProps, props)
+	local modifier = Enum.StudioStyleGuideModifier.Default
+	if joinedProps.Disabled then
+		modifier = Enum.StudioStyleGuideModifier.Disabled
+	end
+	joinedProps.TextColor3 = theme:GetColor(joinedProps.TextColorStyle, modifier)
+	joinedProps.Disabled = nil
+	joinedProps.TextColorStyle = nil
+
+	return Roact.createElement("TextLabel", joinedProps)
 end
 
-return Label
+return Hooks.new(Roact)(Label, {
+	defaultProps = defaultProps,
+})

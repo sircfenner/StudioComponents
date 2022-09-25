@@ -14,4 +14,5 @@ return {
 	Widget = require(script.Widget),
 	ThemeContext = require(script.ThemeContext),
 	withTheme = require(script.withTheme),
+	useTheme = require(script.useTheme),
 }
