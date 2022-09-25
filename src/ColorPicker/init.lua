@@ -98,17 +98,17 @@ function ColorPicker:render()
 				Indicator = Roact.createElement("Frame", {
 					AnchorPoint = Vector2.new(0.5, 0.5),
 					Position = UDim2.new(1 - hue, 1, 1 - sat, 0),
-					Size = UDim2.fromOffset(19, 19),
+					Size = UDim2.fromOffset(20, 20),
 					BackgroundTransparency = 1,
 				}, {
 					Vertical = Roact.createElement("Frame", {
-						Position = UDim2.fromOffset(8, 0),
+						Position = UDim2.fromOffset(9, 0),
 						Size = UDim2.new(0, 2, 1, 0),
 						BorderSizePixel = 0,
 						BackgroundColor3 = indicatorBackground,
 					}),
 					Horizontal = Roact.createElement("Frame", {
-						Position = UDim2.fromOffset(0, 8),
+						Position = UDim2.fromOffset(0, 9),
 						Size = UDim2.new(1, 0, 0, 2),
 						BorderSizePixel = 0,
 						BackgroundColor3 = indicatorBackground,
