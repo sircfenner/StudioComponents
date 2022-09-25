@@ -116,7 +116,7 @@ function ColorPicker:render()
 			}, {
 				Indicator = Roact.createElement("Frame", {
 					AnchorPoint = Vector2.new(0.5, 0.5),
-					Position = UDim2.new(1 - hue, 1, 1 - sat, 0),
+					Position = UDim2.new(1 - hue, 0, 1 - sat, 0),
 					Size = UDim2.fromOffset(20, 20),
 					BackgroundTransparency = 1,
 				}, {
