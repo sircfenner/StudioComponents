@@ -29,9 +29,7 @@ function ColorPicker:init()
 	-- * leading the picker to the right side (sat = zero) causes the picker to wrap around.
 	-- * and more!
 
-	-- So, we have to keep track of those values ourselves.
-	-- Putting it in self.state makes the code much more complex.
-	-- Especially since the source of truth is self.props.Color, not us!
+	-- Using self.state isn't possible since :willUpdate() cannot change state.
 	self.hue, self.sat, self.val = self.props.Color:ToHSV()
 
 	self.regionDrag = getDragInput(function(alpha)
