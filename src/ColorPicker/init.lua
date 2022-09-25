@@ -47,6 +47,7 @@ end
 function ColorPicker:render()
 	local props = self.props
 	local hue, sat, val = props.Color:ToHSV()
+	local indicatorBackground = if val > 0.4 then Color3.new() else Color3.fromRGB(200, 200, 200)
 
 	return withTheme(function(theme)
 		return Roact.createElement("Frame", {
@@ -104,13 +105,13 @@ function ColorPicker:render()
 						Position = UDim2.fromOffset(8, 0),
 						Size = UDim2.new(0, 2, 1, 0),
 						BorderSizePixel = 0,
-						BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+						BackgroundColor3 = indicatorBackground,
 					}),
 					Horizontal = Roact.createElement("Frame", {
 						Position = UDim2.fromOffset(0, 8),
 						Size = UDim2.new(1, 0, 0, 2),
 						BorderSizePixel = 0,
-						BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+						BackgroundColor3 = indicatorBackground,
 					}),
 				}),
 				HueGradient = Roact.createElement("Frame", {
