@@ -4,10 +4,10 @@ registry = "test"
 
 [[package]]
 name = "roblox/roact"
-version = "1.4.2"
+version = "1.4.4"
 dependencies = []
 
 [[package]]
 name = "sircfenner/studiocomponents"
-version = "0.1.1"
-dependencies = [["Roact", "roblox/roact@1.4.2"]]
+version = "0.1.2"
+dependencies = [["Roact", "roblox/roact@1.4.4"]]
