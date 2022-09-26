@@ -2,7 +2,7 @@ local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
 
 local withTheme = require(script.Parent.withTheme)
-local getDragInput = require(script.getDragInput)
+local getDragInput = require(script.Parent.getDragInput)
 
 local ColorPicker = Roact.Component:extend("ColorPicker")
 
@@ -20,6 +20,12 @@ local function generateHueKeypoints(value)
 	return ColorSequence.new(keypoints)
 end
 
+local function process(rbx, position)
+	local offset = position - rbx.AbsolutePosition
+	local alpha = offset / rbx.AbsoluteSize
+	return Vector2.new(math.clamp(alpha.x, 0, 1), math.clamp(alpha.y, 0, 1))
+end
+
 function ColorPicker:init()
 	-- Color3 does not retain HSV data at all. For example:
 	-- Color3.fromHSV(1, 0, 0):ToHSV() -> (0, 0, 0)
@@ -32,7 +38,8 @@ function ColorPicker:init()
 	-- Using self.state isn't possible since :willUpdate() cannot change state.
 	self.hue, self.sat, self.val = self.props.Color:ToHSV()
 
-	self.regionDrag = getDragInput(function(alpha)
+	self.regionDrag = getDragInput(function(rbx, position)
+		local alpha = process(rbx, position)
 		local newHue = 1 - alpha.x
 		local newSat = 1 - alpha.y
 		local newVal = self.val
@@ -41,7 +48,8 @@ function ColorPicker:init()
 		self.sat = newSat
 		self.props.OnChange(Color3.fromHSV(newHue, newSat, newVal))
 	end)
-	self.barDrag = getDragInput(function(alpha)
+	self.barDrag = getDragInput(function(rbx, position)
+		local alpha = process(rbx, position)
 		local newVal = 1 - alpha.y
 		local newHue, newSat = self.hue, self.sat
 
@@ -51,8 +59,8 @@ function ColorPicker:init()
 end
 
 function ColorPicker:willUnmount()
-	self.regionDrag.cleanup()
-	self.barDrag.cleanup()
+	self.regionDrag.clean()
+	self.barDrag.clean()
 end
 
 function ColorPicker:willUpdate(nextProp, _nextState)
@@ -86,7 +94,6 @@ function ColorPicker:render()
 				BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
 				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 				[Roact.Event.InputBegan] = self.barDrag.began,
-				[Roact.Event.InputChanged] = self.barDrag.changed,
 				[Roact.Event.InputEnded] = self.barDrag.ended,
 			}, {
 				Gradient = Roact.createElement("UIGradient", {
@@ -111,7 +118,6 @@ function ColorPicker:render()
 				ClipsDescendants = true,
 				BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
 				[Roact.Event.InputBegan] = self.regionDrag.began,
-				[Roact.Event.InputChanged] = self.regionDrag.changed,
 				[Roact.Event.InputEnded] = self.regionDrag.ended,
 			}, {
 				Indicator = Roact.createElement("Frame", {
