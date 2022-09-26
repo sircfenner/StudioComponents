@@ -26,7 +26,9 @@ local function Dropdown(props, hooks)
 	local open, setOpen = hooks.useState(false)
 	local hovered, setHovered = hooks.useState(false)
 
-	local onSelectedInputBegan = function(_rbx, input)
+	local rootRef = hooks.useValue(Roact.createRef())
+
+	local onSelectedInputBegan = function(_, input)
 		local t = input.UserInputType
 		if t == Enum.UserInputType.MouseMovement then
 			setHovered(true)
@@ -35,7 +37,7 @@ local function Dropdown(props, hooks)
 		end
 	end
 
-	local onSelectedInputEnded = function(_rbx, input)
+	local onSelectedInputEnded = function(_, input)
 		if input.UserInputType == Enum.UserInputType.MouseMovement then
 			setHovered(false)
 		end
@@ -73,6 +75,45 @@ local function Dropdown(props, hooks)
 		+ (visibleItems - 1) * rowPadding -- row padding
 		+ 2 -- top and bottom borders
 
+	local catcher = nil
+	local function onCatcherInputBegan(_, input)
+		local t = input.UserInputType
+		if
+			t == Enum.UserInputType.MouseButton1
+			or t == Enum.UserInputType.MouseButton2
+			or t == Enum.UserInputType.MouseButton3
+		then
+			local inst = rootRef.value:getValue()
+			local p = Vector2.new(input.Position.x, input.Position.y)
+			local min = inst.AbsolutePosition
+			local max = min + inst.AbsoluteSize + Vector2.new(0, scrollHeight)
+			if p.x < min.x or p.x > max.x or p.y < min.y or p.y > max.y then
+				setOpen(false)
+			end
+		elseif t == Enum.UserInputType.Keyboard then
+			if input.KeyCode == Enum.KeyCode.Escape then
+				setOpen(false)
+			end
+		end
+	end
+
+	if open and rootRef.value then
+		local inst = rootRef.value:getValue()
+		local target = inst:FindFirstAncestorWhichIsA("LayerCollector")
+		if target ~= nil then
+			catcher = Roact.createElement(Roact.Portal, {
+				target = target,
+			}, {
+				Frame = Roact.createElement("Frame", {
+					ZIndex = 2 ^ 31 - 1,
+					BackgroundTransparency = 1,
+					Size = UDim2.fromScale(1, 1),
+					[Roact.Event.InputBegan] = onCatcherInputBegan,
+				}),
+			})
+		end
+	end
+
 	return Roact.createElement("Frame", {
 		Size = UDim2.fromOffset(100, DropdownConstants.RowHeightTop), -- prop (width - UDim?)
 		Position = UDim2.fromScale(0.5, 0.5), -- prop
@@ -80,7 +121,9 @@ local function Dropdown(props, hooks)
 		BackgroundTransparency = 1,
 		[Roact.Event.InputBegan] = onSelectedInputBegan,
 		[Roact.Event.InputEnded] = onSelectedInputEnded,
+		[Roact.Ref] = rootRef.value,
 	}, {
+		Catch = catcher,
 		Selected = Roact.createElement("TextLabel", {
 			Size = UDim2.fromScale(1, 1),
 			BackgroundColor3 = theme:GetColor(background, modifier),
