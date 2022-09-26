@@ -10,12 +10,9 @@ local useTheme = require(script.Parent.useTheme)
 
 --[[
 todo:
-- props.Disabled
+- props.Disabled + becoming Disabled while open
 - props for position/anchor/size
 - should it have a border?
-- close when clicked outside (preferably compatible with AutomaticSize - no big frame)
-- consider lifting open/closed state up (compatibility with mutually exclusive dropdowns)
-- look into using Context for mutually exclusive dropdowns (needs design)
 ]]
 
 local ScrollFrame = require(script.Parent.ScrollFrame)
@@ -23,10 +20,13 @@ local DropdownItem = require(script.DropdownItem)
 
 local function Dropdown(props, hooks)
 	local theme = useTheme(hooks)
+
 	local open, setOpen = hooks.useState(false)
 	local hovered, setHovered = hooks.useState(false)
 
 	local rootRef = hooks.useValue(Roact.createRef())
+	local rootPosition, setRootPosition = hooks.useBinding(Vector2.new())
+	local rootSize, setRootSize = hooks.useBinding(Vector2.new())
 
 	local onSelectedInputBegan = function(_, input)
 		local t = input.UserInputType
@@ -88,7 +88,7 @@ local function Dropdown(props, hooks)
 			local min = inst.AbsolutePosition
 			local max = min + inst.AbsoluteSize + Vector2.new(0, scrollHeight)
 			if p.x < min.x or p.x > max.x or p.y < min.y or p.y > max.y then
-				setOpen(false)
+				setOpen(false) -- only run if not clicking over the dropdown/options
 			end
 		elseif t == Enum.UserInputType.Keyboard then
 			if input.KeyCode == Enum.KeyCode.Escape then
@@ -109,6 +109,22 @@ local function Dropdown(props, hooks)
 					BackgroundTransparency = 1,
 					Size = UDim2.fromScale(1, 1),
 					[Roact.Event.InputBegan] = onCatcherInputBegan,
+				}, {
+					-- rounding etc. here corrects for sub-pixel alignments
+					Drop = open and Roact.createElement(ScrollFrame, {
+						Position = rootPosition:map(function(pos)
+							return UDim2.fromOffset(
+								math.round(pos.x),
+								math.ceil(pos.y - 1) + DropdownConstants.RowHeightTop
+							)
+						end),
+						Size = rootSize:map(function(size)
+							return UDim2.fromOffset(math.round(size.x), scrollHeight)
+						end),
+						Layout = {
+							Padding = UDim.new(0, rowPadding),
+						},
+					}, items),
 				}),
 			})
 		end
@@ -119,9 +135,17 @@ local function Dropdown(props, hooks)
 		Position = UDim2.fromScale(0.5, 0.5), -- prop
 		AnchorPoint = Vector2.new(0.5, 0.5), -- prop
 		BackgroundTransparency = 1,
+		LayoutOrder = props.LayoutOrder,
+		ZIndex = props.ZIndex,
 		[Roact.Event.InputBegan] = onSelectedInputBegan,
 		[Roact.Event.InputEnded] = onSelectedInputEnded,
 		[Roact.Ref] = rootRef.value,
+		[Roact.Change.AbsolutePosition] = function(rbx)
+			setRootPosition(rbx.AbsolutePosition)
+		end,
+		[Roact.Change.AbsoluteSize] = function(rbx)
+			setRootSize(rbx.AbsoluteSize)
+		end,
 	}, {
 		Catch = catcher,
 		Selected = Roact.createElement("TextLabel", {
@@ -135,10 +159,12 @@ local function Dropdown(props, hooks)
 			TextSize = Constants.TextSize,
 			TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, modifier),
 			TextXAlignment = Enum.TextXAlignment.Left,
+			ZIndex = 1,
 		}, {
 			Padding = Roact.createElement("UIPadding", {
-				PaddingLeft = UDim.new(0, DropdownConstants.TextPaddingLeft),
+				PaddingLeft = UDim.new(0, DropdownConstants.TextPaddingLeft - 1), -- border
 				PaddingRight = UDim.new(0, DropdownConstants.TextPaddingRight),
+				PaddingBottom = UDim.new(0, 1),
 			}),
 		}),
 		ArrowContainer = Roact.createElement("Frame", {
@@ -146,6 +172,7 @@ local function Dropdown(props, hooks)
 			Position = UDim2.fromScale(1, 0),
 			Size = UDim2.new(0, 18, 1, 0),
 			BackgroundTransparency = 1,
+			ZIndex = 2,
 		}, {
 			Arrow = Roact.createElement("ImageLabel", {
 				Image = "rbxassetid://7260137654",
@@ -156,13 +183,6 @@ local function Dropdown(props, hooks)
 				ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.TitlebarText, modifier),
 			}),
 		}),
-		Drop = open and Roact.createElement(ScrollFrame, {
-			Position = UDim2.new(0, 0, 1, -1),
-			Size = UDim2.new(1, 0, 0, scrollHeight),
-			Layout = {
-				Padding = UDim.new(0, rowPadding),
-			},
-		}, items),
 	})
 end
 

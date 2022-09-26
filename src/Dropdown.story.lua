@@ -11,16 +11,62 @@ local items = string.split(
 )
 
 function Wrapper:init()
-	self:setState({ Item = "Lorem" })
+	self:setState({
+		ShowLastRow = true,
+		Item0 = "Lorem",
+		Item1 = "dolor",
+		Item2 = "sit",
+		Item3 = "amet",
+	})
 end
 
 function Wrapper:render()
-	return Roact.createElement(Dropdown, {
-		Items = items,
-		Item = self.state.Item,
-		OnSelected = function(item)
-			self:setState({ Item = item })
-		end,
+	return Roact.createFragment({
+		Layout = Roact.createElement("UIGridLayout", {
+			CellPadding = UDim2.new(0, 10, 0, 10),
+			CellSize = UDim2.new(0.3, 0, 0, 20),
+			SortOrder = Enum.SortOrder.LayoutOrder,
+			FillDirection = Enum.FillDirection.Horizontal,
+			VerticalAlignment = Enum.VerticalAlignment.Center,
+			HorizontalAlignment = Enum.HorizontalAlignment.Center,
+			FillDirectionMaxCells = 2,
+		}),
+
+		Dropdown0 = Roact.createElement(Dropdown, {
+			LayoutOrder = 0,
+			Items = table.clone(items),
+			Item = self.state.Item0,
+			OnSelected = function(item)
+				self:setState({ Item0 = item })
+			end,
+		}),
+
+		Dropdown1 = Roact.createElement(Dropdown, {
+			LayoutOrder = 1,
+			Items = table.clone(items),
+			Item = self.state.Item1,
+			OnSelected = function(item)
+				self:setState({ Item1 = item })
+			end,
+		}),
+
+		Dropdown2 = Roact.createElement(Dropdown, {
+			LayoutOrder = 2,
+			Items = table.clone(items),
+			Item = self.state.Item2,
+			OnSelected = function(item)
+				self:setState({ Item2 = item })
+			end,
+		}),
+
+		Dropdown3 = Roact.createElement(Dropdown, {
+			LayoutOrder = 3,
+			Items = table.clone(items),
+			Item = self.state.Item3,
+			OnSelected = function(item)
+				self:setState({ Item3 = item })
+			end,
+		}),
 	})
 end
 
