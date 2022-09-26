@@ -104,7 +104,7 @@ function TextInput:render()
 			LayoutOrder = self.props.LayoutOrder,
 			Font = Constants.Font,
 			-- TODO: Get rid of self.props.Text for self.props.Value.
-			Text = self.props.Value or self.props.Text,
+			Text = self.props.Text or self.props.Value,
 			TextSize = Constants.TextSize,
 			TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, mainModifier),
 			TextXAlignment = Enum.TextXAlignment.Left,
