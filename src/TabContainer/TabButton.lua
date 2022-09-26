@@ -1,72 +1,73 @@
 local Packages = script.Parent.Parent.Parent
+
 local Roact = require(Packages.Roact)
+local Hooks = require(Packages.RoactHooks)
 
-local withTheme = require(script.Parent.Parent.withTheme)
+local useTheme = require(script.Parent.Parent.useTheme)
 
-local TabButton = Roact.Component:extend("TabButton")
+local function TabButton(props, hooks)
+	local theme = useTheme(hooks)
+	local hovered, setHovered = hooks.useState(false)
+	local pressed, setPressed = hooks.useState(false)
 
-function TabButton:init()
-	self:setState({ Hover = false, Pressed = false })
-	self.onInputBegan = function(_, input)
-		if self.props.Disabled then
+	local onInputBegan = function(_, input)
+		if props.Disabled then
 			return
 		elseif input.UserInputType == Enum.UserInputType.MouseButton1 then
-			self:setState({ Pressed = true })
+			setPressed(true)
 		elseif input.UserInputType == Enum.UserInputType.MouseMovement then
-			self:setState({ Hover = true })
+			setHovered(true)
 		end
 	end
-	self.onInputEnded = function(_, input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 then
-			self:setState({ Pressed = false })
-		elseif input.UserInputType == Enum.UserInputType.MouseMovement then
-			self:setState({ Hover = false })
-		end
-	end
-end
 
-function TabButton:render()
+	local onInputEnded = function(_, input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			setPressed(false)
+		elseif input.UserInputType == Enum.UserInputType.MouseMovement then
+			setHovered(false)
+		end
+	end
+
 	local color = Enum.StudioStyleGuideColor.Button
 	local modifier = Enum.StudioStyleGuideModifier.Default
-	if self.props.Disabled then
+	if props.Disabled then
 		modifier = Enum.StudioStyleGuideModifier.Disabled
-	elseif self.props.Selected then
+	elseif props.Selected then
 		modifier = Enum.StudioStyleGuideModifier.Pressed
-	elseif self.state.Pressed then
+	elseif pressed then
 		color = Enum.StudioStyleGuideColor.ButtonBorder
-	elseif self.state.Hover then
+	elseif hovered then
 		modifier = Enum.StudioStyleGuideModifier.Hover
 	end
-	return withTheme(function(theme)
-		return Roact.createElement("TextButton", {
-			AutoButtonColor = false,
-			BackgroundColor3 = theme:GetColor(color, modifier),
-			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
-			LayoutOrder = self.props.LayoutOrder,
-			Size = self.props.Size,
-			Text = self.props.Text,
-			Font = Enum.Font.SourceSans,
-			TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, modifier),
-			TextTruncate = Enum.TextTruncate.AtEnd,
-			TextSize = 14,
-			[Roact.Event.InputBegan] = self.onInputBegan,
-			[Roact.Event.InputEnded] = self.onInputEnded,
-			[Roact.Event.Activated] = function()
-				if not self.props.Disabled then
-					self.props.OnActivated()
-				end
-			end,
-		}, {
-			Indicator = self.props.Selected and Roact.createElement("Frame", {
-				AnchorPoint = Vector2.new(0, 1),
-				BackgroundColor3 = Color3.fromRGB(0, 162, 255),
-				BackgroundTransparency = self.props.Disabled and 0.8 or 0,
-				BorderSizePixel = 0,
-				Position = UDim2.fromScale(0, 1),
-				Size = UDim2.new(1, 0, 0, 2),
-			}),
-		})
-	end)
+
+	return Roact.createElement("TextButton", {
+		AutoButtonColor = false,
+		BackgroundColor3 = theme:GetColor(color, modifier),
+		BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
+		LayoutOrder = props.LayoutOrder,
+		Size = props.Size,
+		Text = props.Text,
+		Font = Enum.Font.SourceSans,
+		TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, modifier),
+		TextTruncate = Enum.TextTruncate.AtEnd,
+		TextSize = 14,
+		[Roact.Event.InputBegan] = onInputBegan,
+		[Roact.Event.InputEnded] = onInputEnded,
+		[Roact.Event.Activated] = function()
+			if not props.Disabled then
+				props.OnActivated()
+			end
+		end,
+	}, {
+		Indicator = props.Selected and Roact.createElement("Frame", {
+			AnchorPoint = Vector2.new(0, 1),
+			BackgroundColor3 = Color3.fromRGB(0, 162, 255),
+			BackgroundTransparency = props.Disabled and 0.8 or 0,
+			BorderSizePixel = 0,
+			Position = UDim2.fromScale(0, 1),
+			Size = UDim2.new(1, 0, 0, 2),
+		}),
+	})
 end
 
-return TabButton
+return Hooks.new(Roact)(TabButton)
