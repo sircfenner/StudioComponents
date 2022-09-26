@@ -8,6 +8,7 @@ local Constants = require(script.Parent.Constants)
 local TextInput = Roact.Component:extend("TextInput")
 
 local PLACEHOLDER_TEXT_COLOR = Color3.fromRGB(102, 102, 102) -- works for both themes
+local hasWarned = false
 
 local noop = function() end
 
@@ -15,15 +16,26 @@ TextInput.defaultProps = {
 	Size = UDim2.new(1, 0, 0, 21),
 	LayoutOrder = 0,
 	Disabled = false,
-	Text = "",
+	Value = "",
 	PlaceholderText = "",
+	Stringify = tostring,
+	TryParsing = function(value) return true, value end,
 	ClearTextOnFocus = true,
 	OnFocused = noop,
 	OnFocusLost = noop,
+	OnInvalidFocusLost = noop,
 	OnChanged = noop,
+	OnChangedInvalid = noop,
 }
 
 function TextInput:init()
+	if self.props.Text and not hasWarned then
+		hasWarned = true
+		warn("Text is depreciated, use value instead!")
+	elseif self.props.Text and self.props.Value then
+		error("Text and Value have been set! Use Value instead.")
+	end
+
 	self:setState({
 		Hover = false,
 		Focused = false,
@@ -48,10 +60,22 @@ function TextInput:init()
 	end
 	self.onFocusLost = function(rbx, enterPressed, inputObject)
 		self:setState({ Focused = false })
-		self.props.OnFocusLost(rbx.Text, enterPressed, inputObject)
+		local success, value = self.props.TryParsing(rbx.Text)
+
+		if success then
+			self.props.OnFocusLost(value, enterPressed, inputObject)
+		else
+			self.props.OnFocusLostInvalid(value, enterPressed, inputObject)
+		end
 	end
 	self.onChanged = function(rbx)
-		self.props.OnChanged(rbx.Text)
+		local success, value = self.props.TryParsing(rbx.Text)
+
+		if success then
+			self.props.OnChanged(value)
+		else
+			self.props.OnChangedInvalid(value, rbx.Text)
+		end
 	end
 end
 
@@ -79,7 +103,8 @@ function TextInput:render()
 			BorderMode = Enum.BorderMode.Inset,
 			LayoutOrder = self.props.LayoutOrder,
 			Font = Constants.Font,
-			Text = self.props.Text,
+			-- TODO: Get rid of self.props.Text for self.props.Value.
+			Text = self.props.Value or self.props.Text,
 			TextSize = Constants.TextSize,
 			TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, mainModifier),
 			TextXAlignment = Enum.TextXAlignment.Left,
