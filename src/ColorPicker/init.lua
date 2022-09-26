@@ -10,21 +10,42 @@ ColorPicker.defaultProps = {
 	Size = UDim2.fromOffset(250, 200),
 }
 
+local function generateHueKeypoints(value)
+	local keypoints = {}
+
+	for hue = 0, 6 do
+		table.insert(keypoints, ColorSequenceKeypoint.new(hue / 6, Color3.fromHSV((6 - hue) / 6, 1, value)))
+	end
+
+	return ColorSequence.new(keypoints)
+end
+
 function ColorPicker:init()
+	-- Color3 does not retain HSV data at all. For example:
+	-- Color3.fromHSV(1, 0, 0):ToHSV() -> (0, 0, 0)
+	-- or Color3.fromHSV(1, 1, 1):ToHSV() -> (0, 1, 1)
+	-- Since information is lost leads to cases like:
+	-- * value being zeroed causes the picker's position to snap a corner.
+	-- * leading the picker to the right side (sat = zero) causes the picker to wrap around.
+	-- * and more!
+
+	-- Using self.state isn't possible since :willUpdate() cannot change state.
+	self.hue, self.sat, self.val = self.props.Color:ToHSV()
+
 	self.regionDrag = getDragInput(function(alpha)
-		-- hue is clamped to 0.0001 so that the indicator is visually on the right
-		-- ... when hue is near-zero (at 0, hue will cycle back to the left)
-		-- hue is still lost when sat = 0, but this is less important
-		local newHue = math.max(0.0001, 1 - alpha.x)
+		local newHue = 1 - alpha.x
 		local newSat = 1 - alpha.y
-		local newVal = select(3, self.props.Color:ToHSV())
+		local newVal = self.val
+
+		self.hue = newHue
+		self.sat = newSat
 		self.props.OnChange(Color3.fromHSV(newHue, newSat, newVal))
 	end)
 	self.barDrag = getDragInput(function(alpha)
-		-- clamping val prevents loss of selected hue/sat even though they aren't relevant
-		-- when val is 0, because the user might want to increase val again and keep hue/sat
-		local newVal = math.max(0.0001, 1 - alpha.y)
-		local newHue, newSat = self.props.Color:ToHSV()
+		local newVal = 1 - alpha.y
+		local newHue, newSat = self.hue, self.sat
+
+		self.val = newVal
 		self.props.OnChange(Color3.fromHSV(newHue, newSat, newVal))
 	end)
 end
@@ -34,9 +55,18 @@ function ColorPicker:willUnmount()
 	self.barDrag.cleanup()
 end
 
+function ColorPicker:willUpdate(nextProp, _nextState)
+	-- This will always ensure we're never out of sync. Use a dead-simple check to see if our values don't match.
+	if Color3.fromHSV(self.hue, self.sat, self.val) ~= nextProp.Color then
+		self.hue, self.sat, self.val = nextProp.Color:ToHSV()
+	end
+end
+
 function ColorPicker:render()
 	local props = self.props
-	local hue, sat, val = props.Color:ToHSV()
+	local hue, sat, val = self.hue, self.sat, self.val
+	local indicatorBackground = if val > 0.4 then Color3.new() else Color3.fromRGB(200, 200, 200)
+
 
 	return withTheme(function(theme)
 		return Roact.createElement("Frame", {
@@ -77,7 +107,7 @@ function ColorPicker:render()
 				Active = false,
 				AutoButtonColor = false,
 				Size = UDim2.new(1, -30, 1, 0),
-				Image = "rbxassetid://2752294886",
+				Image = "",
 				ClipsDescendants = true,
 				BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
 				[Roact.Event.InputBegan] = self.regionDrag.began,
@@ -86,21 +116,41 @@ function ColorPicker:render()
 			}, {
 				Indicator = Roact.createElement("Frame", {
 					AnchorPoint = Vector2.new(0.5, 0.5),
-					Position = UDim2.new(1 - hue, 1, 1 - sat, 0),
-					Size = UDim2.fromOffset(19, 19),
+					Position = UDim2.new(1 - hue, 0, 1 - sat, 0),
+					Size = UDim2.fromOffset(20, 20),
 					BackgroundTransparency = 1,
 				}, {
 					Vertical = Roact.createElement("Frame", {
-						Position = UDim2.fromOffset(8, 0),
+						Position = UDim2.fromOffset(9, 0),
 						Size = UDim2.new(0, 2, 1, 0),
 						BorderSizePixel = 0,
-						BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+						BackgroundColor3 = indicatorBackground,
 					}),
 					Horizontal = Roact.createElement("Frame", {
-						Position = UDim2.fromOffset(0, 8),
+						Position = UDim2.fromOffset(0, 9),
 						Size = UDim2.new(1, 0, 0, 2),
 						BorderSizePixel = 0,
-						BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+						BackgroundColor3 = indicatorBackground,
+					}),
+				}),
+				HueGradient = Roact.createElement("Frame", {
+					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+					Size = UDim2.fromScale(1, 1),
+					ZIndex = -1
+				}, {
+					Gradient = Roact.createElement("UIGradient", {
+						Color = generateHueKeypoints(val),
+					}),
+				}),
+				SaturationGradient = Roact.createElement("Frame", {
+					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+					Size = UDim2.fromScale(1, 1),
+					ZIndex = 0,
+				}, {
+					Gradient = Roact.createElement("UIGradient", {
+						Color = ColorSequence.new(Color3.fromHSV(1, 0, val)),
+						Transparency = NumberSequence.new(1, 0),
+						Rotation = 90,
 					}),
 				}),
 			}),

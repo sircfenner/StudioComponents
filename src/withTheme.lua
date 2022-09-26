@@ -1,13 +1,15 @@
 local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
+local ThemeContext = require(script.Parent.ThemeContext)
 
 local StudioThemeProvider = Roact.Component:extend("StudioThemeProvider")
 local studioSettings = settings().Studio
 
 function StudioThemeProvider:init()
-	self:setState({ theme = studioSettings.Theme })
+	self:setState({ studioTheme = studioSettings.Theme })
+
 	self._changed = studioSettings.ThemeChanged:Connect(function()
-		self:setState({ theme = studioSettings.Theme })
+		self:setState({ studioTheme = studioSettings.Theme })
 	end)
 end
 
@@ -17,12 +19,27 @@ end
 
 function StudioThemeProvider:render()
 	local render = Roact.oneChild(self.props[Roact.Children])
-	return render(self.state.theme)
+
+	return Roact.createElement(ThemeContext.Provider, {
+		value = self.state.studioTheme,
+	}, {
+		Consumer = Roact.createElement(ThemeContext.Consumer, {
+			render = render,
+		})
+	})
 end
 
 local function withTheme(render)
-	return Roact.createElement(StudioThemeProvider, {}, {
-		render = render,
+	return Roact.createElement(ThemeContext.Consumer, {
+		render = function(theme)
+			if theme then
+				return render(theme)
+			else
+				return Roact.createElement(StudioThemeProvider, {}, {
+					render = render,
+				})
+			end
+		end
 	})
 end
 

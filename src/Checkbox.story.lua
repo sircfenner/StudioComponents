@@ -2,6 +2,7 @@ local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
 
 local Checkbox = require(script.Parent.Checkbox)
+local Constants = require(script.Parent.Constants)
 
 local Wrapper = Roact.Component:extend("CheckboxWrapper")
 
@@ -14,7 +15,7 @@ end
 
 function Wrapper:render()
 	local state = self.state
-	local value2 = Checkbox.Indeterminate
+	local value2 = Constants.CheckboxIndeterminate
 	if state.Value0 == state.Value1 then
 		value2 = state.Value0
 	end
@@ -80,7 +81,7 @@ function Wrapper:render()
 		}),
 		Checkbox5 = Roact.createElement(Checkbox, {
 			LayoutOrder = 6,
-			Value = Checkbox.Indeterminate,
+			Value = Constants.CheckboxIndeterminate,
 			Disabled = true,
 			Label = "Disabled, indeterminate",
 		}),
