@@ -3,20 +3,32 @@ local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
 local Hooks = require(Packages.RoactHooks)
 
-local DropdownConstants = require(script.Constants)
 local Constants = require(script.Parent.Constants)
-
 local useTheme = require(script.Parent.useTheme)
 
 --[[
 todo:
 - props.Disabled + becoming Disabled while open
-- props for position/anchor/size
-- should it have a border?
 ]]
 
 local ScrollFrame = require(script.Parent.ScrollFrame)
 local DropdownItem = require(script.DropdownItem)
+
+local TEXT_PADDING_LEFT = 5
+local TEXT_PADDING_RIGHT = 3
+
+local catchInputs = {
+	[Enum.UserInputType.MouseButton1] = true,
+	[Enum.UserInputType.MouseButton2] = true,
+	[Enum.UserInputType.MouseButton3] = true,
+}
+
+local defaultProps = {
+	Width = UDim.new(1, 0),
+	MaxVisibleRows = 6,
+	RowHeightTop = 20,
+	RowHeightItem = 15,
+}
 
 local function Dropdown(props, hooks)
 	local theme = useTheme(hooks)
@@ -25,8 +37,6 @@ local function Dropdown(props, hooks)
 	local hovered, setHovered = hooks.useState(false)
 
 	local rootRef = hooks.useValue(Roact.createRef())
-	local rootPosition, setRootPosition = hooks.useBinding(Vector2.new())
-	local rootSize, setRootSize = hooks.useBinding(Vector2.new())
 
 	local onSelectedInputBegan = function(_, input)
 		local t = input.UserInputType
@@ -65,29 +75,27 @@ local function Dropdown(props, hooks)
 				Item = item,
 				LayoutOrder = i,
 				OnSelected = onSelectedItem,
+				RowHeightItem = props.RowHeightItem,
+				TextPaddingLeft = TEXT_PADDING_LEFT,
+				TextPaddingRight = TEXT_PADDING_RIGHT,
 			})
 		end
 	end
 
 	local rowPadding = 1
-	local visibleItems = math.min(DropdownConstants.MaxVisibleRows, #items)
-	local scrollHeight = visibleItems * DropdownConstants.RowHeightItem -- item heights
+	local visibleItems = math.min(props.MaxVisibleRows, #items)
+	local scrollHeight = visibleItems * props.RowHeightItem -- item heights
 		+ (visibleItems - 1) * rowPadding -- row padding
 		+ 2 -- top and bottom borders
 
 	local catcher = nil
 	local function onCatcherInputBegan(_, input)
 		local t = input.UserInputType
-		if
-			t == Enum.UserInputType.MouseButton1
-			or t == Enum.UserInputType.MouseButton2
-			or t == Enum.UserInputType.MouseButton3
-		then
+		if catchInputs[t] then
 			local inst = rootRef.value:getValue()
-			local p = Vector2.new(input.Position.x, input.Position.y)
-			local min = inst.AbsolutePosition
-			local max = min + inst.AbsoluteSize + Vector2.new(0, scrollHeight)
-			if p.x < min.x or p.x > max.x or p.y < min.y or p.y > max.y then
+			local off = Vector2.new(input.Position.x, input.Position.y) - inst.AbsolutePosition
+			local max = inst.AbsoluteSize + Vector2.new(0, scrollHeight)
+			if off.x < 0 or off.x > max.x or off.y < 0 or off.y > max.y then
 				setOpen(false) -- only run if not clicking over the dropdown/options
 			end
 		elseif t == Enum.UserInputType.Keyboard then
@@ -111,16 +119,13 @@ local function Dropdown(props, hooks)
 					[Roact.Event.InputBegan] = onCatcherInputBegan,
 				}, {
 					-- rounding etc. here corrects for sub-pixel alignments
+					-- TODO: open upward, instead of down, if insufficient space?
 					Drop = open and Roact.createElement(ScrollFrame, {
-						Position = rootPosition:map(function(pos)
-							return UDim2.fromOffset(
-								math.round(pos.x),
-								math.ceil(pos.y - 1) + DropdownConstants.RowHeightTop
-							)
-						end),
-						Size = rootSize:map(function(size)
-							return UDim2.fromOffset(math.round(size.x), scrollHeight)
-						end),
+						Position = UDim2.fromOffset(
+							math.round(inst.AbsolutePosition.x) - 1,
+							math.ceil(inst.AbsolutePosition.y) - 1 + props.RowHeightTop
+						),
+						Size = UDim2.fromOffset(math.round(inst.AbsoluteSize.x) + 2, scrollHeight),
 						Layout = {
 							Padding = UDim.new(0, rowPadding),
 						},
@@ -131,28 +136,26 @@ local function Dropdown(props, hooks)
 	end
 
 	return Roact.createElement("Frame", {
-		Size = UDim2.fromOffset(100, DropdownConstants.RowHeightTop), -- prop (width - UDim?)
-		Position = UDim2.fromScale(0.5, 0.5), -- prop
-		AnchorPoint = Vector2.new(0.5, 0.5), -- prop
+		Size = UDim2.new(props.Width, UDim.new(0, props.RowHeightTop)),
+		Position = props.Position,
+		AnchorPoint = props.AnchorPoint,
 		BackgroundTransparency = 1,
 		LayoutOrder = props.LayoutOrder,
 		ZIndex = props.ZIndex,
 		[Roact.Event.InputBegan] = onSelectedInputBegan,
 		[Roact.Event.InputEnded] = onSelectedInputEnded,
 		[Roact.Ref] = rootRef.value,
-		[Roact.Change.AbsolutePosition] = function(rbx)
-			setRootPosition(rbx.AbsolutePosition)
+		[Roact.Change.AbsolutePosition] = function()
+			setOpen(false)
 		end,
-		[Roact.Change.AbsoluteSize] = function(rbx)
-			setRootSize(rbx.AbsoluteSize)
+		[Roact.Change.AbsoluteSize] = function()
+			setOpen(false)
 		end,
 	}, {
 		Catch = catcher,
 		Selected = Roact.createElement("TextLabel", {
 			Size = UDim2.fromScale(1, 1),
 			BackgroundColor3 = theme:GetColor(background, modifier),
-			BorderMode = Enum.BorderMode.Inset,
-			BorderSizePixel = 1,
 			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
 			Text = props.Item,
 			Font = Constants.Font,
@@ -162,8 +165,8 @@ local function Dropdown(props, hooks)
 			ZIndex = 1,
 		}, {
 			Padding = Roact.createElement("UIPadding", {
-				PaddingLeft = UDim.new(0, DropdownConstants.TextPaddingLeft - 1), -- border
-				PaddingRight = UDim.new(0, DropdownConstants.TextPaddingRight),
+				PaddingLeft = UDim.new(0, TEXT_PADDING_LEFT),
+				PaddingRight = UDim.new(0, TEXT_PADDING_RIGHT),
 				PaddingBottom = UDim.new(0, 1),
 			}),
 		}),
@@ -186,4 +189,6 @@ local function Dropdown(props, hooks)
 	})
 end
 
-return Hooks.new(Roact)(Dropdown)
+return Hooks.new(Roact)(Dropdown, {
+	defaultProps = defaultProps,
+})
