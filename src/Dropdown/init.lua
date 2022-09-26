@@ -180,11 +180,12 @@ local function Dropdown(props, hooks)
 			TextSize = Constants.TextSize,
 			TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, modifier),
 			TextXAlignment = Enum.TextXAlignment.Left,
+			TextTruncate = Enum.TextTruncate.AtEnd,
 			ZIndex = 1,
 		}, {
 			Padding = Roact.createElement("UIPadding", {
 				PaddingLeft = UDim.new(0, TEXT_PADDING_LEFT),
-				PaddingRight = UDim.new(0, TEXT_PADDING_RIGHT),
+				PaddingRight = UDim.new(0, 12),
 				PaddingBottom = UDim.new(0, 1),
 			}),
 		}),
