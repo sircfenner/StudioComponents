@@ -35,8 +35,8 @@ function Wrapper:render()
 		Dropdown0 = Roact.createElement(Dropdown, {
 			LayoutOrder = 0,
 			Items = table.clone(words),
-			Item = self.state.Item0,
-			OnSelected = function(item)
+			SelectedItem = self.state.Item0,
+			OnItemSelected = function(item)
 				self:setState({ Item0 = item })
 			end,
 		}),
@@ -44,8 +44,8 @@ function Wrapper:render()
 		Dropdown1 = Roact.createElement(Dropdown, {
 			LayoutOrder = 1,
 			Items = table.clone(words),
-			Item = self.state.Item1,
-			OnSelected = function(item)
+			SelectedItem = self.state.Item1,
+			OnItemSelected = function(item)
 				self:setState({ Item1 = item })
 			end,
 		}),
@@ -53,8 +53,8 @@ function Wrapper:render()
 		Dropdown2 = Roact.createElement(Dropdown, {
 			LayoutOrder = 2,
 			Items = table.clone(words),
-			Item = self.state.Item2,
-			OnSelected = function(item)
+			SelectedItem = self.state.Item2,
+			OnItemSelected = function(item)
 				self:setState({ Item2 = item })
 			end,
 		}),
@@ -62,8 +62,8 @@ function Wrapper:render()
 		Dropdown3 = Roact.createElement(Dropdown, {
 			LayoutOrder = 3,
 			Items = table.clone(words),
-			Item = self.state.Item3,
-			OnSelected = function(item)
+			SelectedItem = self.state.Item3,
+			OnItemSelected = function(item)
 				self:setState({ Item3 = item })
 			end,
 			Disabled = true,

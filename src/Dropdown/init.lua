@@ -55,7 +55,7 @@ local function Dropdown(props, hooks)
 	local onSelectedItem = function(item)
 		if not props.Disabled then
 			setOpen(false)
-			props.OnSelected(item)
+			props.OnItemSelected(item)
 		end
 	end
 
@@ -175,7 +175,7 @@ local function Dropdown(props, hooks)
 			Size = UDim2.fromScale(1, 1),
 			BackgroundColor3 = theme:GetColor(background, modifier),
 			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
-			Text = props.Item,
+			Text = props.SelectedItem,
 			Font = Constants.Font,
 			TextSize = Constants.TextSize,
 			TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, modifier),
