@@ -6,11 +6,6 @@ local Hooks = require(Packages.RoactHooks)
 local Constants = require(script.Parent.Constants)
 local useTheme = require(script.Parent.useTheme)
 
---[[
-todo:
-- props.Disabled + becoming Disabled while open
-]]
-
 local ScrollFrame = require(script.Parent.ScrollFrame)
 local DropdownItem = require(script.DropdownItem)
 
@@ -41,9 +36,13 @@ local function Dropdown(props, hooks)
 	local onSelectedInputBegan = function(_, input)
 		local t = input.UserInputType
 		if t == Enum.UserInputType.MouseMovement then
-			setHovered(true)
+			if not props.Disabled then
+				setHovered(true)
+			end
 		elseif t == Enum.UserInputType.MouseButton1 then
-			setOpen(not open) -- what if disabled?
+			if not props.Disabled then
+				setOpen(not open)
+			end
 		end
 	end
 
@@ -54,12 +53,16 @@ local function Dropdown(props, hooks)
 	end
 
 	local onSelectedItem = function(item)
-		setOpen(false)
-		props.OnSelected(item)
+		if not props.Disabled then
+			setOpen(false)
+			props.OnSelected(item)
+		end
 	end
 
 	local modifier = Enum.StudioStyleGuideModifier.Default
-	if hovered then
+	if props.Disabled then
+		modifier = Enum.StudioStyleGuideModifier.Disabled
+	elseif hovered then
 		modifier = Enum.StudioStyleGuideModifier.Hover
 	end
 
@@ -69,7 +72,7 @@ local function Dropdown(props, hooks)
 	end
 
 	local items = {}
-	if open then
+	if open and not props.Disabled then
 		for i, item in ipairs(props.Items) do
 			items[i] = Roact.createElement(DropdownItem, {
 				Item = item,
@@ -105,7 +108,7 @@ local function Dropdown(props, hooks)
 		end
 	end
 
-	if open and rootRef.value then
+	if not props.Disabled and open and rootRef.value then
 		local inst = rootRef.value:getValue()
 		local target = inst:FindFirstAncestorWhichIsA("LayerCollector")
 		if target ~= nil then
