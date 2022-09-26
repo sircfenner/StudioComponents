@@ -111,7 +111,25 @@ local function Dropdown(props, hooks)
 	if not props.Disabled and open and rootRef.value then
 		local inst = rootRef.value:getValue()
 		local target = inst:FindFirstAncestorWhichIsA("LayerCollector")
+
 		if target ~= nil then
+			local pos = inst.AbsolutePosition
+			local size = inst.AbsoluteSize
+
+			local spaceBelow = target.AbsoluteSize.y - size.y - pos.y
+			local spaceAbove = pos.y
+
+			-- render dropdown going upward if both are true:
+			-- 1. not enough space below AND
+			-- 2. more space above
+			local anchor = Vector2.new(0, 0)
+			local posy = math.ceil(pos.y) - 1 + props.RowHeightTop
+			local buffer = 3 -- extra space required below
+			if spaceBelow < scrollHeight + buffer and spaceAbove > spaceBelow then
+				anchor = Vector2.new(0, 1)
+				posy -= props.RowHeightTop
+			end
+
 			catcher = Roact.createElement(Roact.Portal, {
 				target = target,
 			}, {
@@ -122,13 +140,10 @@ local function Dropdown(props, hooks)
 					[Roact.Event.InputBegan] = onCatcherInputBegan,
 				}, {
 					-- rounding etc. here corrects for sub-pixel alignments
-					-- TODO: open upward, instead of down, if insufficient space?
 					Drop = open and Roact.createElement(ScrollFrame, {
-						Position = UDim2.fromOffset(
-							math.round(inst.AbsolutePosition.x) - 1,
-							math.ceil(inst.AbsolutePosition.y) - 1 + props.RowHeightTop
-						),
-						Size = UDim2.fromOffset(math.round(inst.AbsoluteSize.x) + 2, scrollHeight),
+						AnchorPoint = anchor,
+						Position = UDim2.fromOffset(math.round(pos.x) - 1, posy),
+						Size = UDim2.fromOffset(math.round(size.x) + 2, scrollHeight),
 						Layout = {
 							Padding = UDim.new(0, rowPadding),
 						},
