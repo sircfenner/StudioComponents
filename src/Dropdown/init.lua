@@ -97,9 +97,9 @@ local function Dropdown(props, hooks)
 		if catchInputs[t] then
 			local inst = rootRef.value:getValue()
 			local off = Vector2.new(input.Position.x, input.Position.y) - inst.AbsolutePosition
-			local max = inst.AbsoluteSize + Vector2.new(0, scrollHeight)
+			local max = inst.AbsoluteSize
 			if off.x < 0 or off.x > max.x or off.y < 0 or off.y > max.y then
-				setOpen(false) -- only run if not clicking over the dropdown/options
+				setOpen(false) -- only run if not clicking over the dropdown top part
 			end
 		elseif t == Enum.UserInputType.Keyboard then
 			if input.KeyCode == Enum.KeyCode.Escape then
