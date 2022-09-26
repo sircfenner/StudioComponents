@@ -6,6 +6,7 @@ local function useTheme(hooks)
 	local studioTheme, setStudioTheme = hooks.useState(studio.Theme)
 
 	hooks.useEffect(function()
+		if theme then return end
 		local connection = studio.ThemeChanged:Connect(function()
 			setStudioTheme(studio.Theme)
 		end)
