@@ -20,7 +20,6 @@ local defaultProps = {
 	HoverDelay = 0.5,
 }
 
--- TODO: make sure visible above a dropdown
 -- TODO: do some kind of validation if the trigger has moved e.g. in a scroll frame?
 -- TODO: disabled?
 
@@ -134,7 +133,7 @@ local function Tooltip(props, hooks)
 			target = target,
 		}, {
 			Tooltip = Roact.createElement("Frame", {
-				ZIndex = 2 ^ 16 - 1,
+				ZIndex = Constants.ZIndex.Tooltip,
 				BackgroundTransparency = 1,
 				Size = UDim2.fromOffset(
 					textSize.x + TEXT_PADDING_SIDES * 2,

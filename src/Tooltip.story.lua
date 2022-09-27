@@ -5,6 +5,7 @@ local Tooltip = require(script.Parent.Tooltip)
 
 local Button = require(script.Parent.Button)
 local Checkbox = require(script.Parent.Checkbox)
+local Dropdown = require(script.Parent.Dropdown)
 
 return function(target)
 	local element = Roact.createFragment({
@@ -40,8 +41,20 @@ return function(target)
 			}, {
 				Tooltip = Roact.createElement(Tooltip, {
 					Text = "This is an explanation of the checkbox",
-					HoverDelay = 0.5,
 				}),
+			}),
+		}),
+
+		Dropdown = Roact.createElement(Dropdown, {
+			LayoutOrder = 2,
+			Width = UDim.new(0, 120),
+			Items = { "OptionA", "OptionB", "OptionC", "OptionD", "OptionE", "OptionF" },
+			MaxVisibleRows = 4,
+			SelectedItem = "OptionA",
+			OnItemSelected = function() end,
+		}, {
+			Tooltip = Roact.createElement(Tooltip, {
+				Text = "This is an explanation of the dropdown",
 			}),
 		}),
 	})

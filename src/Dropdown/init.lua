@@ -134,7 +134,7 @@ local function Dropdown(props, hooks)
 				target = target,
 			}, {
 				Frame = Roact.createElement("Frame", {
-					ZIndex = 2 ^ 31 - 1,
+					ZIndex = Constants.ZIndex.Dropdown,
 					BackgroundTransparency = 1,
 					Size = UDim2.fromScale(1, 1),
 					[Roact.Event.InputBegan] = onCatcherInputBegan,
@@ -205,6 +205,7 @@ local function Dropdown(props, hooks)
 				ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.TitlebarText, modifier),
 			}),
 		}),
+		Children = Roact.createFragment(props[Roact.Children]),
 	})
 end
 
