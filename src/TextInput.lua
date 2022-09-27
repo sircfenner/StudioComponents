@@ -23,7 +23,7 @@ TextInput.defaultProps = {
 	ClearTextOnFocus = true,
 	OnFocused = noop,
 	OnFocusLost = noop,
-	OnInvalidFocusLost = noop,
+	OnFocusLostInvalid = noop,
 	OnChanged = noop,
 	OnChangedInvalid = noop,
 }
