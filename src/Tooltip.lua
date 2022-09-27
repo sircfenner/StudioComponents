@@ -26,7 +26,6 @@ local defaultProps = {
 }
 
 -- TODO: do some kind of validation if the trigger has moved e.g. in a scroll frame?
--- TODO: disabled?
 
 local function Shadow(props, hooks)
 	local theme = useTheme(hooks)
@@ -66,6 +65,9 @@ local function Tooltip(props, hooks)
 	end
 
 	local function onInputBeganChanged(_, input)
+		if props.Disabled then
+			return
+		end
 		if input.UserInputType == Enum.UserInputType.MouseMovement then
 			cancel()
 			displayPos.value = Vector2.new(input.Position.x, input.Position.y)
