@@ -1,15 +1,22 @@
 --!strict
 local RunService = game:GetService("RunService")
 local IS_STUDIO = RunService:IsStudio()
+local ALLOWED_MODIFIERS = {
+	Default = true,
+	Selected = true,
+	Pressed = true,
+	Disabled = true,
+	Hover = true,
+}
 
 local Types = require(script.types)
 export type Wrapper = Types.Wrapper
 
 local cache = setmetatable({}, { __mode = "k" })
 
-local function createStyleWrapper(theme, style): Types.ColorStyleWrapper
+local function createModifierWrapper(theme, modifier): Types.ModifierWrapper
 	return setmetatable({}, {
-		__index = function(_, modifier)
+		__index = function(_, style)
 			-- Outside of studio, the enumeration doesn't exist.
 			-- However, StudioTheme requires an enumeration to work. Strings error.
 			if IS_STUDIO and typeof(modifier) == "string" then
@@ -18,7 +25,7 @@ local function createStyleWrapper(theme, style): Types.ColorStyleWrapper
 
 			return theme:GetColor(style, modifier)
 		end,
-		__call = function(_, modifier)
+		__call = function(_, style)
 			return theme:GetColor(style, modifier)
 		end,
 	}) :: any
@@ -35,11 +42,11 @@ local function createWrapper(theme: any): Types.Wrapper
 		end,
 	}, {
 		__index = function(self, key)
-			if theme:GetColor(key) then
-				return createStyleWrapper(theme, key)
+			if ALLOWED_MODIFIERS[key] then
+				return createModifierWrapper(theme, key)
 			end
 
-			error("Invalid color: " .. key)
+			error("Invalid modifier: " .. key)
 		end,
 	}) :: any
 
