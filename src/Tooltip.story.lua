@@ -7,8 +7,22 @@ local Button = require(script.Parent.Button)
 local Checkbox = require(script.Parent.Checkbox)
 local Dropdown = require(script.Parent.Dropdown)
 local Label = require(script.Parent.Label)
+local ScrollFrame = require(script.Parent.ScrollFrame)
 
 return function(target)
+	local scrollContents = {}
+	for i = 1, 10 do
+		scrollContents[i] = Roact.createElement(Label, {
+			LayoutOrder = i,
+			Size = UDim2.new(1, 0, 0, 20),
+			Text = "Label " .. i,
+		}, {
+			Tooltip = Roact.createElement(Tooltip, {
+				Text = "Tooltip for Label " .. i,
+			}),
+		})
+	end
+
 	local element = Roact.createFragment({
 		Layout = Roact.createElement("UIListLayout", {
 			Padding = UDim.new(0, 10),
@@ -68,6 +82,14 @@ return function(target)
 				Text = "This is an explanation of the label",
 			}),
 		}),
+
+		ScrollFrame = Roact.createElement(ScrollFrame, {
+			LayoutOrder = 4,
+			Size = UDim2.fromOffset(175, 80),
+			Layout = {
+				Padding = UDim.new(0, 0),
+			},
+		}, scrollContents),
 	})
 	local handle = Roact.mount(element, target)
 	return function()

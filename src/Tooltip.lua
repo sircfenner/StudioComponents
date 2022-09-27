@@ -25,8 +25,6 @@ local defaultProps = {
 	HoverDelay = 0.4,
 }
 
--- TODO: do some kind of validation if the trigger has moved e.g. in a scroll frame?
-
 local function Shadow(props, hooks)
 	local theme = useTheme(hooks)
 	return Roact.createElement("Frame", {
@@ -157,6 +155,7 @@ local function Tooltip(props, hooks)
 		[Roact.Event.InputBegan] = onInputBeganChanged,
 		[Roact.Event.InputChanged] = onInputBeganChanged,
 		[Roact.Event.InputEnded] = onInputEnded,
+		[Roact.Change.AbsolutePosition] = cancel,
 	}, {
 		Portal = target and Roact.createElement(Roact.Portal, {
 			target = target,
