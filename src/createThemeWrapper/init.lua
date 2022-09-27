@@ -1,6 +1,8 @@
 --!strict
 local RunService = game:GetService("RunService")
 local IS_STUDIO = RunService:IsStudio()
+local IS_RUNMODE = RunService:IsRunMode()
+
 local ALLOWED_MODIFIERS = {
 	Default = true,
 	Selected = true,
@@ -19,7 +21,7 @@ local function createModifierWrapper(theme, modifier): Types.ModifierWrapper
 		__index = function(_, style)
 			-- Outside of studio, the enumeration doesn't exist.
 			-- However, StudioTheme requires an enumeration to work. Strings error.
-			if IS_STUDIO and typeof(modifier) == "string" then
+			if (IS_STUDIO and not IS_RUNMODE) and typeof(modifier) == "string" then
 				modifier = (Enum.StudioStyleGuideModifier :: any)[modifier]
 			end
 
