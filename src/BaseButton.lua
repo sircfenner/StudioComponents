@@ -65,23 +65,19 @@ local function BaseButton(props, hooks)
 		end
 	end
 
-	local modifier = Enum.StudioStyleGuideModifier.Default
-	if props.Disabled then
-		modifier = Enum.StudioStyleGuideModifier.Disabled
-	elseif props.Selected then
-		modifier = Enum.StudioStyleGuideModifier.Selected
-	elseif pressed then
-		modifier = Enum.StudioStyleGuideModifier.Pressed
-	elseif hovered then
-		modifier = Enum.StudioStyleGuideModifier.Hover
-	end
+	local modifier = if props.Disabled
+		then theme.Disabled
+		elseif props.Selected then theme.Selected
+		elseif pressed then theme.Pressed
+		elseif hovered then theme.Hover
+		else theme.Default
 
 	local scrubbedProps = joinDictionaries(props, propsToScrub, {
 		Font = Constants.Font,
 		TextSize = Constants.TextSize,
-		TextColor3 = theme:GetColor(props.TextColorStyle, modifier),
-		BackgroundColor3 = theme:GetColor(props.BackgroundColorStyle, modifier),
-		BorderColor3 = theme:GetColor(props.BorderColorStyle, modifier),
+		TextColor3 = modifier(props.TextColorStyle),
+		BackgroundColor3 = modifier(props.BackgroundColorStyle),
+		BorderColor3 = modifier(props.BorderColorStyle),
 		BorderMode = Enum.BorderMode.Inset,
 		AutoButtonColor = false,
 		[Roact.Event.InputBegan] = onInputBegan,

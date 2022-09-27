@@ -41,18 +41,18 @@ local function Checkbox(props, hooks)
 		end
 	end
 
-	local mainModifier = Enum.StudioStyleGuideModifier.Default
+	local mainModifier = theme.Default
 	if props.Disabled then
-		mainModifier = Enum.StudioStyleGuideModifier.Disabled
+		mainModifier = theme.Disabled
 	elseif hovered then
-		mainModifier = Enum.StudioStyleGuideModifier.Hover
+		mainModifier = theme.Hover
 	end
 
-	local backModifier = Enum.StudioStyleGuideModifier.Default
+	local backModifier = theme.Default
 	if props.Disabled then
-		backModifier = Enum.StudioStyleGuideModifier.Disabled
+		backModifier = theme.Disabled
 	elseif props.Value == true then
-		backModifier = Enum.StudioStyleGuideModifier.Selected
+		backModifier = theme.Selected
 	end
 
 	local boxPositionX = 0
@@ -73,7 +73,7 @@ local function Checkbox(props, hooks)
 		end
 	end
 
-	local indicatorColor = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldIndicator, mainModifier)
+	local indicatorColor = mainModifier.CheckedFieldIndicator
 	if props.Value == Constants.CheckboxIndeterminate then
 		indicatorColor = Color3.fromRGB(255, 255, 255)
 	end
@@ -94,8 +94,8 @@ local function Checkbox(props, hooks)
 		Box = Roact.createElement("Frame", {
 			AnchorPoint = Vector2.new(boxPositionX, 0),
 			Position = UDim2.fromScale(boxPositionX, 0),
-			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldBackground, backModifier),
-			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldBorder, mainModifier),
+			BackgroundColor3 = backModifier.CheckedFieldBackground,
+			BorderColor3 = mainModifier.CheckedFieldBorder,
 			BorderMode = Enum.BorderMode.Inset,
 			Size = UDim2.fromOffset(15, 15),
 		}, {
@@ -119,7 +119,7 @@ local function Checkbox(props, hooks)
 			Text = props.Label,
 			Font = Constants.Font,
 			TextSize = Constants.TextSize,
-			TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, mainModifier),
+			TextColor3 = mainModifier.MainText,
 		}),
 	})
 end

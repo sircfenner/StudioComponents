@@ -30,11 +30,8 @@ local function Label(props, hooks)
 	local theme = useTheme(hooks)
 
 	local joinedProps = joinDictionaries(defaultProps, props)
-	local modifier = Enum.StudioStyleGuideModifier.Default
-	if joinedProps.Disabled then
-		modifier = Enum.StudioStyleGuideModifier.Disabled
-	end
-	joinedProps.TextColor3 = theme:GetColor(joinedProps.TextColorStyle, modifier)
+	local modifier = if joinedProps.Disabled then theme.Disabled else theme.Default
+	joinedProps.TextColor3 = modifier(joinedProps.TextColorStyle)
 	joinedProps.Disabled = nil
 	joinedProps.TextColorStyle = nil
 
