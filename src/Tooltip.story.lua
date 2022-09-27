@@ -4,6 +4,7 @@ local Roact = require(Packages.Roact)
 local Tooltip = require(script.Parent.Tooltip)
 
 local Button = require(script.Parent.Button)
+local Checkbox = require(script.Parent.Checkbox)
 
 return function(target)
 	local element = Roact.createFragment({
@@ -24,6 +25,23 @@ return function(target)
 		}, {
 			Tooltip = Roact.createElement(Tooltip, {
 				Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+			}),
+		}),
+
+		Checkbox = Roact.createElement("Frame", {
+			LayoutOrder = 1,
+			Size = UDim2.fromOffset(120, 16),
+			BackgroundTransparency = 1,
+		}, {
+			Actual = Roact.createElement(Checkbox, {
+				Value = true,
+				Label = "Example checkbox",
+				OnActivated = function() end,
+			}, {
+				Tooltip = Roact.createElement(Tooltip, {
+					Text = "This is an explanation of the checkbox",
+					HoverDelay = 0.5,
+				}),
 			}),
 		}),
 	})
