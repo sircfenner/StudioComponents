@@ -120,6 +120,7 @@ export type StudioStyleGuideColorStrings =
 
 export type StudioStyleModifierStrings = "Default" | "Selected" | "Pressed" | "Disabled" | "Hover"
 
+-- TODO: Change when Luau syntax supports typing tables with metatables.
 export type ModifierWrapper = typeof(setmetatable({}, {
 	__index = {} :: {
 		MainBackground: Color3,
