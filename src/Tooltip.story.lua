@@ -6,6 +6,7 @@ local Tooltip = require(script.Parent.Tooltip)
 local Button = require(script.Parent.Button)
 local Checkbox = require(script.Parent.Checkbox)
 local Dropdown = require(script.Parent.Dropdown)
+local Label = require(script.Parent.Label)
 
 return function(target)
 	local element = Roact.createFragment({
@@ -55,6 +56,16 @@ return function(target)
 		}, {
 			Tooltip = Roact.createElement(Tooltip, {
 				Text = "This is an explanation of the dropdown",
+			}),
+		}),
+
+		Label = Roact.createElement(Label, {
+			LayoutOrder = 3,
+			Size = UDim2.fromOffset(80, 14),
+			Text = "Example label",
+		}, {
+			Tooltip = Roact.createElement(Tooltip, {
+				Text = "This is an explanation of the label",
 			}),
 		}),
 	})
