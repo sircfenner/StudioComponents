@@ -125,8 +125,8 @@ export type ColorStyleWrapper = ((StudioStyleModifierStrings | Enum.StudioStyleG
 export type Wrapper = {
 	GetColor: (
 		any,
-		StudioStyleModifierStrings | Enum.StudioStyleGuideColor,
-		StudioStyleModifierStrings | Enum.StudioStyleGuideModifier
+		StudioStyleGuideColorStrings | Enum.StudioStyleGuideColor,
+		(StudioStyleModifierStrings | Enum.StudioStyleGuideModifier)?
 	) -> Color3,
 	[Enum.StudioStyleGuideColor]: ColorStyleWrapper,
 	MainBackground: ColorStyleWrapper,
