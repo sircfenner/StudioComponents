@@ -9,11 +9,6 @@ local joinDictionaries = require(script.Parent.joinDictionaries)
 local Constants = require(script.Parent.Constants)
 
 local defaultProps = {
-	LayoutOrder = 0,
-	ZIndex = 0,
-	Disabled = false,
-	Position = UDim2.fromScale(0, 0),
-	AnchorPoint = Vector2.new(0, 0),
 	Size = UDim2.fromScale(1, 1),
 	Text = "Label.defaultProps.Text",
 	Font = Constants.Font,

@@ -10,6 +10,7 @@ return {
 	Slider = require(script.Slider),
 	TabContainer = require(script.TabContainer),
 	TextInput = require(script.TextInput),
+	Tooltip = require(script.Tooltip),
 	VerticalCollapsibleSection = require(script.VerticalCollapsibleSection),
 	VerticalExpandingList = require(script.VerticalExpandingList),
 	Widget = require(script.Widget),

@@ -10,8 +10,6 @@ local Constants = require(script.Parent.Constants)
 local INDICATOR_IMAGE = "rbxassetid://6652838434"
 
 local defaultProps = {
-	LayoutOrder = 0,
-	Disabled = false,
 	Alignment = Constants.CheckboxAlignment.Left,
 }
 
@@ -82,6 +80,7 @@ local function Checkbox(props, hooks)
 		Size = UDim2.new(1, 0, 0, 15),
 		BackgroundTransparency = 1,
 		LayoutOrder = props.LayoutOrder,
+		ZIndex = props.ZIndex,
 	}, {
 		Button = Roact.createElement("TextButton", {
 			Text = "",
@@ -121,6 +120,7 @@ local function Checkbox(props, hooks)
 			TextSize = Constants.TextSize,
 			TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, mainModifier),
 		}),
+		Children = Roact.createFragment(props[Roact.Children]),
 	})
 end
 

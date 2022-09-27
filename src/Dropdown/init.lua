@@ -1,127 +1,214 @@
 local Packages = script.Parent.Parent
+
 local Roact = require(Packages.Roact)
+local Hooks = require(Packages.RoactHooks)
 
-local DropdownConstants = require(script.Constants)
 local Constants = require(script.Parent.Constants)
-local withTheme = require(script.Parent.withTheme)
-
---[[
-todo:
-- props.Disabled
-- props for position/anchor/size
-- should it have a border?
-- close when clicked outside (preferably compatible with AutomaticSize - no big frame)
-- consider lifting open/closed state up (compatibility with mutually exclusive dropdowns)
-- look into using Context for mutually exclusive dropdowns (needs design)
-]]
+local useTheme = require(script.Parent.useTheme)
 
 local ScrollFrame = require(script.Parent.ScrollFrame)
 local DropdownItem = require(script.DropdownItem)
 
-local Dropdown = Roact.Component:extend("Dropdown")
+local TEXT_PADDING_LEFT = 5
+local TEXT_PADDING_RIGHT = 3
 
-function Dropdown:init()
-	self:setState({
-		Open = false,
-		Hover = false,
-	})
-	self.onSelectedInputBegan = function(_rbx, input)
+local catchInputs = {
+	[Enum.UserInputType.MouseButton1] = true,
+	[Enum.UserInputType.MouseButton2] = true,
+	[Enum.UserInputType.MouseButton3] = true,
+}
+
+local defaultProps = {
+	Width = UDim.new(1, 0),
+	MaxVisibleRows = 6,
+	RowHeightTop = 20,
+	RowHeightItem = 15,
+}
+
+local function Dropdown(props, hooks)
+	local theme = useTheme(hooks)
+
+	local open, setOpen = hooks.useState(false)
+	local hovered, setHovered = hooks.useState(false)
+
+	local rootRef = hooks.useValue(Roact.createRef())
+
+	local onSelectedInputBegan = function(_, input)
 		local t = input.UserInputType
 		if t == Enum.UserInputType.MouseMovement then
-			self:setState({ Hover = true })
+			if not props.Disabled then
+				setHovered(true)
+			end
 		elseif t == Enum.UserInputType.MouseButton1 then
-			self:setState({ Open = not self.state.Open })
+			if not props.Disabled then
+				setOpen(not open)
+			end
 		end
 	end
-	self.onSelectedInputEnded = function(_rbx, input)
-		if input.UserInputType == Enum.UserInputType.MouseMovement then
-			self:setState({ Hover = false })
-		end
-	end
-	self.onSelectedItem = function(item)
-		self:setState({ Open = false })
-		self.props.OnSelected(item)
-	end
-end
 
-function Dropdown:render()
+	local onSelectedInputEnded = function(_, input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement then
+			setHovered(false)
+		end
+	end
+
+	local onSelectedItem = function(item)
+		if not props.Disabled then
+			setOpen(false)
+			props.OnItemSelected(item)
+		end
+	end
+
 	local modifier = Enum.StudioStyleGuideModifier.Default
-	if self.state.Hover then
+	if props.Disabled then
+		modifier = Enum.StudioStyleGuideModifier.Disabled
+	elseif hovered then
 		modifier = Enum.StudioStyleGuideModifier.Hover
 	end
 
 	local background = Enum.StudioStyleGuideColor.MainBackground
-	if self.state.Open or self.state.Hover then
+	if open or hovered then
 		background = Enum.StudioStyleGuideColor.InputFieldBackground
 	end
 
-	return withTheme(function(theme)
-		local items = {}
-		if self.state.Open then
-			for i, item in ipairs(self.props.Items) do
-				items[i] = Roact.createElement(DropdownItem, {
-					Item = item,
-					LayoutOrder = i,
-					OnSelected = self.onSelectedItem,
-				})
+	local items = {}
+	if open and not props.Disabled then
+		for i, item in ipairs(props.Items) do
+			items[i] = Roact.createElement(DropdownItem, {
+				Item = item,
+				LayoutOrder = i,
+				OnSelected = onSelectedItem,
+				RowHeightItem = props.RowHeightItem,
+				TextPaddingLeft = TEXT_PADDING_LEFT,
+				TextPaddingRight = TEXT_PADDING_RIGHT,
+			})
+		end
+	end
+
+	local rowPadding = 1
+	local visibleItems = math.min(props.MaxVisibleRows, #items)
+	local scrollHeight = visibleItems * props.RowHeightItem -- item heights
+		+ (visibleItems - 1) * rowPadding -- row padding
+		+ 2 -- top and bottom borders
+
+	local catcher = nil
+	local function onCatcherInputBegan(_, input)
+		local t = input.UserInputType
+		if catchInputs[t] then
+			local inst = rootRef.value:getValue()
+			local off = Vector2.new(input.Position.x, input.Position.y) - inst.AbsolutePosition
+			local max = inst.AbsoluteSize
+			if off.x < 0 or off.x > max.x or off.y < 0 or off.y > max.y then
+				setOpen(false) -- only run if not clicking over the dropdown top part
+			end
+		elseif t == Enum.UserInputType.Keyboard then
+			if input.KeyCode == Enum.KeyCode.Escape then
+				setOpen(false)
 			end
 		end
+	end
 
-		local rowPadding = 1
-		local visibleItems = math.min(DropdownConstants.MaxVisibleRows, #items)
-		local scrollHeight = visibleItems * DropdownConstants.RowHeightItem -- item heights
-			+ (visibleItems - 1) * rowPadding -- row padding
-			+ 2 -- top and bottom borders
+	if not props.Disabled and open and rootRef.value then
+		local inst = rootRef.value:getValue()
+		local target = inst:FindFirstAncestorWhichIsA("LayerCollector")
 
-		return Roact.createElement("Frame", {
-			Size = UDim2.fromOffset(100, DropdownConstants.RowHeightTop), -- prop (width - UDim?)
-			Position = UDim2.fromScale(0.5, 0.5), -- prop
-			AnchorPoint = Vector2.new(0.5, 0.5), -- prop
-			BackgroundTransparency = 1,
-			[Roact.Event.InputBegan] = self.onSelectedInputBegan,
-			[Roact.Event.InputEnded] = self.onSelectedInputEnded,
-		}, {
-			Selected = Roact.createElement("TextLabel", {
-				Size = UDim2.fromScale(1, 1),
-				BackgroundColor3 = theme:GetColor(background, modifier),
-				BorderMode = Enum.BorderMode.Inset,
-				BorderSizePixel = 1,
-				BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
-				Text = self.props.Item,
-				Font = Constants.Font,
-				TextSize = Constants.TextSize,
-				TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, modifier),
-				TextXAlignment = Enum.TextXAlignment.Left,
+		if target ~= nil then
+			local pos = inst.AbsolutePosition
+			local size = inst.AbsoluteSize
+
+			local spaceBelow = target.AbsoluteSize.y - size.y - pos.y
+			local spaceAbove = pos.y
+
+			-- render dropdown going upward if both are true:
+			-- 1. not enough space below AND
+			-- 2. more space above
+			local anchor = Vector2.new(0, 0)
+			local posy = math.ceil(pos.y) - 1 + props.RowHeightTop
+			local buffer = 3 -- extra space required below
+			if spaceBelow < scrollHeight + buffer and spaceAbove > spaceBelow then
+				anchor = Vector2.new(0, 1)
+				posy -= props.RowHeightTop
+			end
+
+			catcher = Roact.createElement(Roact.Portal, {
+				target = target,
 			}, {
-				Padding = Roact.createElement("UIPadding", {
-					PaddingLeft = UDim.new(0, DropdownConstants.TextPaddingLeft),
-					PaddingRight = UDim.new(0, DropdownConstants.TextPaddingRight),
-				}),
-			}),
-			ArrowContainer = Roact.createElement("Frame", {
-				AnchorPoint = Vector2.new(1, 0),
-				Position = UDim2.fromScale(1, 0),
-				Size = UDim2.new(0, 18, 1, 0),
-				BackgroundTransparency = 1,
-			}, {
-				Arrow = Roact.createElement("ImageLabel", {
-					Image = "rbxassetid://7260137654",
-					AnchorPoint = Vector2.new(0.5, 0.5),
-					Position = UDim2.fromScale(0.5, 0.5),
-					Size = UDim2.fromOffset(8, 4),
+				Frame = Roact.createElement("Frame", {
+					ZIndex = Constants.ZIndex.Dropdown,
 					BackgroundTransparency = 1,
-					ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.TitlebarText, modifier),
+					Size = UDim2.fromScale(1, 1),
+					[Roact.Event.InputBegan] = onCatcherInputBegan,
+				}, {
+					-- rounding etc. here corrects for sub-pixel alignments
+					Drop = open and Roact.createElement(ScrollFrame, {
+						AnchorPoint = anchor,
+						Position = UDim2.fromOffset(math.round(pos.x) - 1, posy),
+						Size = UDim2.fromOffset(math.round(size.x) + 2, scrollHeight),
+						Layout = {
+							Padding = UDim.new(0, rowPadding),
+						},
+					}, items),
 				}),
+			})
+		end
+	end
+
+	return Roact.createElement("Frame", {
+		Size = UDim2.new(props.Width, UDim.new(0, props.RowHeightTop)),
+		Position = props.Position,
+		AnchorPoint = props.AnchorPoint,
+		BackgroundTransparency = 1,
+		LayoutOrder = props.LayoutOrder,
+		ZIndex = props.ZIndex,
+		[Roact.Event.InputBegan] = onSelectedInputBegan,
+		[Roact.Event.InputEnded] = onSelectedInputEnded,
+		[Roact.Ref] = rootRef.value,
+		[Roact.Change.AbsolutePosition] = function()
+			setOpen(false)
+		end,
+		[Roact.Change.AbsoluteSize] = function()
+			setOpen(false)
+		end,
+	}, {
+		Catch = catcher,
+		Selected = Roact.createElement("TextLabel", {
+			Size = UDim2.fromScale(1, 1),
+			BackgroundColor3 = theme:GetColor(background, modifier),
+			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border, modifier),
+			Text = props.SelectedItem,
+			Font = Constants.Font,
+			TextSize = Constants.TextSize,
+			TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, modifier),
+			TextXAlignment = Enum.TextXAlignment.Left,
+			TextTruncate = Enum.TextTruncate.AtEnd,
+			ZIndex = 1,
+		}, {
+			Padding = Roact.createElement("UIPadding", {
+				PaddingLeft = UDim.new(0, TEXT_PADDING_LEFT),
+				PaddingRight = UDim.new(0, 12),
+				PaddingBottom = UDim.new(0, 1),
 			}),
-			Drop = self.state.Open and Roact.createElement(ScrollFrame, {
-				Position = UDim2.new(0, 0, 1, -1),
-				Size = UDim2.new(1, 0, 0, scrollHeight),
-				Layout = {
-					Padding = UDim.new(0, rowPadding),
-				},
-			}, items),
-		})
-	end)
+		}),
+		ArrowContainer = Roact.createElement("Frame", {
+			AnchorPoint = Vector2.new(1, 0),
+			Position = UDim2.fromScale(1, 0),
+			Size = UDim2.new(0, 18, 1, 0),
+			BackgroundTransparency = 1,
+			ZIndex = 2,
+		}, {
+			Arrow = Roact.createElement("ImageLabel", {
+				Image = "rbxassetid://7260137654",
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.fromScale(0.5, 0.5),
+				Size = UDim2.fromOffset(8, 4),
+				BackgroundTransparency = 1,
+				ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.TitlebarText, modifier),
+			}),
+		}),
+		Children = Roact.createFragment(props[Roact.Children]),
+	})
 end
 
-return Dropdown
+return Hooks.new(Roact)(Dropdown, {
+	defaultProps = defaultProps,
+})
