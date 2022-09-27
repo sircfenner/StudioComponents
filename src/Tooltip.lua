@@ -22,7 +22,7 @@ local OFFSET_UP = 2
 local defaultProps = {
 	Text = "Tooltip.defaultProps.Text",
 	MaxWidth = 200,
-	HoverDelay = 0.5,
+	HoverDelay = 0.4,
 }
 
 -- TODO: do some kind of validation if the trigger has moved e.g. in a scroll frame?
@@ -117,33 +117,36 @@ local function Tooltip(props, hooks)
 		end
 	end
 
-	local dropShadow = Roact.createElement(Shadow, {
-		Position = UDim2.fromOffset(4, 4),
-		Size = UDim2.new(1, 1, 1, 1),
-		Radius = 5,
-		Transparency = 0.96,
-	}, {
-		Shadow = Roact.createElement(Shadow, {
-			Position = UDim2.fromOffset(1, 1),
-			Size = UDim2.new(1, -2, 1, -2),
-			Radius = 4,
-			Transparency = 0.88,
+	local dropShadow = nil
+	if target ~= nil then
+		dropShadow = Roact.createElement(Shadow, {
+			Position = UDim2.fromOffset(4, 4),
+			Size = UDim2.new(1, 1, 1, 1),
+			Radius = 5,
+			Transparency = 0.96,
 		}, {
 			Shadow = Roact.createElement(Shadow, {
 				Position = UDim2.fromOffset(1, 1),
 				Size = UDim2.new(1, -2, 1, -2),
-				Radius = 3,
-				Transparency = 0.80,
+				Radius = 4,
+				Transparency = 0.88,
 			}, {
 				Shadow = Roact.createElement(Shadow, {
 					Position = UDim2.fromOffset(1, 1),
 					Size = UDim2.new(1, -2, 1, -2),
-					Radius = 2,
-					Transparency = 0.77,
+					Radius = 3,
+					Transparency = 0.80,
+				}, {
+					Shadow = Roact.createElement(Shadow, {
+						Position = UDim2.fromOffset(1, 1),
+						Size = UDim2.new(1, -2, 1, -2),
+						Radius = 2,
+						Transparency = 0.77,
+					}),
 				}),
 			}),
-		}),
-	})
+		})
+	end
 
 	return Roact.createElement("Frame", {
 		Size = UDim2.fromScale(1, 1),
