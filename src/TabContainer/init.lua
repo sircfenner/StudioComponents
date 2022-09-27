@@ -39,7 +39,6 @@ local function TabContainer(props, hooks)
 		AnchorPoint = props.AnchorPoint or Vector2.new(0, 0),
 		LayoutOrder = props.LayoutOrder or 0,
 		ZIndex = props.ZIndex or 1,
-		BorderMode = Enum.BorderMode.Inset,
 		BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
 		BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainBackground),
 	}, {
@@ -58,7 +57,7 @@ local function TabContainer(props, hooks)
 			ZIndex = 1,
 			AnchorPoint = Vector2.new(0, 1),
 			Position = UDim2.fromScale(0, 1),
-			Size = UDim2.new(1, 0, 1, -TAB_HEIGHT),
+			Size = UDim2.new(1, 0, 1, -TAB_HEIGHT - 1), -- extra px for outer border
 			BackgroundTransparency = 1,
 			ClipsDescendants = true,
 		}, {
