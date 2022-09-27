@@ -120,7 +120,18 @@ export type StudioStyleGuideColorStrings =
 
 export type StudioStyleModifierStrings = "Default" | "Selected" | "Pressed" | "Disabled" | "Hover"
 
-export type ColorStyleWrapper = ((StudioStyleModifierStrings | Enum.StudioStyleGuideModifier)?) -> Color3
+export type ColorStyleWrapper = typeof(setmetatable({}, {
+	__index = {} :: {
+		Default: Color3,
+		Selected: Color3,
+		Pressed: Color3,
+		Disabled: Color3,
+		Hover: Color3,
+	},
+	__call = function(_, modifier: (StudioStyleModifierStrings | Enum.StudioStyleGuideModifier)?): Color3
+		return Color3.new()
+	end,
+}))
 
 export type Wrapper = {
 	GetColor: (
