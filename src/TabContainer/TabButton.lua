@@ -29,6 +29,9 @@ local function TabButton(props, hooks)
 	end
 
 	local color = Enum.StudioStyleGuideColor.Button
+	if props.Selected then
+		color = Enum.StudioStyleGuideColor.MainBackground
+	end
 	local modifier = Enum.StudioStyleGuideModifier.Default
 	if props.Disabled then
 		modifier = Enum.StudioStyleGuideModifier.Disabled
@@ -60,11 +63,9 @@ local function TabButton(props, hooks)
 		end,
 	}, {
 		Indicator = props.Selected and Roact.createElement("Frame", {
-			AnchorPoint = Vector2.new(0, 1),
 			BackgroundColor3 = Color3.fromRGB(0, 162, 255),
 			BackgroundTransparency = props.Disabled and 0.8 or 0,
 			BorderSizePixel = 0,
-			Position = UDim2.fromScale(0, 1),
 			Size = UDim2.new(1, 0, 0, 2),
 		}),
 	})
