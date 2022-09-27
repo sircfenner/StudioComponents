@@ -8,6 +8,7 @@ return {
 	MainButton = require(script.MainButton),
 	ScrollFrame = require(script.ScrollFrame),
 	Slider = require(script.Slider),
+	TabContainer = require(script.TabContainer),
 	TextInput = require(script.TextInput),
 	Tooltip = require(script.Tooltip),
 	VerticalCollapsibleSection = require(script.VerticalCollapsibleSection),
