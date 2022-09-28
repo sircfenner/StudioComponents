@@ -18,9 +18,9 @@ local defaultProps = {
 --[[
 TODO: 
 - figure out how (whether?) to do mouse icon
-- self-managed version?
-- make sure no perf concerns from re-rendering complex children (?)
+- is there a strategy for preventing child re-renders when the only thing that changed is the split?
 - make dragging still work when cursor is outside of a widget/background (getDragInput?)
+- self-managed version?
 ]]
 
 -- handles case where min is greater than max by prioritizing the min operation
@@ -103,14 +103,14 @@ local function Splitter(props, hooks)
 			Size = size0,
 			BackgroundTransparency = 1,
 			ZIndex = 0,
-		}, { props[Roact.Children][1] }),
+		}, { Content = props[Roact.Children][1] }),
 		Side1 = Roact.createElement("Frame", {
 			AnchorPoint = anchor1,
 			Position = position1,
 			Size = size1,
 			BackgroundTransparency = 1,
 			ZIndex = 0,
-		}, { props[Roact.Children][2] }),
+		}, { Content = props[Roact.Children][2] }),
 		Bar = Roact.createElement("TextButton", {
 			AutoButtonColor = false,
 			Text = "",
