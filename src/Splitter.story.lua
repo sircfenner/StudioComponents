@@ -12,6 +12,7 @@ function Wrapper:init()
 	self:setState({
 		Alpha0 = 0.5,
 		Alpha1 = 0.5,
+		Alpha2 = 0.5,
 	})
 end
 
@@ -34,9 +35,22 @@ function Wrapper:render()
 			end,
 			Orientation = Constants.SplitterOrientation.Horizontal,
 		}, {
-			[1] = Roact.createElement(Label, {
-				Size = UDim2.fromScale(1, 1),
-				Text = "Side 2(1)",
+			[1] = Roact.createElement(Splitter, {
+				Alpha = self.state.Alpha2,
+				OnAlphaChanged = function(newAlpha)
+					self:setState({ Alpha2 = newAlpha })
+				end,
+				Orientation = Constants.SplitterOrientation.Vertical,
+				Disabled = true,
+			}, {
+				[1] = Roact.createElement(Label, {
+					Size = UDim2.fromScale(1, 1),
+					Text = "Side 2(1)(1)",
+				}),
+				[2] = Roact.createElement(Label, {
+					Size = UDim2.fromScale(1, 1),
+					Text = "Side 2(1)(2)",
+				}),
 			}),
 			[2] = Roact.createElement(Label, {
 				Size = UDim2.fromScale(1, 1),

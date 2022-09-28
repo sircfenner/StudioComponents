@@ -18,7 +18,6 @@ local defaultProps = {
 --[[
 TODO: 
 - figure out how (whether?) to do mouse icon
-- disabled?
 - self-managed version?
 - make sure no perf concerns from re-rendering complex children (?)
 - make dragging still work when cursor is outside of a widget/background (getDragInput?)
@@ -34,6 +33,9 @@ local function Splitter(props, hooks)
 	local dragging, setDragging = hooks.useState(false)
 
 	local onInputBegan = function(_, input)
+		if props.Disabled then
+			return
+		end
 		if input.UserInputType == Enum.UserInputType.MouseButton1 then
 			setDragging(true)
 		end
@@ -46,6 +48,9 @@ local function Splitter(props, hooks)
 	end
 
 	local onInputChanged = function(container, input)
+		if props.Disabled then
+			return
+		end
 		if input.UserInputType == Enum.UserInputType.MouseMovement then
 			if dragging == true then
 				local size = container.AbsoluteSize
@@ -114,6 +119,7 @@ local function Splitter(props, hooks)
 			Size = barSize,
 			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.DialogButton),
 			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
+			BackgroundTransparency = props.Disabled and 0.75 or 0,
 			ZIndex = 1,
 			[Roact.Event.InputBegan] = onInputBegan,
 			[Roact.Event.InputEnded] = onInputEnded,
