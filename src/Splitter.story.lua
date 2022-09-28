@@ -4,6 +4,7 @@ local Roact = require(Packages.Roact)
 local Constants = require(script.Parent.Constants)
 local Splitter = require(script.Parent.Splitter)
 
+local PluginProvider = require(script.Parent.PluginProvider)
 local Label = require(script.Parent.Label)
 
 local Wrapper = Roact.Component:extend("Wrapper")
@@ -61,7 +62,14 @@ function Wrapper:render()
 end
 
 return function(target)
-	local element = Roact.createElement(Wrapper)
+	-- NB: hoarcekat does not provide a way to access its plugin instance
+	-- selene: allow(undefined_variable)
+	local plugin = PluginManager():CreatePlugin()
+	local element = Roact.createElement(PluginProvider, {
+		Plugin = plugin,
+	}, {
+		Main = Roact.createElement(Wrapper),
+	})
 	local handle = Roact.mount(element, target)
 	return function()
 		Roact.unmount(handle)
