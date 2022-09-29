@@ -62,7 +62,8 @@ function Wrapper:render()
 end
 
 return function(target)
-	-- NB: hoarcekat does not provide a way to access its plugin instance
+	-- hoarcekat does not provide a way to access its plugin instance
+	-- this is a little hacky but acceptable since it's purely for the story
 	-- selene: allow(undefined_variable)
 	local plugin = PluginManager():CreatePlugin()
 	local element = Roact.createElement(PluginProvider, {

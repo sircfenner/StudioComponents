@@ -6,6 +6,7 @@ local Hooks = require(Packages.RoactHooks)
 local Constants = require(script.Parent.Constants)
 local useTheme = require(script.Parent.useTheme)
 local usePlugin = require(script.Parent.usePlugin)
+local useDragInput = require(script.Parent.useDragInput)
 
 local HANDLE_THICKNESS = 4
 
@@ -22,7 +23,7 @@ TODO:
 - self-managed version?
 ]]
 
--- handles case where min is greater than max by prioritizing the min operation
+-- handles min > max by prioritizing min operation
 local function safeClamp(value, min, max)
 	return math.min(math.max(value, min), max)
 end
@@ -31,27 +32,30 @@ local function Splitter(props, hooks)
 	local theme = useTheme(hooks)
 	local plugin = usePlugin(hooks)
 
-	local hovered, setHovered = hooks.useState(false)
-	local dragging, setDragging = hooks.useState(false)
+	local containerRef = hooks.useValue(Roact.createRef())
+
+	local drag = useDragInput(hooks, function(position)
+		local container = containerRef.value:getValue()
+		local size = container.AbsoluteSize
+		local offset = Vector2.new(position.x, position.y) - container.AbsolutePosition
+		offset = Vector2.new(
+			safeClamp(offset.x, HANDLE_THICKNESS + 1, size.x - HANDLE_THICKNESS - 1),
+			safeClamp(offset.y, HANDLE_THICKNESS + 1, size.y - HANDLE_THICKNESS - 1)
+		)
+		local relative = offset / size
+		local alpha = Vector2.new(
+			safeClamp(relative.x, props.MinAlpha, props.MaxAlpha),
+			safeClamp(relative.y, props.MinAlpha, props.MaxAlpha)
+		)
+		props.OnAlphaChanged(if props.Orientation == Constants.SplitterOrientation.Vertical then alpha.x else alpha.y)
+	end)
 
 	local mouseIconId = hooks.useValue(nil)
 	local mouseIconUsed = hooks.useValue(nil)
-	local containerRef = hooks.useValue(Roact.createRef())
-	local globalConnection = hooks.useValue(nil)
-
-	local function cleanup()
-		if globalConnection.value then
-			globalConnection.value:Disconnect()
-		end
-	end
-
-	hooks.useEffect(function()
-		return cleanup
-	end, {}) -- mount -> unmount
 
 	hooks.useEffect(function()
 		if plugin ~= nil then
-			local active = hovered or dragging
+			local active = drag.hovered or drag.dragging
 			local icon = string.format(
 				"rbxasset://SystemCursors/Split%s",
 				if props.Orientation == Constants.SplitterOrientation.Vertical then "EW" else "NS"
@@ -70,66 +74,17 @@ local function Splitter(props, hooks)
 				mouseIconUsed.value = nil
 			end
 		end
-	end, { plugin, hovered, dragging, props.Orientation })
+	end, { plugin, drag.hovered, drag.dragging, props.Orientation })
 
-	local function process(position)
-		local container = containerRef.value:getValue()
-		local size = container.AbsoluteSize
-		local offset = Vector2.new(position.x, position.y) - container.AbsolutePosition
-		offset = Vector2.new(
-			-- prevent handle escaping container
-			safeClamp(offset.x, HANDLE_THICKNESS + 1, size.x - HANDLE_THICKNESS - 1),
-			safeClamp(offset.y, HANDLE_THICKNESS + 1, size.y - HANDLE_THICKNESS - 1)
-		)
-		local relative = offset / size
-		local alpha = Vector2.new(
-			-- additionally clamp within min/max from props
-			safeClamp(relative.x, props.MinAlpha, props.MaxAlpha),
-			safeClamp(relative.y, props.MinAlpha, props.MaxAlpha)
-		)
-		props.OnAlphaChanged(if props.Orientation == Constants.SplitterOrientation.Vertical then alpha.x else alpha.y)
-	end
-
-	local onBarInputBegan = function(rbx, input)
-		if props.Disabled then
-			return
-		end
-		if input.UserInputType == Enum.UserInputType.MouseMovement then
-			setHovered(true)
-		elseif input.UserInputType == Enum.UserInputType.MouseButton1 then
-			setDragging(true)
-
-			local UserInputService = game:GetService("UserInputService")
-			local RunService = game:GetService("RunService")
-
-			local widget = rbx:FindFirstAncestorWhichIsA("DockWidgetPluginGui")
-			if widget ~= nil then
-				globalConnection.value = RunService.RenderStepped:Connect(function()
-					process(widget:GetRelativeMousePosition())
-				end)
-			else
-				globalConnection.value = UserInputService.InputChanged:Connect(function(globalInput)
-					process(Vector2.new(globalInput.Position.x, globalInput.Position.y))
-				end)
+	hooks.useEffect(function()
+		return function()
+			if plugin and mouseIconId.value then
+				plugin.popMouseIcon(mouseIconId.value)
+				mouseIconId.value = nil
+				mouseIconUsed.value = nil
 			end
 		end
-	end
-
-	local onBarInputEnded = function(rbx, input)
-		if input.UserInputType == Enum.UserInputType.MouseMovement then
-			setHovered(false)
-		elseif input.UserInputType == Enum.UserInputType.MouseButton1 then
-			setDragging(false)
-			-- ended for mousemovement does not fire if mouse is moved and released quickly enough
-			-- over another instance, so we set hover=false if mouse is no longer over it
-			local offset = Vector2.new(input.Position.x, input.Position.y) - rbx.AbsolutePosition
-			local bounds = rbx.AbsoluteSize
-			if offset.x < 0 or offset.x > bounds.x or offset.y < 0 or offset.y > bounds.y then
-				setHovered(false)
-			end
-			cleanup()
-		end
-	end
+	end, {})
 
 	local alpha = safeClamp(props.Alpha, props.MinAlpha, props.MaxAlpha)
 
@@ -182,8 +137,8 @@ local function Splitter(props, hooks)
 			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
 			BackgroundTransparency = props.Disabled and 0.75 or 0,
 			ZIndex = 1,
-			[Roact.Event.InputBegan] = onBarInputBegan,
-			[Roact.Event.InputEnded] = onBarInputEnded,
+			[Roact.Event.InputBegan] = if not props.Disabled then drag.onInputBegan else nil,
+			[Roact.Event.InputEnded] = if not props.Disabled then drag.onInputEnded else nil,
 		}),
 	})
 end
