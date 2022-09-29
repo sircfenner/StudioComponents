@@ -7,6 +7,8 @@ local Hooks = require(Packages.RoactHooks)
 
 local PluginContext = require(script.Parent.PluginContext)
 
+-- consumers that set mouse icon are responsible for unsetting on unmount
+
 local function PluginProvider(props, hooks)
 	local plugin = props.Plugin
 	local iconStack = hooks.useValue({})
@@ -32,11 +34,6 @@ local function PluginProvider(props, hooks)
 		end
 		updateMouseIcon()
 	end
-
-	-- TODO: unset icon on unmount?
-	-- hooks.useEffect(function()
-	--	 updateMouseIcon()
-	-- end)
 
 	return Roact.createElement(PluginContext.Provider, {
 		value = {
