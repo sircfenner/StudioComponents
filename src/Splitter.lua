@@ -28,6 +28,16 @@ local function safeClamp(value, min, max)
 	return math.min(math.max(value, min), max)
 end
 
+local function maybeFlip(shouldFlip, value)
+	if not shouldFlip then
+		return value
+	elseif typeof(value) == "Vector2" then
+		return Vector2.new(value.Y, value.X)
+	elseif typeof(value) == "UDim2" then
+		return UDim2.new(value.Height, value.Width)
+	end
+end
+
 local function Splitter(props, hooks)
 	local theme = useTheme(hooks)
 	local plugin = usePlugin(hooks)
@@ -87,23 +97,8 @@ local function Splitter(props, hooks)
 	end, {})
 
 	local alpha = safeClamp(props.Alpha, props.MinAlpha, props.MaxAlpha)
-
-	local size0 = UDim2.new(alpha, -HANDLE_THICKNESS / 2, 1, 0)
-	local size1 = UDim2.new(1 - alpha, -HANDLE_THICKNESS / 2, 1, 0)
-	local anchor1 = Vector2.new(1, 0)
-	local position1 = UDim2.fromScale(1, 0)
-	local barAnchorPoint = Vector2.new(0.5, 0)
-	local barPosition = UDim2.fromScale(alpha, 0)
-	local barSize = UDim2.new(0, HANDLE_THICKNESS, 1, 0)
-	if props.Orientation == Constants.SplitterOrientation.Horizontal then
-		size0 = UDim2.new(size0.Height, size0.Width)
-		size1 = UDim2.new(size1.Height, size1.Width)
-		anchor1 = Vector2.new(anchor1.y, anchor1.x)
-		position1 = UDim2.new(position1.Height, position1.Width)
-		barAnchorPoint = Vector2.new(barAnchorPoint.y, barAnchorPoint.x)
-		barPosition = UDim2.new(barPosition.Height, barPosition.Width)
-		barSize = UDim2.new(barSize.Height, barSize.Width)
-	end
+	local barColor = theme:GetColor(Enum.StudioStyleGuideColor.DialogButton)
+	local flip = props.Orientation ~= Constants.SplitterOrientation.Vertical
 
 	return Roact.createElement("Frame", {
 		Size = props.Size,
@@ -115,15 +110,15 @@ local function Splitter(props, hooks)
 		[Roact.Ref] = containerRef.value,
 	}, {
 		Side0 = Roact.createElement("Frame", {
-			Size = size0,
+			Size = maybeFlip(flip, UDim2.new(alpha, -HANDLE_THICKNESS / 2, 1, 0)),
 			BackgroundTransparency = 1,
 			ZIndex = 0,
 			ClipsDescendants = true,
 		}, { Content = props[Roact.Children][1] }),
 		Side1 = Roact.createElement("Frame", {
-			AnchorPoint = anchor1,
-			Position = position1,
-			Size = size1,
+			AnchorPoint = maybeFlip(flip, Vector2.new(1, 0)),
+			Position = maybeFlip(flip, UDim2.fromScale(1, 0)),
+			Size = maybeFlip(flip, UDim2.new(1 - alpha, -HANDLE_THICKNESS / 2, 1, 0)),
 			BackgroundTransparency = 1,
 			ZIndex = 0,
 			ClipsDescendants = true,
@@ -132,10 +127,10 @@ local function Splitter(props, hooks)
 			Active = false,
 			AutoButtonColor = false,
 			Text = "",
-			AnchorPoint = barAnchorPoint,
-			Position = barPosition,
-			Size = barSize,
-			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.DialogButton),
+			AnchorPoint = maybeFlip(flip, Vector2.new(0.5, 0)),
+			Position = maybeFlip(flip, UDim2.fromScale(alpha, 0)),
+			Size = maybeFlip(flip, UDim2.new(0, HANDLE_THICKNESS, 1, 0)),
+			BackgroundColor3 = barColor,
 			BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
 			BackgroundTransparency = props.Disabled and 0.75 or 0,
 			ZIndex = 1,

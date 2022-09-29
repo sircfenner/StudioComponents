@@ -2,10 +2,13 @@ local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
 
 local Constants = require(script.Parent.Constants)
-local Splitter = require(script.Parent.Splitter)
 
+local Splitter = require(script.Parent.Splitter)
 local PluginProvider = require(script.Parent.PluginProvider)
+
 local Label = require(script.Parent.Label)
+local ScrollFrame = require(script.Parent.ScrollFrame)
+local Dropdown = require(script.Parent.Dropdown)
 
 local Wrapper = Roact.Component:extend("Wrapper")
 
@@ -18,6 +21,15 @@ function Wrapper:init()
 end
 
 function Wrapper:render()
+	local scrollContents = {}
+	for i = 1, 20 do
+		scrollContents[i] = Roact.createElement(Label, {
+			Size = UDim2.new(1, 0, 0, 20),
+			Text = "Item " .. i,
+			LayoutOrder = i,
+		})
+	end
+
 	return Roact.createElement(Splitter, {
 		Alpha = self.state.Alpha0,
 		OnAlphaChanged = function(newAlpha)
@@ -25,10 +37,9 @@ function Wrapper:render()
 		end,
 		Orientation = Constants.SplitterOrientation.Vertical,
 	}, {
-		[1] = Roact.createElement(Label, {
+		[1] = Roact.createElement(ScrollFrame, {
 			Size = UDim2.fromScale(1, 1),
-			Text = "Side 1",
-		}),
+		}, scrollContents),
 		[2] = Roact.createElement(Splitter, {
 			Alpha = self.state.Alpha1,
 			OnAlphaChanged = function(newAlpha)
@@ -53,9 +64,13 @@ function Wrapper:render()
 					Text = "Side 2(1)(2)",
 				}),
 			}),
-			[2] = Roact.createElement(Label, {
-				Size = UDim2.fromScale(1, 1),
-				Text = "Side 2(2)",
+			[2] = Roact.createElement(Dropdown, {
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.fromScale(0.5, 0.5),
+				Width = UDim.new(0.4, 50),
+				SelectedItem = "Test",
+				Items = { "Test", "Example", "Placeholder", "Dummy", "Sample" },
+				OnItemSelected = function() end,
 			}),
 		}),
 	})
