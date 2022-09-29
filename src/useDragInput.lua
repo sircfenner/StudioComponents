@@ -3,7 +3,7 @@ local RunService = game:GetService("RunService")
 
 local function useDragInput(hooks, callback)
 	local hovered, setHovered = hooks.useState(false)
-	local dragging, setDragging = hooks.useState(false)
+	local active, setActive = hooks.useState(false)
 
 	local globalConnection = hooks.useValue(nil)
 	local function cleanup()
@@ -12,21 +12,20 @@ local function useDragInput(hooks, callback)
 		end
 	end
 
-	-- prevents stale callback values
+	-- prevent stale values in callback
 	local savedCallback = hooks.useValue(callback)
 	hooks.useEffect(function()
 		savedCallback.value = callback
 	end, { callback })
 
-	-- cleanup on unmount
 	hooks.useEffect(function()
 		return cleanup
 	end, {})
 
-	local onInputBegan = function(rbx, input)
+	local function onInputBegan(rbx, input)
 		if input.UserInputType == Enum.UserInputType.MouseMovement then
 			setHovered(true)
-		elseif input.UserInputType == Enum.UserInputType.MouseButton1 and not dragging then
+		elseif input.UserInputType == Enum.UserInputType.MouseButton1 and not active then
 			local widget = rbx:FindFirstAncestorWhichIsA("DockWidgetPluginGui")
 			if widget ~= nil then
 				globalConnection.value = RunService.RenderStepped:Connect(function()
@@ -37,12 +36,12 @@ local function useDragInput(hooks, callback)
 					savedCallback.value(rbx, Vector2.new(globalInput.Position.x, globalInput.Position.y))
 				end)
 			end
-			setDragging(true)
+			setActive(true)
 			savedCallback.value(rbx, Vector2.new(input.Position.x, input.Position.y))
 		end
 	end
 
-	local onInputEnded = function(rbx, input)
+	local function onInputEnded(rbx, input)
 		if input.UserInputType == Enum.UserInputType.MouseMovement then
 			setHovered(false)
 		elseif input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -53,20 +52,20 @@ local function useDragInput(hooks, callback)
 			if offset.x < 0 or offset.x > bounds.x or offset.y < 0 or offset.y > bounds.y then
 				setHovered(false)
 			end
-			setDragging(false)
+			setActive(false)
 			cleanup()
 		end
 	end
 
-	local cancel = function()
+	local function cancel()
 		setHovered(false)
-		setDragging(false)
+		setActive(false)
 		cleanup()
 	end
 
 	return {
 		hovered = hovered,
-		dragging = dragging,
+		active = active,
 		onInputBegan = onInputBegan,
 		onInputEnded = onInputEnded,
 		cancel = cancel,

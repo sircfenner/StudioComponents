@@ -17,9 +17,8 @@ local defaultProps = {
 	Orientation = Constants.SplitterOrientation.Vertical,
 }
 
--- is there a strategy for preventing child re-renders when the only thing that changed is the split?
+-- NB: use purecomponent children to avoid re-rendering them every time split changes
 
--- handles min > max by prioritizing min operation
 local function safeClamp(value, min, max)
 	return math.min(math.max(value, min), max)
 end
@@ -62,31 +61,7 @@ local function Splitter(props, hooks)
 	local mouseIconId = hooks.useValue(nil)
 	local mouseIconUsed = hooks.useValue(nil)
 
-	hooks.useEffect(function()
-		if plugin ~= nil then
-			local active = drag.hovered or drag.dragging
-			local icon = string.format(
-				"rbxasset://SystemCursors/Split%s",
-				if props.Orientation == Constants.SplitterOrientation.Vertical then "EW" else "NS"
-			)
-			if active then
-				if not mouseIconId.value then
-					mouseIconId.value = plugin.pushMouseIcon(icon)
-				elseif mouseIconUsed.value ~= icon then
-					plugin.popMouseIcon(mouseIconId.value)
-					mouseIconId.value = plugin.pushMouseIcon(icon)
-				end
-				mouseIconUsed.value = icon
-			elseif not active and mouseIconId.value then
-				plugin.popMouseIcon(mouseIconId.value)
-				mouseIconId.value = nil
-				mouseIconUsed.value = nil
-			end
-		end
-	end, { plugin, drag.hovered, drag.dragging, props.Orientation })
-
-	local function cancel()
-		drag.cancel()
+	local function resetMouseIcon()
 		if plugin and mouseIconId.value then
 			plugin.popMouseIcon(mouseIconId.value)
 			mouseIconId.value = nil
@@ -94,16 +69,35 @@ local function Splitter(props, hooks)
 		end
 	end
 
-	-- became Disabled while dragging/hovering
+	hooks.useEffect(function()
+		if plugin ~= nil then
+			local using = drag.hovered or drag.active
+			local icon = string.format(
+				"rbxasset://SystemCursors/Split%s",
+				if props.Orientation == Constants.SplitterOrientation.Vertical then "EW" else "NS"
+			)
+			if using then
+				if not mouseIconId.value then
+					mouseIconId.value = plugin.pushMouseIcon(icon)
+				elseif mouseIconUsed.value ~= icon then
+					plugin.popMouseIcon(mouseIconId.value)
+					mouseIconId.value = plugin.pushMouseIcon(icon)
+				end
+				mouseIconUsed.value = icon
+			elseif not using and mouseIconId.value then
+				resetMouseIcon()
+			end
+		end
+	end, { plugin, drag.hovered, drag.active, props.Orientation })
+
 	hooks.useEffect(function()
 		if props.Disabled == true then
-			cancel()
+			drag.cancel()
 		end
 	end, { props.Disabled })
 
-	-- icon etc. cleanup on unmount
 	hooks.useEffect(function()
-		return cancel
+		return resetMouseIcon
 	end, {})
 
 	local alpha = safeClamp(props.Alpha, props.MinAlpha, props.MaxAlpha)
