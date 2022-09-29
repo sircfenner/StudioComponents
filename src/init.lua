@@ -21,4 +21,5 @@ return {
 
 	withTheme = require(script.withTheme),
 	useTheme = require(script.useTheme),
+	usePlugin = require(script.usePlugin),
 }
