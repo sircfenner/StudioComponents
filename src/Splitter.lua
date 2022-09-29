@@ -53,7 +53,10 @@ local function Splitter(props, hooks)
 			safeClamp(relative.x, props.MinAlpha, props.MaxAlpha),
 			safeClamp(relative.y, props.MinAlpha, props.MaxAlpha)
 		)
-		props.OnAlphaChanged(if props.Orientation == Constants.SplitterOrientation.Vertical then alpha.x else alpha.y)
+		local newAlpha = if props.Orientation == Constants.SplitterOrientation.Vertical then alpha.x else alpha.y
+		if newAlpha ~= props.Alpha then
+			props.OnAlphaChanged(newAlpha)
+		end
 	end)
 
 	local mouseIconId = hooks.useValue(nil)
