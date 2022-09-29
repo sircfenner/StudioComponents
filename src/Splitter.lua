@@ -17,11 +17,7 @@ local defaultProps = {
 	Orientation = Constants.SplitterOrientation.Vertical,
 }
 
---[[
-TODO: 
-- is there a strategy for preventing child re-renders when the only thing that changed is the split?
-- self-managed version?
-]]
+-- is there a strategy for preventing child re-renders when the only thing that changed is the split?
 
 -- handles min > max by prioritizing min operation
 local function safeClamp(value, min, max)
@@ -44,7 +40,7 @@ local function Splitter(props, hooks)
 
 	local containerRef = hooks.useValue(Roact.createRef())
 
-	local drag = useDragInput(hooks, function(position)
+	local drag = useDragInput(hooks, function(_, position)
 		local container = containerRef.value:getValue()
 		local size = container.AbsoluteSize
 		local offset = Vector2.new(position.x, position.y) - container.AbsolutePosition
@@ -86,14 +82,25 @@ local function Splitter(props, hooks)
 		end
 	end, { plugin, drag.hovered, drag.dragging, props.Orientation })
 
-	hooks.useEffect(function()
-		return function()
-			if plugin and mouseIconId.value then
-				plugin.popMouseIcon(mouseIconId.value)
-				mouseIconId.value = nil
-				mouseIconUsed.value = nil
-			end
+	local function cancel()
+		drag.cancel()
+		if plugin and mouseIconId.value then
+			plugin.popMouseIcon(mouseIconId.value)
+			mouseIconId.value = nil
+			mouseIconUsed.value = nil
 		end
+	end
+
+	-- became Disabled while dragging/hovering
+	hooks.useEffect(function()
+		if props.Disabled == true then
+			cancel()
+		end
+	end, { props.Disabled })
+
+	-- icon etc. cleanup on unmount
+	hooks.useEffect(function()
+		return cancel
 	end, {})
 
 	local alpha = safeClamp(props.Alpha, props.MinAlpha, props.MaxAlpha)

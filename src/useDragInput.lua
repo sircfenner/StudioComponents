@@ -12,6 +12,7 @@ local function useDragInput(hooks, callback)
 		end
 	end
 
+	-- cleanup on unmount
 	hooks.useEffect(function()
 		return cleanup
 	end, {})
@@ -23,14 +24,15 @@ local function useDragInput(hooks, callback)
 			local widget = rbx:FindFirstAncestorWhichIsA("DockWidgetPluginGui")
 			if widget ~= nil then
 				globalConnection.value = RunService.RenderStepped:Connect(function()
-					callback(widget:GetRelativeMousePosition())
+					callback(rbx, widget:GetRelativeMousePosition())
 				end)
 			else
 				globalConnection.value = UserInputService.InputChanged:Connect(function(globalInput)
-					callback(Vector2.new(globalInput.Position.x, globalInput.Position.y))
+					callback(rbx, Vector2.new(globalInput.Position.x, globalInput.Position.y))
 				end)
 			end
 			setDragging(true)
+			callback(rbx, Vector2.new(input.Position.x, input.Position.y))
 		end
 	end
 
@@ -50,11 +52,18 @@ local function useDragInput(hooks, callback)
 		end
 	end
 
+	local cancel = function()
+		setHovered(false)
+		setDragging(false)
+		cleanup()
+	end
+
 	return {
 		hovered = hovered,
 		dragging = dragging,
 		onInputBegan = onInputBegan,
 		onInputEnded = onInputEnded,
+		cancel = cancel,
 	}
 end
 
