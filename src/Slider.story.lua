@@ -4,6 +4,8 @@ local Roact = require(Packages.Roact)
 local Slider = require(script.Parent.Slider)
 local Checkbox = require(script.Parent.Checkbox)
 
+local Constants = require(script.Parent.Constants)
+
 local MIN = 0
 local MAX = 10
 local STEP = 1
@@ -62,7 +64,7 @@ function Wrapper:render()
 		Disabled = Roact.createElement(Checkbox, {
 			Value = self.state.Disabled,
 			Label = "Disabled",
-			Alignment = "Left",
+			Alignment = Constants.CheckboxAlignment.Left,
 			OnActivated = function()
 				self:setState({ Disabled = not self.state.Disabled })
 			end,
