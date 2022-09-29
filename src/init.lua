@@ -1,5 +1,6 @@
 return {
 	Background = require(script.Background),
+	BaseButton = require(script.BaseButton),
 	Button = require(script.Button),
 	Checkbox = require(script.Checkbox),
 	ColorPicker = require(script.ColorPicker),
@@ -16,6 +17,7 @@ return {
 	VerticalExpandingList = require(script.VerticalExpandingList),
 	Widget = require(script.Widget),
 
+	Constants = require(script.Constants),
 	ThemeContext = require(script.ThemeContext),
 	PluginProvider = require(script.PluginProvider),
 
