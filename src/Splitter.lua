@@ -118,6 +118,7 @@ local function Splitter(props, hooks)
 			Size = size0,
 			BackgroundTransparency = 1,
 			ZIndex = 0,
+			ClipsDescendants = true,
 		}, { Content = props[Roact.Children][1] }),
 		Side1 = Roact.createElement("Frame", {
 			AnchorPoint = anchor1,
@@ -125,6 +126,7 @@ local function Splitter(props, hooks)
 			Size = size1,
 			BackgroundTransparency = 1,
 			ZIndex = 0,
+			ClipsDescendants = true,
 		}, { Content = props[Roact.Children][2] }),
 		Bar = Roact.createElement("TextButton", {
 			Active = false,
