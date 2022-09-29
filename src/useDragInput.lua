@@ -12,6 +12,12 @@ local function useDragInput(hooks, callback)
 		end
 	end
 
+	-- prevents stale callback values
+	local savedCallback = hooks.useValue(callback)
+	hooks.useEffect(function()
+		savedCallback.value = callback
+	end, { callback })
+
 	-- cleanup on unmount
 	hooks.useEffect(function()
 		return cleanup
@@ -24,15 +30,15 @@ local function useDragInput(hooks, callback)
 			local widget = rbx:FindFirstAncestorWhichIsA("DockWidgetPluginGui")
 			if widget ~= nil then
 				globalConnection.value = RunService.RenderStepped:Connect(function()
-					callback(rbx, widget:GetRelativeMousePosition())
+					savedCallback.value(rbx, widget:GetRelativeMousePosition())
 				end)
 			else
 				globalConnection.value = UserInputService.InputChanged:Connect(function(globalInput)
-					callback(rbx, Vector2.new(globalInput.Position.x, globalInput.Position.y))
+					savedCallback.value(rbx, Vector2.new(globalInput.Position.x, globalInput.Position.y))
 				end)
 			end
 			setDragging(true)
-			callback(rbx, Vector2.new(input.Position.x, input.Position.y))
+			savedCallback.value(rbx, Vector2.new(input.Position.x, input.Position.y))
 		end
 	end
 
