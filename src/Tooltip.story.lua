@@ -8,6 +8,7 @@ local Checkbox = require(script.Parent.Checkbox)
 local Dropdown = require(script.Parent.Dropdown)
 local Label = require(script.Parent.Label)
 local ScrollFrame = require(script.Parent.ScrollFrame)
+local RadioButton = require(script.Parent.RadioButton)
 
 return function(target)
 	local scrollContents = {}
@@ -90,6 +91,17 @@ return function(target)
 				Padding = UDim.new(0, 0),
 			},
 		}, scrollContents),
+
+		RadioButton = Roact.createElement(RadioButton, {
+			LayoutOrder = 5,
+			Value = false,
+			Label = "Example radiobutton",
+			OnActivated = function() end,
+		}, {
+			Tooltip = Roact.createElement(Tooltip, {
+				Text = "This is an explanation of the radiobutton",
+			}),
+		}),
 	})
 	local handle = Roact.mount(element, target)
 	return function()
