@@ -15,7 +15,7 @@ local function PluginProvider(props, hooks)
 
 	local function updateMouseIcon()
 		local top = iconStack.value[#iconStack.value]
-		plugin:GetMouse().Icon = if top then top.icon else ""
+		plugin:GetMouse().Icon = if top then top.icon else " "
 	end
 
 	local function pushMouseIcon(icon)
