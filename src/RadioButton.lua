@@ -90,6 +90,7 @@ local function RadioButton(props, hooks)
 			TextSize = TEXT_SIZE,
 			TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, modifier),
 		}),
+		Children = Roact.createFragment(props[Roact.Children]),
 	})
 end
 
