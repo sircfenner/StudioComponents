@@ -173,7 +173,7 @@ local function Panel(props, hooks)
 		BorderSizePixel = 1,
 		BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
 	}, {
-		Hitbox = Roact.createElement("Frame", {
+		ResizeHitBox = Roact.createElement("Frame", {
 			Size = UDim2.new(1, DRAGGABLE_AREA_OUTSET * 2, 1, DRAGGABLE_AREA_OUTSET * 2),
 			Position = UDim2.new(0, -DRAGGABLE_AREA_OUTSET, 0, -DRAGGABLE_AREA_OUTSET),
 			BackgroundTransparency = 1,
