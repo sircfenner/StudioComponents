@@ -87,11 +87,11 @@ local function Panel(props, hooks)
 			return
 		end
 
-		local position = Vector2.new(inputObject.Position.X, inputObject.Position.Y)
-
 		if inputObject.UserInputType ~= Enum.UserInputType.MouseMovement then
 			return
 		end
+
+		local position = Vector2.new(inputObject.Position.X, inputObject.Position.Y)
 
 		local direction = getResizeDirection(rbx, position)
 
