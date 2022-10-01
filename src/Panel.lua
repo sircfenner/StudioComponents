@@ -3,9 +3,9 @@ local Roact = require(Packages.Roact)
 local Hooks = require(Packages.RoactHooks)
 
 local Background = require(script.Parent.Background)
-local useTheme = require(script.Parent.useTheme)
 local Label = require(script.Parent.Label)
 local ImageButton = require(script.Parent.ImageButton)
+local useTheme = require(script.Parent.useTheme)
 local useDragInput = require(script.Parent.useDragInput)
 local usePlugin = require(script.Parent.usePlugin)
 
