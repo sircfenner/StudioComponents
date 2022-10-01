@@ -22,12 +22,10 @@ local function Helper(_props, hooks)
 			end,
 		}),
 		Panel = opened and Roact.createElement(Panel, {
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.fromScale(0.5, 0.5),
-			Size = UDim2.fromScale(0.7, 0.7),
-			BackgroundTransparency = 1,
-			MinimumWindowSize = Vector2.new(50, 50),
-			MaximumWindowSize = Vector2.new(500, 500),
+			Title = "Message pop-up",
+			MinimumWindowSize = Vector2.new(150, 50),
+			InitalWindowSize = Vector2.new(150, 150),
+			MaximumWindowSize = Vector2.new(250, 250),
 			OnClosed = function()
 				setOpened(false)
 			end

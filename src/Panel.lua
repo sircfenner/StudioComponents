@@ -23,6 +23,8 @@ local defaultProps = {
 	MinimumWindowSize = Vector2.new(0, 0),
 	InitalPlacement = Vector2.new(20, 20),
 	OnClosed = function() end,
+	Adjustable = true,
+	Closable = true,
 }
 
 local function getResizeDirection(rbx, maybeMouseHit)
@@ -39,10 +41,6 @@ local function getResizeDirection(rbx, maybeMouseHit)
 		elseif maybeRightHit.Y >= -DRAGGABLE_AREA_OUTSET and maybeRightHit.Y <= 0 then 1
 		else 0
 
-	if maybeDirectionX == 0 and maybeDirectionY == 0 then
-		return
-	end
-
 	return Vector2.new(maybeDirectionX, maybeDirectionY)
 end
 
@@ -56,7 +54,7 @@ local function getCursorIconWithDirection(direction)
 			then "rbxasset://SystemCursors/SizeEW"
 			elseif direction.Y == -1 then "rbxasset://SystemCursors/SizeNWSE"
 			else "rbxasset://SystemCursors/SizeNESW"
-		else if direction.Y == 0 then error("Impossible") else "rbxasset://SystemCursors/SizeNS"
+		else if direction.Y == 0 then " " else "rbxasset://SystemCursors/SizeNS"
 end
 
 local function Panel(props, hooks)
@@ -95,15 +93,6 @@ local function Panel(props, hooks)
 
 		local direction = getResizeDirection(rbx, position)
 
-		if direction == nil then
-			plugin.popMouseIcon(currentCursor.value.id)
-			return
-		end
-
-		if currentCursor.value.direction == direction then
-			return
-		end
-
 		plugin.popMouseIcon(currentCursor.value.id)
 
 		currentCursor.value.direction = getCursorIconWithDirection(direction)
@@ -111,6 +100,11 @@ local function Panel(props, hooks)
 	end
 
 	local windowDragging = useDragInput(hooks, function(rbx, position)
+		-- Are we allowed to drag?
+		if not props.Adjustable then
+			return
+		end
+
 		-- Guard against conflicting with resizing.
 		if directionOfResizeRef.value ~= nil then
 			return
@@ -130,6 +124,11 @@ local function Panel(props, hooks)
 	end)
 
 	local windowResizing = useDragInput(hooks, function(rbx, position)
+		-- Are we allowed to resize?
+		if not props.Adjustable then
+			return
+		end
+
 		-- Guard against conflicting with dragging input.
 		if lastPositionDraggedToRef.value ~= nil then
 			return
@@ -147,20 +146,23 @@ local function Panel(props, hooks)
 		local directionOfResize = directionOfResizeRef.value
 		local lastPosition = lastPositionReizedToRef.value
 
-
 		local maybeDelta = directionOfResize * (position - lastPosition)
 
 		local delta = Vector2.new(
-			if maybeDelta.X + windowSize.X < props.MinimumWindowSize.X then
-				-math.min(windowSize.X - props.MinimumWindowSize.X, 0)
-			elseif maybeDelta.X + windowSize.X > props.MaximumWindowSize.X then
-				math.min(props.MaximumWindowSize.X - windowSize.X, 0)
-			else maybeDelta.X,
-			if maybeDelta.Y + windowSize.Y < props.MinimumWindowSize.Y then
-				-math.min(windowSize.Y - props.MinimumWindowSize.Y, 0)
-			elseif maybeDelta.Y + windowSize.Y > props.MaximumWindowSize.Y then
-				math.min(props.MaximumWindowSize.Y - windowSize.Y, 0)
-			else maybeDelta.Y
+			if maybeDelta.X + windowSize.X < props.MinimumWindowSize.X
+				then -math.min(windowSize.X - props.MinimumWindowSize.X, 0)
+				elseif maybeDelta.X + windowSize.X > props.MaximumWindowSize.X then math.min(
+					props.MaximumWindowSize.X - windowSize.X,
+					0
+				)
+				else maybeDelta.X,
+			if maybeDelta.Y + windowSize.Y < props.MinimumWindowSize.Y
+				then -math.min(windowSize.Y - props.MinimumWindowSize.Y, 0)
+				elseif maybeDelta.Y + windowSize.Y > props.MaximumWindowSize.Y then math.min(
+					props.MaximumWindowSize.Y - windowSize.Y,
+					0
+				)
+				else maybeDelta.Y
 		)
 
 		setWindowSize(delta + windowSize)
@@ -176,6 +178,14 @@ local function Panel(props, hooks)
 		lastPositionReizedToRef.value = position
 	end)
 
+	-- Make sure if the resizing is no longer active, that we don't accidentially
+	-- leave the cursor icon behind. But, making sure the icon is present while the cursor hovers.
+	hooks.useEffect(function()
+		if not windowResizing.hovered and not windowResizing.active then
+			plugin.popMouseIcon(currentCursor.value.id)
+		end
+	end, { windowResizing.hovered, windowResizing.active })
+
 	if closed then
 		return
 	end
@@ -187,7 +197,7 @@ local function Panel(props, hooks)
 		BorderSizePixel = 1,
 		BorderColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Border),
 	}, {
-		ResizeHitBox = Roact.createElement("Frame", {
+		ResizeHitBox = props.Adjustable and Roact.createElement("Frame", {
 			Size = UDim2.new(1, DRAGGABLE_AREA_OUTSET * 2, 1, DRAGGABLE_AREA_OUTSET * 2),
 			Position = UDim2.new(0, -DRAGGABLE_AREA_OUTSET, 0, -DRAGGABLE_AREA_OUTSET),
 			BackgroundTransparency = 1,
@@ -205,7 +215,7 @@ local function Panel(props, hooks)
 					directionOfResizeRef.value = nil
 					lastPositionReizedToRef.value = nil
 				end
-				
+
 				windowResizing.onInputEnded(rbx, inputObject)
 				cursorMaybeChanged(rbx, inputObject)
 			end,
@@ -232,7 +242,7 @@ local function Panel(props, hooks)
 				Text = props.Title,
 				TextColorStyle = Enum.StudioStyleGuideColor.TitlebarText,
 			}),
-			CloseButton = Roact.createElement(ImageButton, {
+			CloseButton = props.Closable and Roact.createElement(ImageButton, {
 				BackgroundColorStyle = Enum.StudioStyleGuideColor.Button,
 				BorderColorStyle = Enum.StudioStyleGuideColor.DialogButtonBorder,
 				BackgroundTransparency = 0,
