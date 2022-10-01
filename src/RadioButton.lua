@@ -23,7 +23,9 @@ local function RadioButton(props, hooks)
 	local hovered, setHovered = hooks.useState(false)
 
 	local modifier = Enum.StudioStyleGuideModifier.Default
-	if hovered then
+	if props.Disabled then
+		modifier = Enum.StudioStyleGuideModifier.Disabled
+	elseif hovered then
 		modifier = Enum.StudioStyleGuideModifier.Hover
 	end
 
@@ -44,23 +46,26 @@ local function RadioButton(props, hooks)
 		LayoutOrder = props.LayoutOrder,
 		ZIndex = props.ZIndex,
 		[Roact.Event.InputBegan] = function(_, input)
-			if input.UserInputType == Enum.UserInputType.MouseMovement then
+			if not props.Disabled and input.UserInputType == Enum.UserInputType.MouseMovement then
 				setHovered(true)
 			end
 		end,
 		[Roact.Event.InputEnded] = function(_, input)
-			if input.UserInputType == Enum.UserInputType.MouseMovement then
+			if not props.Disabled and input.UserInputType == Enum.UserInputType.MouseMovement then
 				setHovered(false)
 			end
 		end,
 		[Roact.Event.Activated] = function()
-			props.OnActivated()
+			if not props.Disabled then
+				props.OnActivated()
+			end
 		end,
 	}, {
 		Main = Roact.createElement("Frame", {
 			Size = UDim2.fromOffset(HEIGHT - 4, HEIGHT - 4),
 			Position = UDim2.fromOffset(2, 2),
 			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.Button, modifier),
+			BackgroundTransparency = props.Disabled and 0.65 or 0,
 		}, {
 			Corner = Roact.createElement("UICorner", {
 				CornerRadius = UDim.new(0.5, 0),
@@ -68,11 +73,13 @@ local function RadioButton(props, hooks)
 			Stroke = Roact.createElement("UIStroke", {
 				Color = theme:GetColor(secondaryColorStyle, modifier),
 				Thickness = 1,
+				Transparency = props.Disabled and 0.65 or 0,
 			}),
 			Inner = props.Value == true and Roact.createElement("Frame", {
 				Size = UDim2.new(1, -4, 1, -4),
 				Position = UDim2.fromOffset(2, 2),
 				BackgroundColor3 = theme:GetColor(secondaryColorStyle, modifier),
+				BackgroundTransparency = props.Disabled and 0.65 or 0,
 				BorderSizePixel = 0,
 			}, {
 				Corner = Roact.createElement("UICorner", {
