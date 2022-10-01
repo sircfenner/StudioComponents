@@ -89,7 +89,7 @@ local function RadioButton(props, hooks)
 		}),
 		Label = Roact.createElement("TextLabel", {
 			BackgroundTransparency = 1,
-			Size = UDim2.new(0, textSize.X, 1, 0), -- !
+			Size = UDim2.new(0, textSize.X, 1, 0),
 			Position = UDim2.new(0, HEIGHT + TEXT_PADDING, 0, 0),
 			TextXAlignment = Enum.TextXAlignment.Left,
 			TextYAlignment = Enum.TextYAlignment.Center,
