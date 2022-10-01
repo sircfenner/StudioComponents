@@ -73,6 +73,14 @@ local function Panel(props, hooks)
 
 	local lastPositionDraggedToRef = hooks.useValue(nil)
 
+	-- Potentially, the widget may close while there's still a cursor.
+	-- Make sure to clean it up!
+	hooks.useEffect(function()
+		return function()
+			plugin.popMouseIcon(currentCursor.value.id)
+		end
+	end, {})
+
 	local cursorMaybeChanged = function(rbx, inputObject)
 		-- We're still dragging, thus should not try to change the cursor icon.
 		if directionOfResizeRef.value ~= nil then
