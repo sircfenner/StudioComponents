@@ -5,6 +5,7 @@ local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
 local Hooks = require(Packages.RoactHooks)
 
+local Constants = require(script.Parent.Constants)
 local useTheme = require(script.Parent.useTheme)
 
 local defaultProps = {
@@ -12,9 +13,10 @@ local defaultProps = {
 }
 
 local HEIGHT = 16
-local FONT = Enum.Font.SourceSans
-local TEXT_SIZE = 14
 local TEXT_PADDING = 5
+
+local FONT = Constants.Font
+local TEXT_SIZE = Constants.TextSize
 
 local function RadioButton(props, hooks)
 	local theme = useTheme(hooks)
