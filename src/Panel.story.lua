@@ -26,6 +26,8 @@ local function Helper(_props, hooks)
 			Position = UDim2.fromScale(0.5, 0.5),
 			Size = UDim2.fromScale(0.7, 0.7),
 			BackgroundTransparency = 1,
+			MinimumWindowSize = Vector2.new(50, 50),
+			MaximumWindowSize = Vector2.new(500, 500),
 			OnClosed = function()
 				setOpened(false)
 			end

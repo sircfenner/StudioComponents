@@ -147,24 +147,30 @@ local function Panel(props, hooks)
 		local directionOfResize = directionOfResizeRef.value
 		local lastPosition = lastPositionReizedToRef.value
 
-		local newX = if directionOfResize.X == 1
-			then (position.X - lastPosition.X) + windowSize.X
-			elseif directionOfResize.X == -1 then (lastPosition.X - position.X) + windowSize.X
-			else windowSize.X
-		local newY = if directionOfResize.Y == 1
-			then (position.Y - lastPosition.Y) + windowSize.Y
-			elseif directionOfResize.Y == -1 then (lastPosition.Y - position.Y) + windowSize.Y
-			else windowSize.Y
 
-		setWindowSize(Vector2.new(newX, newY))
+		local maybeDelta = directionOfResize * (position - lastPosition)
 
-		local delta = position - lastPosition
+		local delta = Vector2.new(
+			if maybeDelta.X + windowSize.X < props.MinimumWindowSize.X then
+				-math.min(windowSize.X - props.MinimumWindowSize.X, 0)
+			elseif maybeDelta.X + windowSize.X > props.MaximumWindowSize.X then
+				math.min(props.MaximumWindowSize.X - windowSize.X, 0)
+			else maybeDelta.X,
+			if maybeDelta.Y + windowSize.Y < props.MinimumWindowSize.Y then
+				-math.min(windowSize.Y - props.MinimumWindowSize.Y, 0)
+			elseif maybeDelta.Y + windowSize.Y > props.MaximumWindowSize.Y then
+				math.min(props.MaximumWindowSize.Y - windowSize.Y, 0)
+			else maybeDelta.Y
+		)
+
+		setWindowSize(delta + windowSize)
 
 		setWindowPosition(
-			Vector2.new(
-				if directionOfResize.X == -1 then delta.X + windowPosition.X else windowPosition.X,
-				if directionOfResize.Y == -1 then delta.Y + windowPosition.Y else windowPosition.Y
-			)
+			windowPosition
+				- Vector2.new(
+					if directionOfResize.X == -1 then delta.X else 0,
+					if directionOfResize.Y == -1 then delta.Y else 0
+				)
 		)
 
 		lastPositionReizedToRef.value = position
@@ -199,9 +205,9 @@ local function Panel(props, hooks)
 					directionOfResizeRef.value = nil
 					lastPositionReizedToRef.value = nil
 				end
-
-				cursorMaybeChanged(rbx, inputObject)
+				
 				windowResizing.onInputEnded(rbx, inputObject)
+				cursorMaybeChanged(rbx, inputObject)
 			end,
 		}),
 		Titlebar = Roact.createElement("Frame", {
