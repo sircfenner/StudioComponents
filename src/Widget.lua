@@ -1,4 +1,3 @@
-local ScriptChangeService = game:GetService("ScriptChangeService")
 local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
 local Hooks = require(Packages.RoactHooks)
@@ -30,8 +29,8 @@ local function Widget(props, hooks)
 		local id = props.Id
 		local info = DockWidgetPluginGuiInfo.new(
 			props.InitialDockState,
-			props.InitalEnabled,
-			props.InitialEnabledShouldOverrideRestore,
+			true, -- InitialEnabled (TODO)
+			true, -- InitialEnabledShouldOverrideRestore (TODO)
 			props.FloatingWindowSize.x,
 			props.FloatingWindowSize.y,
 			props.MinimumWindowSize.x,
@@ -46,7 +45,7 @@ local function Widget(props, hooks)
 		newWidget.Enabled = true
 
 		newWidget:BindToClose(function()
-			widget.Enabled = false
+			newWidget.Enabled = false
 			props.OnClosed()
 		end)
 
