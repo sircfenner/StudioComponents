@@ -1,71 +1,87 @@
+local ScriptChangeService = game:GetService("ScriptChangeService")
 local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
+local Hooks = require(Packages.RoactHooks)
 
-local plugin = script:FindFirstAncestorWhichIsA("Plugin")
-local withTheme = require(script.Parent.withTheme)
+local usePlugin = require(script.Parent.usePlugin)
+local useTheme = require(script.Parent.useTheme)
 
-local Widget = Roact.Component:extend("Widget")
-
-Widget.defaultProps = {
+local defaultProps = {
 	Title = "Widget.defaultProps.Title",
 	Name = "Widget.defaultProps.Name",
 	InitialDockState = Enum.InitialDockState.Float,
+	InitialEnabledShouldOverrideRestore = true,
+	InitialEnabled = true,
 	FloatingWindowSize = Vector2.new(300, 200),
 	MinimumWindowSize = Vector2.new(0, 0),
 	OnClosed = function() end,
 }
 
-function Widget:init()
-	local initProps = self.props
+local function Widget(props, hooks)
+	local widget, setWidget = hooks.useState()
+	local plugin = usePlugin(hooks)
+	local theme = useTheme(hooks)
 
-	local id = initProps.Id
-	local info = DockWidgetPluginGuiInfo.new(
-		initProps.InitialDockState,
-		true, -- InitialEnabled (TODO)
-		true, -- InitialEnabledShouldOverrideRestore (TODO)
-		initProps.FloatingWindowSize.x,
-		initProps.FloatingWindowSize.y,
-		initProps.MinimumWindowSize.x,
-		initProps.MinimumWindowSize.y
-	)
+	hooks.useEffect(function()
+		if plugin == nil then
+			return
+		end
 
-	local widget = plugin:CreateDockWidgetPluginGui(id, info)
-	widget.Name = initProps.Name
-	widget.Title = initProps.Title
-	widget.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+		local id = props.Id
+		local info = DockWidgetPluginGuiInfo.new(
+			props.InitialDockState,
+			props.InitalEnabled,
+			props.InitialEnabledShouldOverrideRestore,
+			props.FloatingWindowSize.x,
+			props.FloatingWindowSize.y,
+			props.MinimumWindowSize.x,
+			props.MinimumWindowSize.y
+		)
 
-	widget:BindToClose(function()
-		widget.Enabled = false
-		self.props.OnClosed()
-	end)
+		local newWidget = plugin.makeWidget(id, info)
+		
+		newWidget.Name = props.Name
+		newWidget.Title = props.Title
+		newWidget.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+		newWidget.Enabled = true
 
-	self.widget = widget
-end
+		newWidget:BindToClose(function()
+			widget.Enabled = false
+			props.OnClosed()
+		end)
 
-function Widget:willUnmount()
-	self.widget:Destroy()
-	self.widget = nil
-end
+		setWidget(newWidget)
 
-function Widget:didUpdate(prevProps)
-	local nextProps = self.props
-	if prevProps.Title ~= nextProps.Title then
-		self.widget.Title = nextProps.Title -- TODO: clean this up
+		return function()
+			-- Destroying the widget actually works.
+			newWidget:Destroy()
+			setWidget(nil)
+		end
+	end, { plugin })
+
+	hooks.useEffect(function()
+		if widget then
+			widget.Title = props.Title
+			widget.Name = props.Name
+		end
+	end, { widget, props.Title, props.Name })
+
+	-- Can't render if there's no widget to render to.
+	if widget == nil then
+		return
 	end
-end
 
-function Widget:render()
 	return Roact.createElement(Roact.Portal, {
-		target = self.widget,
+		target = widget,
 	}, {
-		Main = withTheme(function(theme)
-			return Roact.createElement("Frame", {
-				BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainBackground),
-				BorderSizePixel = 0,
-				Size = UDim2.fromScale(1, 1),
-			}, self.props[Roact.Children])
-		end),
+		Main = Roact.createElement("Frame", {
+			BackgroundColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainBackground),
+			BorderSizePixel = 0,
+			Size = UDim2.fromScale(1, 1),
+		}, props[Roact.Children]),
 	})
 end
 
-return Widget
+return Hooks.new(Roact)(Widget, {
+	defaultProps = defaultProps,
+})

@@ -35,11 +35,16 @@ local function PluginProvider(props, hooks)
 		updateMouseIcon()
 	end
 
+	local function makeWidget(id, info)
+		return plugin:CreateDockWidgetPluginGui(id, info)
+	end
+
 	return Roact.createElement(PluginContext.Provider, {
 		value = {
 			plugin = plugin,
 			pushMouseIcon = pushMouseIcon,
 			popMouseIcon = popMouseIcon,
+			makeWidget = makeWidget,
 		},
 	}, props[Roact.Children])
 end

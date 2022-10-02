@@ -1,6 +1,7 @@
 local Packages = script.Parent.Parent
 local Roact = require(Packages.Roact)
 
+local PluginProvider = require(script.Parent.PluginProvider)
 local Button = require(script.Parent.Button)
 local Widget = require(script.Parent.Widget)
 
@@ -24,7 +25,7 @@ function Wrapper:render()
 			end,
 		}),
 		Widget = self.state.Enabled and Roact.createElement(Widget, {
-			Id = "_unique101",
+			Id = "_unique1012",
 			OnClosed = function()
 				self:setState({ Enabled = false })
 			end,
@@ -33,7 +34,14 @@ function Wrapper:render()
 end
 
 return function(target)
-	local element = Roact.createElement(Wrapper)
+	local plugin = PluginManager():CreatePlugin()
+
+	local element = Roact.createElement(PluginProvider, {
+		Plugin = plugin,
+	}, {
+		Main = Roact.createElement(Wrapper),
+	})
+
 	local handle = Roact.mount(element, target)
 	return function()
 		Roact.unmount(handle)
