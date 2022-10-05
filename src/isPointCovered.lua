@@ -98,7 +98,7 @@ local function isPointCovered(target, mousePosition)
 	local beforeRootIndex = table.find(rootChildren, beforeRoot)
 
 	for possibleIndex, possibleCoverer in root:GetChildren() do
-		if possibleCoverer == beforeRoot then
+		if possibleCoverer == target.Parent then
 			continue
 		end
 
