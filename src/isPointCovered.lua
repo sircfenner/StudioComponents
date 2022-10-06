@@ -8,116 +8,108 @@ local function inRange(a, point)
 		and point.Y < aPosition.Y + aSize.Y
 end
 
-local function isPointCovered(target, mousePosition)
-	local parent = target.Parent
+local function buildAncestoryToTheFirst(class, from)
+	local target = from:FindFirstAncestorWhichIsA(class)
 
-	if parent == nil then
-		return true
+	if not target then
+		return nil
 	end
 
-	local siblings = parent:GetChildren()
-	local indexImAt = table.find(siblings, target)
+	local ancestory = {}
+	local temp = from
+
+	while temp ~= target do
+		table.insert(ancestory, 1, temp)
+		temp = temp.Parent
+	end
+	table.insert(ancestory, 1, temp)
+
+	return ancestory
+end
+
+local function isPointCovered(target, mousePosition)
+	local root = target:FindFirstAncestorWhichIsA("LayerCollector")
+	if not root then
+		error("Not parented correctly.")
+	end
+	
+	-- An important assumption made is that the LayerCollector has a sibling ZIndexBehavior.
+	if root.ZIndexBehavior ~= Enum.ZIndexBehavior.Sibling then
+		error("Only Sibling ZIndexBehavior is supported.")
+	end
+
+	-- Path from the root to our target.
+	-- Needed to know which way our target is from the root.
+	local ancestory = buildAncestoryToTheFirst("LayerCollector", target)
 
 	local function helper(descendant)
-		if not descendant:IsA("GuiObject") then
+		local imPlacedWhere = table.find(ancestory, descendant)
+		local nextTowardsTarget = if imPlacedWhere then ancestory[imPlacedWhere + 1] else nil
+
+		-- We're the target, we don't need to test ourselves.
+		if imPlacedWhere and nextTowardsTarget == nil then
 			return false
 		end
 
-		if not descendant.Visible then
-			return false
-		end
+		local myChildren = descendant:GetChildren()
+		local nextTowardsTargetIndex = if nextTowardsTarget then table.find(myChildren, nextTowardsTarget) else nil
 
-		if descendant.BackgroundTransparency == 1 then
-			return false
-		end
+		for possibleIndex, possibleCoverer in myChildren do
+			if possibleIndex == nextTowardsTargetIndex then
+				continue
+			end
 
-		if inRange(descendant, mousePosition) then
-			return true
-		end
+			-- Non-gui objects can't cover.
+			if not possibleCoverer:IsA("GuiObject") then
+				continue
+			end
 
-		for _, possibleDescendant in descendant:GetChildren() do
-			if helper(possibleDescendant) then
+			-- Visible being false hides all descendants.
+			if not possibleCoverer.Visible then
+				continue
+			end
+
+			if nextTowardsTarget then
+				-- If the child towards the target is on top, then we continue on since it cannot be covered.
+				if nextTowardsTarget.ZIndex > possibleCoverer.ZIndex then
+					continue
+				end
+
+				-- Roblox solve tiebreakers by what order :GetChildren returns.
+				-- If we're last, then we'll be the last to be drawn. Hence, on top.
+				if possibleCoverer.ZIndex == nextTowardsTarget.ZIndex and nextTowardsTargetIndex > possibleIndex then
+					continue
+				end
+
+				-- At this point, it's known that the possibleCoverer is on top.
+				-- But, we don't know if it will cover for sure.
+
+				-- Transparent means that the potential coverer can't cover.
+				-- However, its desecendants can!
+				if possibleCoverer.BackgroundTransparency == 1 then
+					if helper(possibleCoverer) then
+						return true
+					end
+				end
+			end
+	
+			-- This path only happens if we could be covering the target.
+			-- Now, we have to check if it covers.
+			if inRange(possibleCoverer, mousePosition) then
 				return true
+
+				-- Even if it doesn't cover, not clipping means its descendants can.
+			elseif possibleCoverer.ClipsDescendants == false then
+				if helper(possibleCoverer) then
+					return true
+				end
 			end
 		end
 
 		return false
 	end
 
-	for possibleIndex, possible in parent:GetChildren() do
-		if possible == target then
-			continue
-		end
-
-		if not possible:IsA("GuiObject") then
-			continue
-		end
-
-		if not possible.visible then
-			continue
-		end
-
-		if possible.BackgroundTransparency == 1 then
-			continue
-		end
-
-		if possible.ZIndex < target.ZIndex then
-			continue
-		end
-
-		if inRange(possible, mousePosition) then
-			if possible.ZIndex > target.ZIndex then
-				return true
-			else
-				-- Roblox tiebreaks by whoever was last in the child list
-				-- gets rendered last.
-				if possibleIndex > indexImAt then
-					return true
-				end
-			end
-		end
-
-		if not possible.ClipsDescendants then
-			for _, possibleDescendant in possible:GetChildren() do
-				if helper(possibleDescendant) then
-					return true
-				end
-			end
-		end
-	end
-
-	local root = target
-	local beforeRoot
-
-	while root.Parent and not root:IsA("LayerCollector") do
-		beforeRoot = root
-		root = root.Parent
-	end
-
-	local rootChildren = root:GetChildren()
-	local beforeRootIndex = table.find(rootChildren, beforeRoot)
-
-	for possibleIndex, possibleCoverer in root:GetChildren() do
-		if possibleCoverer == target.Parent then
-			continue
-		end
-
-		if possibleCoverer.ZIndex < beforeRoot.ZIndex then
-			continue
-		end
-
-		if possibleCoverer.ZIndex == beforeRoot.ZIndex then
-			if possibleIndex < beforeRootIndex then
-				continue
-			end
-		end
-
-		if helper(possibleCoverer) then
-			return true
-		end
-	end
-
-	return false
+	return helper(root)
 end
 
 return isPointCovered
