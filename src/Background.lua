@@ -15,7 +15,7 @@ local function Background(props, hooks)
 		LayoutOrder = props.LayoutOrder or 0,
 		ZIndex = props.ZIndex or 1,
 		BorderSizePixel = 0,
-		BackgroundColor3 = theme.Default.MainBackground,
+		BackgroundColor3 = theme.Default("MainBackground"),
 	}, props[Roact.Children])
 end
 

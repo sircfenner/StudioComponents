@@ -73,7 +73,7 @@ local function Checkbox(props, hooks)
 		end
 	end
 
-	local indicatorColor = mainModifier.CheckedFieldIndicator
+	local indicatorColor = mainModifier("CheckedFieldIndicator")
 	if props.Value == Constants.CheckboxIndeterminate then
 		indicatorColor = Color3.fromRGB(255, 255, 255)
 	end
@@ -94,8 +94,8 @@ local function Checkbox(props, hooks)
 		Box = Roact.createElement("Frame", {
 			AnchorPoint = Vector2.new(boxPositionX, 0),
 			Position = UDim2.fromScale(boxPositionX, 0),
-			BackgroundColor3 = backModifier.CheckedFieldBackground,
-			BorderColor3 = mainModifier.CheckedFieldBorder,
+			BackgroundColor3 = backModifier("CheckedFieldBackground"),
+			BorderColor3 = mainModifier("CheckedFieldBorder"),
 			BorderMode = Enum.BorderMode.Inset,
 			Size = UDim2.fromOffset(15, 15),
 		}, {
@@ -119,7 +119,7 @@ local function Checkbox(props, hooks)
 			Text = props.Label,
 			Font = Constants.Font,
 			TextSize = Constants.TextSize,
-			TextColor3 = mainModifier.MainText,
+			TextColor3 = mainModifier("MainText"),
 		}),
 	})
 end
