@@ -30,6 +30,7 @@ local function Helper(props, hooks)
 		}),
 		Input = Roact.createElement(TextInput, {
 			Value = number,
+			ResetOnInvalid = true,
 			PlaceholderText = "Enabled",
 			LayoutOrder = 1,
 			TryParsing = function(text)
@@ -43,7 +44,7 @@ local function Helper(props, hooks)
 			end,
 			OnChangedInvalid = setParsingError,
 			OnChanged = function(value)
-				if error then
+				if parsingError then
 					setParsingError(Roact.None)
 				end
 

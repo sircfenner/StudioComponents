@@ -19,8 +19,11 @@ TextInput.defaultProps = {
 	Value = "",
 	PlaceholderText = "",
 	Stringify = tostring,
-	TryParsing = function(value) return true, value end,
+	TryParsing = function(value)
+		return true, value
+	end,
 	ClearTextOnFocus = true,
+	ResetOnInvalid = true,
 	OnFocused = noop,
 	OnFocusLost = noop,
 	OnFocusLostInvalid = noop,
@@ -64,8 +67,12 @@ function TextInput:init()
 
 		if success then
 			self.props.OnFocusLost(value, enterPressed, inputObject)
-		else
+		elseif not self.props.ResetOnInvalid then
 			self.props.OnFocusLostInvalid(value, enterPressed, inputObject)
+		end
+
+		if self.props.ResetOnInvalid then
+			rbx.Text = self:getTextFromValue()
 		end
 	end
 	self.onChanged = function(rbx)
@@ -77,6 +84,11 @@ function TextInput:init()
 			self.props.OnChangedInvalid(value, rbx.Text)
 		end
 	end
+end
+
+function TextInput:getTextFromValue()
+	-- TODO: Get rid of self.props.Text for self.props.Value.
+	return self.props.Stringify(self.props.Value or self.props.Text)
 end
 
 function TextInput:render()
@@ -103,8 +115,7 @@ function TextInput:render()
 			BorderMode = Enum.BorderMode.Inset,
 			LayoutOrder = self.props.LayoutOrder,
 			Font = Constants.Font,
-			-- TODO: Get rid of self.props.Text for self.props.Value.
-			Text = self.props.Text or self.props.Value,
+			Text = self:getTextFromValue(),
 			TextSize = Constants.TextSize,
 			TextColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainText, mainModifier),
 			TextXAlignment = Enum.TextXAlignment.Left,
