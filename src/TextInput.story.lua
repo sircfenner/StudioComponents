@@ -25,7 +25,7 @@ return function(target)
 			LayoutOrder = 1,
 			Disabled = true,
 			PlaceholderText = "Disabled",
-			Text = "Disabled",
+			Value = "Disabled",
 		}),
 	})
 	local handle = Roact.mount(element, target)
