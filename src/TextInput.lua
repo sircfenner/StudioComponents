@@ -12,7 +12,7 @@ local Constants = require(script.Parent.Constants)
 local PLACEHOLDER_TEXT_COLOR = Color3.fromRGB(102, 102, 102) -- works for both themes
 local EDGE_PADDING_PX = 5
 
-local defaultProps = { -- do we need this???????????????????????????????????????????????????????????????
+local defaultProps = {
 	Size = UDim2.new(1, 0, 0, 21),
 	Disabled = false,
 	Text = "",
@@ -38,12 +38,10 @@ local function TextInput(props, hooks)
 	local innerOffset = hooks.useValue(0)
 	local cursorPosition, setCursorPosition = hooks.useState(-1)
 
-	local children = {
-		Padding = Roact.createElement("UIPadding", {
-			PaddingLeft = UDim.new(0, EDGE_PADDING_PX),
-			PaddingRight = UDim.new(0, EDGE_PADDING_PX),
-		}),
-	}
+	local padding = Roact.createElement("UIPadding", {
+		PaddingLeft = UDim.new(0, EDGE_PADDING_PX),
+		PaddingRight = UDim.new(0, EDGE_PADDING_PX),
+	})
 
 	local mainModifier = Enum.StudioStyleGuideModifier.Default
 	local borderModifier = Enum.StudioStyleGuideModifier.Default
@@ -139,7 +137,7 @@ local function TextInput(props, hooks)
 			TextTruncate = if focused then Enum.TextTruncate.None else Enum.TextTruncate.AtEnd,
 		}
 
-		local textField = props.Disabled and Roact.createElement("TextLabel", textFieldProps, children)
+		local textField = props.Disabled and Roact.createElement("TextLabel", textFieldProps, padding)
 			or Roact.createElement(
 				"TextBox",
 				joinDictionaries(textFieldProps, {
@@ -154,7 +152,7 @@ local function TextInput(props, hooks)
 					[Roact.Change.Text] = onTextChanged,
 					[Roact.Change.CursorPosition] = onCursorChanged,
 				}),
-				children
+				padding
 			)
 
 		return Roact.createElement("Frame", {
@@ -170,6 +168,7 @@ local function TextInput(props, hooks)
 			[Roact.Ref] = containerRef.value,
 		}, {
 			TextField = textField,
+			Children = Roact.createFragment(props[Roact.Children]),
 		})
 	end)
 end
