@@ -38,11 +38,6 @@ local function TextInput(props, hooks)
 	local innerOffset = hooks.useValue(0)
 	local cursorPosition, setCursorPosition = hooks.useState(-1)
 
-	local padding = Roact.createElement("UIPadding", {
-		PaddingLeft = UDim.new(0, EDGE_PADDING_PX),
-		PaddingRight = UDim.new(0, EDGE_PADDING_PX),
-	})
-
 	local mainModifier = Enum.StudioStyleGuideModifier.Default
 	local borderModifier = Enum.StudioStyleGuideModifier.Default
 	if props.Disabled then
@@ -103,11 +98,9 @@ local function TextInput(props, hooks)
 			innerOffset.value = 0
 		else
 			if fullOffset < min then
-				local adjust = min - fullOffset
-				innerOffset.value += adjust
+				innerOffset.value += min - fullOffset
 			elseif fullOffset > max then
-				local adjust = fullOffset - max
-				innerOffset.value -= adjust
+				innerOffset.value -= fullOffset - max
 			end
 			innerOffset.value = math.max(innerOffset.value, innerArea - fullTextWidth)
 		end
@@ -124,6 +117,11 @@ local function TextInput(props, hooks)
 		)
 	end
 
+	local padding = Roact.createElement("UIPadding", {
+		PaddingLeft = UDim.new(0, EDGE_PADDING_PX),
+		PaddingRight = UDim.new(0, EDGE_PADDING_PX),
+	})
+
 	return withTheme(function(theme)
 		local textFieldProps = {
 			Size = textFieldSize,
@@ -137,7 +135,7 @@ local function TextInput(props, hooks)
 			TextTruncate = if focused then Enum.TextTruncate.None else Enum.TextTruncate.AtEnd,
 		}
 
-		local textField = props.Disabled and Roact.createElement("TextLabel", textFieldProps, padding)
+		local textField = props.Disabled and Roact.createElement("TextLabel", textFieldProps, { Padding = padding })
 			or Roact.createElement(
 				"TextBox",
 				joinDictionaries(textFieldProps, {
@@ -152,7 +150,7 @@ local function TextInput(props, hooks)
 					[Roact.Change.Text] = onTextChanged,
 					[Roact.Change.CursorPosition] = onCursorChanged,
 				}),
-				padding
+				{ Padding = padding }
 			)
 
 		return Roact.createElement("Frame", {
