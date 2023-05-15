@@ -3,6 +3,7 @@ local Roact = require(Packages.Roact)
 
 local withTheme = require(script.Parent.withTheme)
 local joinDictionaries = require(script.Parent.joinDictionaries)
+local isPointCovered = require(script.Parent.isPointCovered)
 
 local ScrollFrame = Roact.Component:extend("ScrollFrame")
 
@@ -85,10 +86,14 @@ function ScrollFrame:init()
 		}
 	end)
 
-	self.maybeScrollInput = function(_, inputObject)
+	self.maybeScrollInput = function(rbx, inputObject)
 		if self.props.Disabled then
 			return
 		elseif inputObject.UserInputType == Enum.UserInputType.MouseWheel then
+			if isPointCovered(rbx, inputObject.Position) then
+				return
+			end
+
 			local factor = -inputObject.Position.z
 			local visible = self.barVisible:getValue()
 			if visible.y then
