@@ -7,6 +7,7 @@ return {
 	Dropdown = require(script.Dropdown),
 	Label = require(script.Label),
 	MainButton = require(script.MainButton),
+	Panel = require(script.Panel),
 	RadioButton = require(script.RadioButton),
 	ScrollFrame = require(script.ScrollFrame),
 	Slider = require(script.Slider),
