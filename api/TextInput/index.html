@@ -8,7 +8,7 @@ boxes in the Explorer and Properties widgets, among other inputs in Studio.
 
 | Dark | Light |
 | - | - |
-| ![Dark](/components/textinput/dark.png) | ![Light](/components/textinput/light.png) |
+| ![Dark](/StudioComponents/components/textinput/dark.png) | ![Light](/StudioComponents/components/textinput/light.png) |
 
 This is a controlled component, which means the current text should be passed in to the
 `Text` prop and a callback value to the `OnChanged` prop which gets run when the user attempts 
@@ -49,7 +49,7 @@ boxes in the Explorer and Properties widgets, among other inputs in Studio.
 
 | Dark | Light |
 | - | - |
-| ![Dark](/components/textinput/dark.png) | ![Light](/components/textinput/light.png) |
+| ![Dark](/StudioComponents/components/textinput/dark.png) | ![Light](/StudioComponents/components/textinput/light.png) |
 
 This is a controlled component, which means the current text should be passed in to the
 `Text` prop and a callback value to the `OnChanged` prop which gets run when the user attempts 
@@ -86,8 +86,8 @@ end
 By default, the height of this component is equal to the value in [Constants.DefaultInputHeight].
 While this can be overriden by props, in order to keep inputs accessible it is not recommended 
 to make the component any smaller than this."><link data-rh="true" rel="canonical" href="https://sircfenner.github.io/StudioComponents/api/TextInput"><link data-rh="true" rel="alternate" href="https://sircfenner.github.io/StudioComponents/api/TextInput" hreflang="en"><link data-rh="true" rel="alternate" href="https://sircfenner.github.io/StudioComponents/api/TextInput" hreflang="x-default"><link rel="stylesheet" href="/StudioComponents/assets/css/styles.a51545d9.css">
-<link rel="preload" href="/StudioComponents/assets/js/runtime~main.19ea85b3.js" as="script">
-<link rel="preload" href="/StudioComponents/assets/js/main.66ea6857.js" as="script">
+<link rel="preload" href="/StudioComponents/assets/js/runtime~main.09eac804.js" as="script">
+<link rel="preload" href="/StudioComponents/assets/js/main.6d8921d8.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -106,10 +106,10 @@ to make the component any smaller than this."><link data-rh="true" rel="canonica
   <tbody>
     <tr>
       <td>
-        <img src="/components/textinput/dark.png" alt="Dark">
+        <img src="/StudioComponents/components/textinput/dark.png" alt="Dark">
       </td>
       <td>
-        <img src="/components/textinput/light.png" alt="Light">
+        <img src="/StudioComponents/components/textinput/light.png" alt="Light">
       </td>
     </tr>
   </tbody>
@@ -203,13 +203,13 @@ to make the component any smaller than this."><link data-rh="true" rel="canonica
         }
     ],
     &quot;name&quot;: &quot;TextInput&quot;,
-    &quot;desc&quot;: &quot;A basic input field for entering any kind of text. This matches the appearance of the search\nboxes in the Explorer and Properties widgets, among other inputs in Studio.\n\n| Dark | Light |\n| - | - |\n| ![Dark](/components/textinput/dark.png) | ![Light](/components/textinput/light.png) |\n\nThis is a controlled component, which means the current text should be passed in to the\n`Text` prop and a callback value to the `OnChanged` prop which gets run when the user attempts \ntypes in the input field. For example:\n\n```lua\nlocal function MyComponent()\n\tlocal text, setText = React.useState(\&quot;\&quot;)\n\treturn React.createElement(StudioComponents.TextInput, {\n\t\tText = text,\n\t\tOnChanged = setText,\n\t})\nend\n```\n\nThis allows complete control over the text displayed and keeps the source of truth in your own\ncode. This is helpful for consistency and controlling the state from elsewhere in the tree. It\nalso allows you to easily filter what can be typed into the text input. For example, to only\npermit entering lowercase letters:\n\n```lua\nlocal function MyComponent()\n\tlocal text, setText = React.useState(\&quot;\&quot;)\n\treturn React.createElement(StudioComponents.TextInput, {\n\t\tText = text,\n\t\tOnChanged = function(newText),\n\t\t\tlocal filteredText = string.gsub(newText, \&quot;[^a-z]\&quot;, \&quot;\&quot;)\n\t\t\tsetText(filteredText)\n\t\tend,\n\t})\nend\n```\n\nBy default, the height of this component is equal to the value in [Constants.DefaultInputHeight].\nWhile this can be overriden by props, in order to keep inputs accessible it is not recommended \nto make the component any smaller than this.&quot;,
+    &quot;desc&quot;: &quot;A basic input field for entering any kind of text. This matches the appearance of the search\nboxes in the Explorer and Properties widgets, among other inputs in Studio.\n\n| Dark | Light |\n| - | - |\n| ![Dark](/StudioComponents/components/textinput/dark.png) | ![Light](/StudioComponents/components/textinput/light.png) |\n\nThis is a controlled component, which means the current text should be passed in to the\n`Text` prop and a callback value to the `OnChanged` prop which gets run when the user attempts \ntypes in the input field. For example:\n\n```lua\nlocal function MyComponent()\n\tlocal text, setText = React.useState(\&quot;\&quot;)\n\treturn React.createElement(StudioComponents.TextInput, {\n\t\tText = text,\n\t\tOnChanged = setText,\n\t})\nend\n```\n\nThis allows complete control over the text displayed and keeps the source of truth in your own\ncode. This is helpful for consistency and controlling the state from elsewhere in the tree. It\nalso allows you to easily filter what can be typed into the text input. For example, to only\npermit entering lowercase letters:\n\n```lua\nlocal function MyComponent()\n\tlocal text, setText = React.useState(\&quot;\&quot;)\n\treturn React.createElement(StudioComponents.TextInput, {\n\t\tText = text,\n\t\tOnChanged = function(newText),\n\t\t\tlocal filteredText = string.gsub(newText, \&quot;[^a-z]\&quot;, \&quot;\&quot;)\n\t\t\tsetText(filteredText)\n\t\tend,\n\t})\nend\n```\n\nBy default, the height of this component is equal to the value in [Constants.DefaultInputHeight].\nWhile this can be overriden by props, in order to keep inputs accessible it is not recommended \nto make the component any smaller than this.&quot;,
     &quot;source&quot;: {
         &quot;line&quot;: 47,
         &quot;path&quot;: &quot;src/Components/TextInput.luau&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#Props" class="table-of-contents__link toc-highlight">Props</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 sircfenner. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/StudioComponents/assets/js/runtime~main.19ea85b3.js"></script>
-<script src="/StudioComponents/assets/js/main.66ea6857.js"></script>
+<script src="/StudioComponents/assets/js/runtime~main.09eac804.js"></script>
+<script src="/StudioComponents/assets/js/main.6d8921d8.js"></script>
 </body>
 </html>

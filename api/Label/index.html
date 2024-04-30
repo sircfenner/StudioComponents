@@ -7,7 +7,7 @@
 
 | Dark | Light |
 | - | - |
-| ![Dark](/components/label/dark.png) | ![Light](/components/label/light.png) |
+| ![Dark](/StudioComponents/components/label/dark.png) | ![Light](/StudioComponents/components/label/light.png) |
 
 By default, text color matches the current theme&#x27;s MainText color, which is the color
 used in the Explorer and Properties widgets as well as most other places. It can be overriden
@@ -41,7 +41,7 @@ cannot currently be overriden via props."><meta data-rh="true" property="og:desc
 
 | Dark | Light |
 | - | - |
-| ![Dark](/components/label/dark.png) | ![Light](/components/label/light.png) |
+| ![Dark](/StudioComponents/components/label/dark.png) | ![Light](/StudioComponents/components/label/light.png) |
 
 By default, text color matches the current theme&#x27;s MainText color, which is the color
 used in the Explorer and Properties widgets as well as most other places. It can be overriden
@@ -72,8 +72,8 @@ or adding a UIStroke / UIGradient.
 
 Labels use [Constants.DefaultFont] for Font and [Constants.DefaultTextSize] for TextSize. This
 cannot currently be overriden via props."><link data-rh="true" rel="canonical" href="https://sircfenner.github.io/StudioComponents/api/Label"><link data-rh="true" rel="alternate" href="https://sircfenner.github.io/StudioComponents/api/Label" hreflang="en"><link data-rh="true" rel="alternate" href="https://sircfenner.github.io/StudioComponents/api/Label" hreflang="x-default"><link rel="stylesheet" href="/StudioComponents/assets/css/styles.a51545d9.css">
-<link rel="preload" href="/StudioComponents/assets/js/runtime~main.19ea85b3.js" as="script">
-<link rel="preload" href="/StudioComponents/assets/js/main.66ea6857.js" as="script">
+<link rel="preload" href="/StudioComponents/assets/js/runtime~main.09eac804.js" as="script">
+<link rel="preload" href="/StudioComponents/assets/js/main.6d8921d8.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -89,10 +89,10 @@ cannot currently be overriden via props."><link data-rh="true" rel="canonical" h
   <tbody>
     <tr>
       <td>
-        <img src="/components/label/dark.png" alt="Dark">
+        <img src="/StudioComponents/components/label/dark.png" alt="Dark">
       </td>
       <td>
-        <img src="/components/label/light.png" alt="Light">
+        <img src="/StudioComponents/components/label/light.png" alt="Light">
       </td>
     </tr>
   </tbody>
@@ -213,13 +213,13 @@ cannot currently be overriden via props."><link data-rh="true" rel="canonical" h
         }
     ],
     &quot;name&quot;: &quot;Label&quot;,
-    &quot;desc&quot;: &quot;A basic text label with default styling to match built-in labels as closely as possible.\n\n| Dark | Light |\n| - | - |\n| ![Dark](/components/label/dark.png) | ![Light](/components/label/light.png) |\n\nBy default, text color matches the current theme&#x27;s MainText color, which is the color\nused in the Explorer and Properties widgets as well as most other places. It can be overriden\nin two ways:\n1. Passing a [StudioStyleGuideColor](https://create.roblox.com/docs/reference/engine/enums/StudioStyleGuideColor)\nto the `TextColorStyle` prop. This is the preferred way to recolor text\nbecause it will use the correct version of the color for the user&#x27;s current selected theme.\n2. Passing a [Color3] value to the `TextColor3` prop. This is useful when a color is not represented\nby any StudioStyleGuideColor or should remain constant regardless of theme.\n\nExample of creating an error message label:\n\n```lua\nlocal function MyComponent()\n\treturn React.createElement(StudioComponents.Label, {\n\t\tText = \&quot;Please enter at least 5 characters!\&quot;,\n\t\tTextColorStyle = Enum.StudioStyleGuideColor.ErrorText,\n\t})\nend\n```\n\nPlugins like [Theme Color Shower](https://create.roblox.com/store/asset/3115567199/Theme-Color-Shower)\nare useful for finding a StudioStyleGuideColor to use.\n\nThis component will parent any children passed to it to the underlying TextLabel instance.\nThis is useful for things like adding extra padding around the text using a nested UIPadding,\nor adding a UIStroke / UIGradient.\n\nLabels use [Constants.DefaultFont] for Font and [Constants.DefaultTextSize] for TextSize. This\ncannot currently be overriden via props.&quot;,
+    &quot;desc&quot;: &quot;A basic text label with default styling to match built-in labels as closely as possible.\n\n| Dark | Light |\n| - | - |\n| ![Dark](/StudioComponents/components/label/dark.png) | ![Light](/StudioComponents/components/label/light.png) |\n\nBy default, text color matches the current theme&#x27;s MainText color, which is the color\nused in the Explorer and Properties widgets as well as most other places. It can be overriden\nin two ways:\n1. Passing a [StudioStyleGuideColor](https://create.roblox.com/docs/reference/engine/enums/StudioStyleGuideColor)\nto the `TextColorStyle` prop. This is the preferred way to recolor text\nbecause it will use the correct version of the color for the user&#x27;s current selected theme.\n2. Passing a [Color3] value to the `TextColor3` prop. This is useful when a color is not represented\nby any StudioStyleGuideColor or should remain constant regardless of theme.\n\nExample of creating an error message label:\n\n```lua\nlocal function MyComponent()\n\treturn React.createElement(StudioComponents.Label, {\n\t\tText = \&quot;Please enter at least 5 characters!\&quot;,\n\t\tTextColorStyle = Enum.StudioStyleGuideColor.ErrorText,\n\t})\nend\n```\n\nPlugins like [Theme Color Shower](https://create.roblox.com/store/asset/3115567199/Theme-Color-Shower)\nare useful for finding a StudioStyleGuideColor to use.\n\nThis component will parent any children passed to it to the underlying TextLabel instance.\nThis is useful for things like adding extra padding around the text using a nested UIPadding,\nor adding a UIStroke / UIGradient.\n\nLabels use [Constants.DefaultFont] for Font and [Constants.DefaultTextSize] for TextSize. This\ncannot currently be overriden via props.&quot;,
     &quot;source&quot;: {
         &quot;line&quot;: 40,
         &quot;path&quot;: &quot;src/Components/Label.luau&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#Props" class="table-of-contents__link toc-highlight">Props</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 sircfenner. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/StudioComponents/assets/js/runtime~main.19ea85b3.js"></script>
-<script src="/StudioComponents/assets/js/main.66ea6857.js"></script>
+<script src="/StudioComponents/assets/js/runtime~main.09eac804.js"></script>
+<script src="/StudioComponents/assets/js/main.6d8921d8.js"></script>
 </body>
 </html>

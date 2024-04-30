@@ -8,7 +8,7 @@ or as a secondary button alongside a [MainButton] for the primary action in a gr
 
 | Dark | Light |
 | - | - |
-| ![Dark](/components/button/dark.png) | ![Light](/components/button/light.png) |
+| ![Dark](/StudioComponents/components/button/dark.png) | ![Light](/StudioComponents/components/button/light.png) |
 
 The `OnActivated` prop should be a callback which is run when the button is clicked.
 For example:
@@ -37,7 +37,7 @@ or as a secondary button alongside a [MainButton] for the primary action in a gr
 
 | Dark | Light |
 | - | - |
-| ![Dark](/components/button/dark.png) | ![Light](/components/button/light.png) |
+| ![Dark](/StudioComponents/components/button/dark.png) | ![Light](/StudioComponents/components/button/light.png) |
 
 The `OnActivated` prop should be a callback which is run when the button is clicked.
 For example:
@@ -62,8 +62,8 @@ AutomaticSize is a simpler version of Roblox&#x27;s built-in AutomaticSize syste
 `Enum.AutomaticSize.X` will override the button&#x27;s width to fit the text and/or icon. Passing a
 value of `Enum.AutomaticSize.Y` will do the same but with the button&#x27;s height. Passing
 `Enum.AutomaticSize.XY` will override both axes."><link data-rh="true" rel="canonical" href="https://sircfenner.github.io/StudioComponents/api/Button"><link data-rh="true" rel="alternate" href="https://sircfenner.github.io/StudioComponents/api/Button" hreflang="en"><link data-rh="true" rel="alternate" href="https://sircfenner.github.io/StudioComponents/api/Button" hreflang="x-default"><link rel="stylesheet" href="/StudioComponents/assets/css/styles.a51545d9.css">
-<link rel="preload" href="/StudioComponents/assets/js/runtime~main.19ea85b3.js" as="script">
-<link rel="preload" href="/StudioComponents/assets/js/main.66ea6857.js" as="script">
+<link rel="preload" href="/StudioComponents/assets/js/runtime~main.09eac804.js" as="script">
+<link rel="preload" href="/StudioComponents/assets/js/main.6d8921d8.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -82,10 +82,10 @@ value of `Enum.AutomaticSize.Y` will do the same but with the button&#x27;s heig
   <tbody>
     <tr>
       <td>
-        <img src="/components/button/dark.png" alt="Dark">
+        <img src="/StudioComponents/components/button/dark.png" alt="Dark">
       </td>
       <td>
-        <img src="/components/button/light.png" alt="Light">
+        <img src="/StudioComponents/components/button/light.png" alt="Light">
       </td>
     </tr>
   </tbody>
@@ -207,13 +207,13 @@ value of `Enum.AutomaticSize.Y` will do the same but with the button&#x27;s heig
         }
     ],
     &quot;name&quot;: &quot;Button&quot;,
-    &quot;desc&quot;: &quot;A basic button that supports text, an icon, or both. This should be used as a standalone button\nor as a secondary button alongside a [MainButton] for the primary action in a group of options.\n\n| Dark | Light |\n| - | - |\n| ![Dark](/components/button/dark.png) | ![Light](/components/button/light.png) |\n\nThe `OnActivated` prop should be a callback which is run when the button is clicked.\nFor example:\n\n```lua\nlocal function MyComponent()\n\treturn React.createElement(StudioComponents.Button, {\n\t\tText = \&quot;Click Me\&quot;,\n\t\tOnActivated = function()\n\t\t\tprint(\&quot;Button clicked!\&quot;)\n\t\tend\n\t})\nend\n```\n\nThe default size of buttons can be found in [Constants.DefaultButtonHeight]. To override this,\nthere are two main options, which may be combined:\n1. Pass a `Size` prop.\n2. Pass an `AutomaticSize` prop.\n\nAutomaticSize is a simpler version of Roblox&#x27;s built-in AutomaticSize system. Passing a value of\n`Enum.AutomaticSize.X` will override the button&#x27;s width to fit the text and/or icon. Passing a\nvalue of `Enum.AutomaticSize.Y` will do the same but with the button&#x27;s height. Passing\n`Enum.AutomaticSize.XY` will override both axes.&quot;,
+    &quot;desc&quot;: &quot;A basic button that supports text, an icon, or both. This should be used as a standalone button\nor as a secondary button alongside a [MainButton] for the primary action in a group of options.\n\n| Dark | Light |\n| - | - |\n| ![Dark](/StudioComponents/components/button/dark.png) | ![Light](/StudioComponents/components/button/light.png) |\n\nThe `OnActivated` prop should be a callback which is run when the button is clicked.\nFor example:\n\n```lua\nlocal function MyComponent()\n\treturn React.createElement(StudioComponents.Button, {\n\t\tText = \&quot;Click Me\&quot;,\n\t\tOnActivated = function()\n\t\t\tprint(\&quot;Button clicked!\&quot;)\n\t\tend\n\t})\nend\n```\n\nThe default size of buttons can be found in [Constants.DefaultButtonHeight]. To override this,\nthere are two main options, which may be combined:\n1. Pass a `Size` prop.\n2. Pass an `AutomaticSize` prop.\n\nAutomaticSize is a simpler version of Roblox&#x27;s built-in AutomaticSize system. Passing a value of\n`Enum.AutomaticSize.X` will override the button&#x27;s width to fit the text and/or icon. Passing a\nvalue of `Enum.AutomaticSize.Y` will do the same but with the button&#x27;s height. Passing\n`Enum.AutomaticSize.XY` will override both axes.&quot;,
     &quot;source&quot;: {
         &quot;line&quot;: 34,
         &quot;path&quot;: &quot;src/Components/Button.luau&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#IconProps" class="table-of-contents__link toc-highlight">IconProps</a></li><li><a href="#Props" class="table-of-contents__link toc-highlight">Props</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 sircfenner. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/StudioComponents/assets/js/runtime~main.19ea85b3.js"></script>
-<script src="/StudioComponents/assets/js/main.66ea6857.js"></script>
+<script src="/StudioComponents/assets/js/runtime~main.09eac804.js"></script>
+<script src="/StudioComponents/assets/js/main.6d8921d8.js"></script>
 </body>
 </html>

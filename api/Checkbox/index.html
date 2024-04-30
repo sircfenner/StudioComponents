@@ -8,7 +8,7 @@ the `Label` prop is the recommended way to indicate the purpose of a checkbox.
 
 | Dark | Light |
 | - | - |
-| ![Dark](/components/checkbox/dark.png) | ![Light](/components/checkbox/light.png) |
+| ![Dark](/StudioComponents/components/checkbox/dark.png) | ![Light](/StudioComponents/components/checkbox/light.png) |
 
 As this is a controlled component, you should pass a value to the `Value` prop representing 
 whether the box is checked, and a callback value to the `OnChanged`	prop which gets run when 
@@ -48,7 +48,7 @@ the `Label` prop is the recommended way to indicate the purpose of a checkbox.
 
 | Dark | Light |
 | - | - |
-| ![Dark](/components/checkbox/dark.png) | ![Light](/components/checkbox/light.png) |
+| ![Dark](/StudioComponents/components/checkbox/dark.png) | ![Light](/StudioComponents/components/checkbox/light.png) |
 
 As this is a controlled component, you should pass a value to the `Value` prop representing 
 whether the box is checked, and a callback value to the `OnChanged`	prop which gets run when 
@@ -84,8 +84,8 @@ The built-in Studio checkboxes were changed during this project&#x27;s lifetime 
 have a lower contrast ratio, especially in Dark theme. This component retains the old design
 as it is more accessible.
 :::"><link data-rh="true" rel="canonical" href="https://sircfenner.github.io/StudioComponents/api/Checkbox"><link data-rh="true" rel="alternate" href="https://sircfenner.github.io/StudioComponents/api/Checkbox" hreflang="en"><link data-rh="true" rel="alternate" href="https://sircfenner.github.io/StudioComponents/api/Checkbox" hreflang="x-default"><link rel="stylesheet" href="/StudioComponents/assets/css/styles.a51545d9.css">
-<link rel="preload" href="/StudioComponents/assets/js/runtime~main.19ea85b3.js" as="script">
-<link rel="preload" href="/StudioComponents/assets/js/main.66ea6857.js" as="script">
+<link rel="preload" href="/StudioComponents/assets/js/runtime~main.09eac804.js" as="script">
+<link rel="preload" href="/StudioComponents/assets/js/main.6d8921d8.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -104,10 +104,10 @@ as it is more accessible.
   <tbody>
     <tr>
       <td>
-        <img src="/components/checkbox/dark.png" alt="Dark">
+        <img src="/StudioComponents/components/checkbox/dark.png" alt="Dark">
       </td>
       <td>
-        <img src="/components/checkbox/light.png" alt="Light">
+        <img src="/StudioComponents/components/checkbox/light.png" alt="Light">
       </td>
     </tr>
   </tbody>
@@ -207,13 +207,13 @@ as it is more accessible.
         }
     ],
     &quot;name&quot;: &quot;Checkbox&quot;,
-    &quot;desc&quot;: &quot;A box which can be checked or unchecked, usually used to toggle an option. Passing a value to\nthe `Label` prop is the recommended way to indicate the purpose of a checkbox.\n\n| Dark | Light |\n| - | - |\n| ![Dark](/components/checkbox/dark.png) | ![Light](/components/checkbox/light.png) |\n\nAs this is a controlled component, you should pass a value to the `Value` prop representing \nwhether the box is checked, and a callback value to the `OnChanged`\tprop which gets run when \nthe user interacts with the checkbox. For example:\n\n```lua\nlocal function MyComponent()\n\tlocal selected, setSelected = React.useState(false)\n\treturn React.createElement(StudioComponents.Checkbox, {\n\t\tValue = selected,\n\t\tOnChanged = setSelected,\n\t})\nend\n```\n\nThe default height of a checkbox, including its label, can be found in [Constants.DefaultToggleHeight].\nThe size of the whole checkbox can be overridden by passing a value to the `Size` prop.\n\nBy default, the box and label are left-aligned within the parent frame. This can be overriden by \npassing an [Enum.HorizontalAlignment] value to the `ContentAlignment` prop.\n\nBy default, the box is placed to the left of the label. This can be overriden by passing either\n`Enum.HorizontalAlignment.Left` or `Enum.HorizontalAlignment.Right` to the\n`ButtonAlignment` prop.\n\nCheckboxes can also represent &#x27;indeterminate&#x27; values, which indicates that it is neither\nchecked nor unchecked. This can be achieved by passing `nil` to the `Value` prop.\nThis might be used when a checkbox represents the combined state of two different options, one of\nwhich has a value of `true` and the other `false`.\n\n:::info\nThe built-in Studio checkboxes were changed during this project&#x27;s lifetime to be smaller and\nhave a lower contrast ratio, especially in Dark theme. This component retains the old design\nas it is more accessible.\n:::&quot;,
+    &quot;desc&quot;: &quot;A box which can be checked or unchecked, usually used to toggle an option. Passing a value to\nthe `Label` prop is the recommended way to indicate the purpose of a checkbox.\n\n| Dark | Light |\n| - | - |\n| ![Dark](/StudioComponents/components/checkbox/dark.png) | ![Light](/StudioComponents/components/checkbox/light.png) |\n\nAs this is a controlled component, you should pass a value to the `Value` prop representing \nwhether the box is checked, and a callback value to the `OnChanged`\tprop which gets run when \nthe user interacts with the checkbox. For example:\n\n```lua\nlocal function MyComponent()\n\tlocal selected, setSelected = React.useState(false)\n\treturn React.createElement(StudioComponents.Checkbox, {\n\t\tValue = selected,\n\t\tOnChanged = setSelected,\n\t})\nend\n```\n\nThe default height of a checkbox, including its label, can be found in [Constants.DefaultToggleHeight].\nThe size of the whole checkbox can be overridden by passing a value to the `Size` prop.\n\nBy default, the box and label are left-aligned within the parent frame. This can be overriden by \npassing an [Enum.HorizontalAlignment] value to the `ContentAlignment` prop.\n\nBy default, the box is placed to the left of the label. This can be overriden by passing either\n`Enum.HorizontalAlignment.Left` or `Enum.HorizontalAlignment.Right` to the\n`ButtonAlignment` prop.\n\nCheckboxes can also represent &#x27;indeterminate&#x27; values, which indicates that it is neither\nchecked nor unchecked. This can be achieved by passing `nil` to the `Value` prop.\nThis might be used when a checkbox represents the combined state of two different options, one of\nwhich has a value of `true` and the other `false`.\n\n:::info\nThe built-in Studio checkboxes were changed during this project&#x27;s lifetime to be smaller and\nhave a lower contrast ratio, especially in Dark theme. This component retains the old design\nas it is more accessible.\n:::&quot;,
     &quot;source&quot;: {
         &quot;line&quot;: 46,
         &quot;path&quot;: &quot;src/Components/Checkbox.luau&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#Props" class="table-of-contents__link toc-highlight">Props</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 sircfenner. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/StudioComponents/assets/js/runtime~main.19ea85b3.js"></script>
-<script src="/StudioComponents/assets/js/main.66ea6857.js"></script>
+<script src="/StudioComponents/assets/js/runtime~main.09eac804.js"></script>
+<script src="/StudioComponents/assets/js/main.6d8921d8.js"></script>
 </body>
 </html>

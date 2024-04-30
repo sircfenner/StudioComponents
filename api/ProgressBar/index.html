@@ -8,7 +8,7 @@ For shorter loading processes, consider using a [LoadingDots] component.
 
 | Dark | Light |
 | - | - |
-| ![Dark](/components/progressbar/dark.png) | ![Light](/components/progressbar/light.png) |
+| ![Dark](/StudioComponents/components/progressbar/dark.png) | ![Light](/StudioComponents/components/progressbar/light.png) |
 
 Pass a number representing the current progress into the `Value` prop. You can optionally pass a 
 number representing the maximum value into the `Max` prop, which defaults to 1 if not provided. 
@@ -46,7 +46,7 @@ For shorter loading processes, consider using a [LoadingDots] component.
 
 | Dark | Light |
 | - | - |
-| ![Dark](/components/progressbar/dark.png) | ![Light](/components/progressbar/light.png) |
+| ![Dark](/StudioComponents/components/progressbar/dark.png) | ![Light](/StudioComponents/components/progressbar/light.png) |
 
 Pass a number representing the current progress into the `Value` prop. You can optionally pass a 
 number representing the maximum value into the `Max` prop, which defaults to 1 if not provided. 
@@ -80,8 +80,8 @@ end
 
 By default, the height of a progress bar is equal to the value in [Constants.DefaultProgressBarHeight].
 This can be configured via props."><link data-rh="true" rel="canonical" href="https://sircfenner.github.io/StudioComponents/api/ProgressBar"><link data-rh="true" rel="alternate" href="https://sircfenner.github.io/StudioComponents/api/ProgressBar" hreflang="en"><link data-rh="true" rel="alternate" href="https://sircfenner.github.io/StudioComponents/api/ProgressBar" hreflang="x-default"><link rel="stylesheet" href="/StudioComponents/assets/css/styles.a51545d9.css">
-<link rel="preload" href="/StudioComponents/assets/js/runtime~main.19ea85b3.js" as="script">
-<link rel="preload" href="/StudioComponents/assets/js/main.66ea6857.js" as="script">
+<link rel="preload" href="/StudioComponents/assets/js/runtime~main.09eac804.js" as="script">
+<link rel="preload" href="/StudioComponents/assets/js/main.6d8921d8.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -100,10 +100,10 @@ This can be configured via props."><link data-rh="true" rel="canonical" href="ht
   <tbody>
     <tr>
       <td>
-        <img src="/components/progressbar/dark.png" alt="Dark">
+        <img src="/StudioComponents/components/progressbar/dark.png" alt="Dark">
       </td>
       <td>
-        <img src="/components/progressbar/light.png" alt="Light">
+        <img src="/StudioComponents/components/progressbar/light.png" alt="Light">
       </td>
     </tr>
   </tbody>
@@ -179,13 +179,13 @@ This can be configured via props."><link data-rh="true" rel="canonical" href="ht
         }
     ],
     &quot;name&quot;: &quot;ProgressBar&quot;,
-    &quot;desc&quot;: &quot;A basic progress indicator. This should be used for longer or more detailed loading processes.\nFor shorter loading processes, consider using a [LoadingDots] component.\n\n| Dark | Light |\n| - | - |\n| ![Dark](/components/progressbar/dark.png) | ![Light](/components/progressbar/light.png) |\n\nPass a number representing the current progress into the `Value` prop. You can optionally pass a \nnumber representing the maximum value into the `Max` prop, which defaults to 1 if not provided. \nThe `Value` prop should be between 0 and `Max`. For example:\n\n```lua\nlocal function MyComponent()\n\treturn React.createElement(StudioComponents.ProgressBar, {\n\t\tValue = 5, -- loaded 5 items\n\t\tMax = 10, -- out of a total of 10 items\n\t})\nend\n```\n\nBy default, the progress bar will display text indicating the progress as a percentage,\nrounded to the nearest whole number. This can be customized by providing a prop to `Formatter`,\nwhich should be a function that takes two numbers representing the current value and the maximum value\nand returns a string to be displayed. For example:\n\n```lua\nlocal function MyComponent()\n\treturn React.createElement(StudioComponents.ProgressBar, {\n\t\tValue = 3,\n\t\tMax = 20,\n\t\tFormatter = function(current, max)\n\t\t\treturn `Loaded {current} / {max} assets...`\n\t\tend,\n\t})\nend\n```\n\nBy default, the height of a progress bar is equal to the value in [Constants.DefaultProgressBarHeight].\nThis can be configured via props.&quot;,
+    &quot;desc&quot;: &quot;A basic progress indicator. This should be used for longer or more detailed loading processes.\nFor shorter loading processes, consider using a [LoadingDots] component.\n\n| Dark | Light |\n| - | - |\n| ![Dark](/StudioComponents/components/progressbar/dark.png) | ![Light](/StudioComponents/components/progressbar/light.png) |\n\nPass a number representing the current progress into the `Value` prop. You can optionally pass a \nnumber representing the maximum value into the `Max` prop, which defaults to 1 if not provided. \nThe `Value` prop should be between 0 and `Max`. For example:\n\n```lua\nlocal function MyComponent()\n\treturn React.createElement(StudioComponents.ProgressBar, {\n\t\tValue = 5, -- loaded 5 items\n\t\tMax = 10, -- out of a total of 10 items\n\t})\nend\n```\n\nBy default, the progress bar will display text indicating the progress as a percentage,\nrounded to the nearest whole number. This can be customized by providing a prop to `Formatter`,\nwhich should be a function that takes two numbers representing the current value and the maximum value\nand returns a string to be displayed. For example:\n\n```lua\nlocal function MyComponent()\n\treturn React.createElement(StudioComponents.ProgressBar, {\n\t\tValue = 3,\n\t\tMax = 20,\n\t\tFormatter = function(current, max)\n\t\t\treturn `Loaded {current} / {max} assets...`\n\t\tend,\n\t})\nend\n```\n\nBy default, the height of a progress bar is equal to the value in [Constants.DefaultProgressBarHeight].\nThis can be configured via props.&quot;,
     &quot;source&quot;: {
         &quot;line&quot;: 44,
         &quot;path&quot;: &quot;src/Components/ProgressBar.luau&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#Props" class="table-of-contents__link toc-highlight">Props</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 sircfenner. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/StudioComponents/assets/js/runtime~main.19ea85b3.js"></script>
-<script src="/StudioComponents/assets/js/main.66ea6857.js"></script>
+<script src="/StudioComponents/assets/js/runtime~main.09eac804.js"></script>
+<script src="/StudioComponents/assets/js/main.6d8921d8.js"></script>
 </body>
 </html>

@@ -9,7 +9,7 @@ size of the other section, and vice versa. This is useful for letting users resi
 
 | Dark | Light |
 | - | - |
-| ![Dark](/components/splitter/dark.png) | ![Light](/components/splitter/light.png) |
+| ![Dark](/StudioComponents/components/splitter/dark.png) | ![Light](/StudioComponents/components/splitter/light.png) |
 
 This is a controlled component. The current split location should be passed as a number between
 0 and 1 to the `Alpha` prop, and a callback should be passed to the `OnChanged` prop, which
@@ -46,7 +46,7 @@ size of the other section, and vice versa. This is useful for letting users resi
 
 | Dark | Light |
 | - | - |
-| ![Dark](/components/splitter/dark.png) | ![Light](/components/splitter/light.png) |
+| ![Dark](/StudioComponents/components/splitter/dark.png) | ![Light](/StudioComponents/components/splitter/light.png) |
 
 This is a controlled component. The current split location should be passed as a number between
 0 and 1 to the `Alpha` prop, and a callback should be passed to the `OnChanged` prop, which
@@ -78,8 +78,8 @@ side. This can be changed, for example to a vertical split (top and bottom), by 
 This component can use your system&#x27;s splitter mouse icons when interacting with the splitter bar. 
 To enable this behavior, ensure you have rendered a [PluginProvider] somewhere higher up in 
 the tree."><link data-rh="true" rel="canonical" href="https://sircfenner.github.io/StudioComponents/api/Splitter"><link data-rh="true" rel="alternate" href="https://sircfenner.github.io/StudioComponents/api/Splitter" hreflang="en"><link data-rh="true" rel="alternate" href="https://sircfenner.github.io/StudioComponents/api/Splitter" hreflang="x-default"><link rel="stylesheet" href="/StudioComponents/assets/css/styles.a51545d9.css">
-<link rel="preload" href="/StudioComponents/assets/js/runtime~main.19ea85b3.js" as="script">
-<link rel="preload" href="/StudioComponents/assets/js/main.66ea6857.js" as="script">
+<link rel="preload" href="/StudioComponents/assets/js/runtime~main.09eac804.js" as="script">
+<link rel="preload" href="/StudioComponents/assets/js/main.6d8921d8.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -99,10 +99,10 @@ the tree."><link data-rh="true" rel="canonical" href="https://sircfenner.github.
   <tbody>
     <tr>
       <td>
-        <img src="/components/splitter/dark.png" alt="Dark">
+        <img src="/StudioComponents/components/splitter/dark.png" alt="Dark">
       </td>
       <td>
-        <img src="/components/splitter/light.png" alt="Light">
+        <img src="/StudioComponents/components/splitter/light.png" alt="Light">
       </td>
     </tr>
   </tbody>
@@ -195,13 +195,13 @@ the tree."><link data-rh="true" rel="canonical" href="https://sircfenner.github.
         }
     ],
     &quot;name&quot;: &quot;Splitter&quot;,
-    &quot;desc&quot;: &quot;A container frame similar to a [Background] but split into two panels, with a draggable control \nfor\tresizing the panels within the container. Resizing one section to be larger will reduce the\nsize of the other section, and vice versa. This is useful for letting users resize content.\n\n| Dark | Light |\n| - | - |\n| ![Dark](/components/splitter/dark.png) | ![Light](/components/splitter/light.png) |\n\nThis is a controlled component. The current split location should be passed as a number between\n0 and 1 to the `Alpha` prop, and a callback should be passed to the `OnChanged` prop, which\nis run with the new alpha value when the user uses the splitter. \n\nYou can also optionally provide `MinAlpha` and `MaxAlpha` props (numbers between 0 and 1) which\nlimit the resizing. These values default to 0.1 and 0.9.\n\nTo render children in each side, use the `children` parameters in createElement and provide the \nkeys `Side0` and `Side1`. For a complete example:\n\n```lua\nlocal function MyComponent()\n\tlocal division, setDivision = React.useState(0.5)\n\treturn React.createElement(StudioComponents.Splitter, {\n\t\tAlpha = division,\n\t\tOnChanged = setDivision,\n\t}, {\n\t\tSide0 = React.createElement(...),\n\t\tSide1 = React.createElement(...),\n\t})\nend\n```\n\nBy default, the split is horizontal, which means that the frame is split into a left and right\nside. This can be changed, for example to a vertical split (top and bottom), by providing an \n[Enum.FillDirection] value to the `FillDirection` prop.\n\nThis component can use your system&#x27;s splitter mouse icons when interacting with the splitter bar. \nTo enable this behavior, ensure you have rendered a [PluginProvider] somewhere higher up in \nthe tree.&quot;,
+    &quot;desc&quot;: &quot;A container frame similar to a [Background] but split into two panels, with a draggable control \nfor\tresizing the panels within the container. Resizing one section to be larger will reduce the\nsize of the other section, and vice versa. This is useful for letting users resize content.\n\n| Dark | Light |\n| - | - |\n| ![Dark](/StudioComponents/components/splitter/dark.png) | ![Light](/StudioComponents/components/splitter/light.png) |\n\nThis is a controlled component. The current split location should be passed as a number between\n0 and 1 to the `Alpha` prop, and a callback should be passed to the `OnChanged` prop, which\nis run with the new alpha value when the user uses the splitter. \n\nYou can also optionally provide `MinAlpha` and `MaxAlpha` props (numbers between 0 and 1) which\nlimit the resizing. These values default to 0.1 and 0.9.\n\nTo render children in each side, use the `children` parameters in createElement and provide the \nkeys `Side0` and `Side1`. For a complete example:\n\n```lua\nlocal function MyComponent()\n\tlocal division, setDivision = React.useState(0.5)\n\treturn React.createElement(StudioComponents.Splitter, {\n\t\tAlpha = division,\n\t\tOnChanged = setDivision,\n\t}, {\n\t\tSide0 = React.createElement(...),\n\t\tSide1 = React.createElement(...),\n\t})\nend\n```\n\nBy default, the split is horizontal, which means that the frame is split into a left and right\nside. This can be changed, for example to a vertical split (top and bottom), by providing an \n[Enum.FillDirection] value to the `FillDirection` prop.\n\nThis component can use your system&#x27;s splitter mouse icons when interacting with the splitter bar. \nTo enable this behavior, ensure you have rendered a [PluginProvider] somewhere higher up in \nthe tree.&quot;,
     &quot;source&quot;: {
         &quot;line&quot;: 43,
         &quot;path&quot;: &quot;src/Components/Splitter.luau&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#Props" class="table-of-contents__link toc-highlight">Props</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 sircfenner. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/StudioComponents/assets/js/runtime~main.19ea85b3.js"></script>
-<script src="/StudioComponents/assets/js/main.66ea6857.js"></script>
+<script src="/StudioComponents/assets/js/runtime~main.09eac804.js"></script>
+<script src="/StudioComponents/assets/js/main.6d8921d8.js"></script>
 </body>
 </html>

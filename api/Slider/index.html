@@ -9,7 +9,7 @@ various built-in plugins such as the Terrain Editor.
 
 | Dark | Light |
 | - | - |
-| ![Dark](/components/slider/dark.png) | ![Light](/components/slider/light.png) |
+| ![Dark](/StudioComponents/components/slider/dark.png) | ![Light](/StudioComponents/components/slider/light.png) |
 
 As with other components in this library, this is a controlled component. You should pass a
 value to the `Value` prop representing the current value, as well as a callback to the `OnChanged`
@@ -48,7 +48,7 @@ various built-in plugins such as the Terrain Editor.
 
 | Dark | Light |
 | - | - |
-| ![Dark](/components/slider/dark.png) | ![Light](/components/slider/light.png) |
+| ![Dark](/StudioComponents/components/slider/dark.png) | ![Light](/StudioComponents/components/slider/light.png) |
 
 As with other components in this library, this is a controlled component. You should pass a
 value to the `Value` prop representing the current value, as well as a callback to the `OnChanged`
@@ -82,8 +82,8 @@ Both of these props default to `true`.
 By default, the height of sliders is equal to the value found in [Constants.DefaultSliderHeight].
 While this can be overriden by props, in order to keep inputs accessible it is not recommended 
 to make the component any smaller than this."><link data-rh="true" rel="canonical" href="https://sircfenner.github.io/StudioComponents/api/Slider"><link data-rh="true" rel="alternate" href="https://sircfenner.github.io/StudioComponents/api/Slider" hreflang="en"><link data-rh="true" rel="alternate" href="https://sircfenner.github.io/StudioComponents/api/Slider" hreflang="x-default"><link rel="stylesheet" href="/StudioComponents/assets/css/styles.a51545d9.css">
-<link rel="preload" href="/StudioComponents/assets/js/runtime~main.19ea85b3.js" as="script">
-<link rel="preload" href="/StudioComponents/assets/js/main.66ea6857.js" as="script">
+<link rel="preload" href="/StudioComponents/assets/js/runtime~main.09eac804.js" as="script">
+<link rel="preload" href="/StudioComponents/assets/js/main.6d8921d8.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -103,10 +103,10 @@ to make the component any smaller than this."><link data-rh="true" rel="canonica
   <tbody>
     <tr>
       <td>
-        <img src="/components/slider/dark.png" alt="Dark">
+        <img src="/StudioComponents/components/slider/dark.png" alt="Dark">
       </td>
       <td>
-        <img src="/components/slider/light.png" alt="Light">
+        <img src="/StudioComponents/components/slider/light.png" alt="Light">
       </td>
     </tr>
   </tbody>
@@ -208,13 +208,13 @@ to make the component any smaller than this."><link data-rh="true" rel="canonica
         }
     ],
     &quot;name&quot;: &quot;Slider&quot;,
-    &quot;desc&quot;: &quot;A component for selecting a numeric value from a range of values with an optional increment.\nThese are seen in some number-valued properties in the built-in Properties widget, as well as in\nvarious built-in plugins such as the Terrain Editor.\n\n| Dark | Light |\n| - | - |\n| ![Dark](/components/slider/dark.png) | ![Light](/components/slider/light.png) |\n\nAs with other components in this library, this is a controlled component. You should pass a\nvalue to the `Value` prop representing the current value, as well as a callback to the `OnChanged`\nprop which will be run when the user changes the value via dragging or clicking on the slider.\n\nIn addition to these, you must also provide a `Min` and a `Max` prop, which together define the\nrange of the slider. Optionally, a `Step` prop can be provided, which defines the increment of\nthe slider. This defaults to 0, which allows any value in the range. For a complete example:\n\n```lua\nlocal function MyComponent()\n\tlocal value, setValue = React.useState(1)\n\treturn React.createElement(StudioComponents.Slider, {\n\t\tValue = value,\n\t\tOnChanged = setValue,\n\t\tMin = 0,\n\t\tMax = 10,\n\t\tStep = 1,\n\t})\nend\n```\n\nTwo further props can optionally be provided:\n1. `Border` determines whether a border is drawn around the component.\nThis is useful for giving visual feedback when the slider is hovered or selected. \n2. `Background` determines whether the component has a visible background.\nIf this is value is missing or set to `false`, any border will also be hidden.\n\nBoth of these props default to `true`.\n\nBy default, the height of sliders is equal to the value found in [Constants.DefaultSliderHeight].\nWhile this can be overriden by props, in order to keep inputs accessible it is not recommended \nto make the component any smaller than this.&quot;,
+    &quot;desc&quot;: &quot;A component for selecting a numeric value from a range of values with an optional increment.\nThese are seen in some number-valued properties in the built-in Properties widget, as well as in\nvarious built-in plugins such as the Terrain Editor.\n\n| Dark | Light |\n| - | - |\n| ![Dark](/StudioComponents/components/slider/dark.png) | ![Light](/StudioComponents/components/slider/light.png) |\n\nAs with other components in this library, this is a controlled component. You should pass a\nvalue to the `Value` prop representing the current value, as well as a callback to the `OnChanged`\nprop which will be run when the user changes the value via dragging or clicking on the slider.\n\nIn addition to these, you must also provide a `Min` and a `Max` prop, which together define the\nrange of the slider. Optionally, a `Step` prop can be provided, which defines the increment of\nthe slider. This defaults to 0, which allows any value in the range. For a complete example:\n\n```lua\nlocal function MyComponent()\n\tlocal value, setValue = React.useState(1)\n\treturn React.createElement(StudioComponents.Slider, {\n\t\tValue = value,\n\t\tOnChanged = setValue,\n\t\tMin = 0,\n\t\tMax = 10,\n\t\tStep = 1,\n\t})\nend\n```\n\nTwo further props can optionally be provided:\n1. `Border` determines whether a border is drawn around the component.\nThis is useful for giving visual feedback when the slider is hovered or selected. \n2. `Background` determines whether the component has a visible background.\nIf this is value is missing or set to `false`, any border will also be hidden.\n\nBoth of these props default to `true`.\n\nBy default, the height of sliders is equal to the value found in [Constants.DefaultSliderHeight].\nWhile this can be overriden by props, in order to keep inputs accessible it is not recommended \nto make the component any smaller than this.&quot;,
     &quot;source&quot;: {
         &quot;line&quot;: 45,
         &quot;path&quot;: &quot;src/Components/Slider.luau&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#Props" class="table-of-contents__link toc-highlight">Props</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 sircfenner. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/StudioComponents/assets/js/runtime~main.19ea85b3.js"></script>
-<script src="/StudioComponents/assets/js/main.66ea6857.js"></script>
+<script src="/StudioComponents/assets/js/runtime~main.09eac804.js"></script>
+<script src="/StudioComponents/assets/js/main.6d8921d8.js"></script>
 </body>
 </html>
