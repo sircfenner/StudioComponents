@@ -6,7 +6,7 @@
 
 	| Dark | Light |
 	| - | - |
-	| ![Dark](/components/checkbox/dark.png) | ![Light](/components/checkbox/light.png) |
+	| ![Dark](/StudioComponents/components/checkbox/dark.png) | ![Light](/StudioComponents/components/checkbox/light.png) |
 
 	As this is a controlled component, you should pass a value to the `Value` prop representing 
 	whether the box is checked, and a callback value to the `OnChanged`	prop which gets run when 

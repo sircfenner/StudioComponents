@@ -6,7 +6,7 @@
 	
 	| Dark | Light |
 	| - | - |
-	| ![Dark](/components/progressbar/dark.png) | ![Light](/components/progressbar/light.png) |
+	| ![Dark](/StudioComponents/components/progressbar/dark.png) | ![Light](/StudioComponents/components/progressbar/light.png) |
 
 	Pass a number representing the current progress into the `Value` prop. You can optionally pass a 
 	number representing the maximum value into the `Max` prop, which defaults to 1 if not provided. 

@@ -9,7 +9,7 @@
 
 	| Dark | Light |
 	| - | - |
-	| ![Dark](/components/dropdown/dark.png) | ![Light](/components/dropdown/light.png) |
+	| ![Dark](/StudioComponents/components/dropdown/dark.png) | ![Light](/StudioComponents/components/dropdown/light.png) |
 
 	By default, the dropdown list opens below the top section.  However, if there is not enough 
 	space below, and there is more space above, the dropdown list will open upwards instead. 

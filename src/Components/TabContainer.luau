@@ -6,7 +6,7 @@
 
 	| Dark | Light |
 	| - | - |
-	| ![Dark](/components/tabcontainer/dark.png) | ![Light](/components/tabcontainer/light.png) |
+	| ![Dark](/StudioComponents/components/tabcontainer/dark.png) | ![Light](/StudioComponents/components/tabcontainer/light.png) |
 
 	This is a controlled component. The identifier of the selected tab should be passed to the
 	`SelectedTab` prop, and a callback should be passed to the `OnTabSelected` prop which is run 

@@ -7,7 +7,7 @@
 
 	| Dark | Light |
 	| - | - |
-	| ![Dark](/components/numbersequencepicker/dark.png) | ![Light](/components/numbersequencepicker/light.png) |
+	| ![Dark](/StudioComponents/components/numbersequencepicker/dark.png) | ![Light](/StudioComponents/components/numbersequencepicker/light.png) |
 
 	As this is a controlled component, you should pass a NumberSequence to the `Value` prop 
 	representing the current value, and a callback to the `OnChanged` prop which gets run when the 

@@ -5,7 +5,7 @@
 
 	| Dark | Light |
 	| - | - |
-	| ![Dark](/components/background/dark.png) | ![Light](/components/background/light.png) |
+	| ![Dark](/StudioComponents/components/background/dark.png) | ![Light](/StudioComponents/components/background/light.png) |
 
 	Any children passed will be parented to the frame, which makes it suitable for use as, 
 	for example, the root component in a plugin Widget. For example:

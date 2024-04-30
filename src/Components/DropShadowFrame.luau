@@ -8,7 +8,7 @@
 
 	| Dark | Light |
 	| - | - |
-	| ![Dark](/components/dropshadowframe/dark.png) | ![Light](/components/dropshadowframe/light.png) |
+	| ![Dark](/StudioComponents/components/dropshadowframe/dark.png) | ![Light](/StudioComponents/components/dropshadowframe/light.png) |
 
 	Any children passed will be parented to the container frame. For example:
 

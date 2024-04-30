@@ -6,7 +6,7 @@
 
 	| Dark | Light |
 	| - | - |
-	| ![Dark](/components/scrollframe/dark.png) | ![Light](/components/scrollframe/light.png) |
+	| ![Dark](/StudioComponents/components/scrollframe/dark.png) | ![Light](/StudioComponents/components/scrollframe/light.png) |
 
 	ScrollFrames automatically size their canvas to fit their contents, which are passed via the
 	`children` parameters in createElement. By default, children are laid out with a [UIListLayout];

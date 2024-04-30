@@ -8,7 +8,7 @@
 
 	| Dark | Light |
 	| - | - |
-	| ![Dark](/components/radiobutton/dark.png) | ![Light](/components/radiobutton/light.png) |
+	| ![Dark](/StudioComponents/components/radiobutton/dark.png) | ![Light](/StudioComponents/components/radiobutton/light.png) |
 
 	The props and behavior for this component are the same as [Checkbox]. Importantly, this is
 	also a controlled component, which means it does not manage its own selected state. A value

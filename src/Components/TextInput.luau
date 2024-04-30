@@ -6,7 +6,7 @@
 
 	| Dark | Light |
 	| - | - |
-	| ![Dark](/components/textinput/dark.png) | ![Light](/components/textinput/light.png) |
+	| ![Dark](/StudioComponents/components/textinput/dark.png) | ![Light](/StudioComponents/components/textinput/light.png) |
 
 	This is a controlled component, which means the current text should be passed in to the
 	`Text` prop and a callback value to the `OnChanged` prop which gets run when the user attempts 

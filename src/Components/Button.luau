@@ -5,7 +5,7 @@
 
 	| Dark | Light |
 	| - | - |
-	| ![Dark](/components/button/dark.png) | ![Light](/components/button/light.png) |
+	| ![Dark](/StudioComponents/components/button/dark.png) | ![Light](/StudioComponents/components/button/light.png) |
 
 	The `OnActivated` prop should be a callback which is run when the button is clicked.
 	For example:

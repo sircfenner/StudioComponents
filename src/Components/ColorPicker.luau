@@ -5,7 +5,7 @@
 
 	| Dark | Light |
 	| - | - |
-	| ![Dark](/components/colorpicker/dark.png) | ![Light](/components/colorpicker/light.png) |
+	| ![Dark](/StudioComponents/components/colorpicker/dark.png) | ![Light](/StudioComponents/components/colorpicker/light.png) |
 
 	This is a controlled component, which means the current color should be passed in to the
 	`Color` prop and a callback value to the `OnChanged` prop which gets run when the user attempts 

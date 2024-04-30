@@ -7,7 +7,7 @@
 
 	| Dark | Light |
 	| - | - |
-	| ![Dark](/components/slider/dark.png) | ![Light](/components/slider/light.png) |
+	| ![Dark](/StudioComponents/components/slider/dark.png) | ![Light](/StudioComponents/components/slider/light.png) |
 
 	As with other components in this library, this is a controlled component. You should pass a
 	value to the `Value` prop representing the current value, as well as a callback to the `OnChanged`

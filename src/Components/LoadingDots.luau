@@ -8,7 +8,7 @@
 	
 	| Dark | Light |
 	| - | - |
-	| ![Dark](/components/loadingdots/dark.gif) | ![Light](/components/loadingdots/light.gif) |
+	| ![Dark](/StudioComponents/components/loadingdots/dark.gif) | ![Light](/StudioComponents/components/loadingdots/light.gif) |
 
 	Example of usage:
 

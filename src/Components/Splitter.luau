@@ -7,7 +7,7 @@
 
 	| Dark | Light |
 	| - | - |
-	| ![Dark](/components/splitter/dark.png) | ![Light](/components/splitter/light.png) |
+	| ![Dark](/StudioComponents/components/splitter/dark.png) | ![Light](/StudioComponents/components/splitter/light.png) |
 
 	This is a controlled component. The current split location should be passed as a number between
 	0 and 1 to the `Alpha` prop, and a callback should be passed to the `OnChanged` prop, which
