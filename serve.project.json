@@ -1,0 +1,11 @@
+{
+    "name": "studiocomponents-dev",
+    "tree": {
+        "$className": "DataModel",
+        "ServerStorage": {
+            "studiocomponents": {
+                "$path": "model.project.json"
+            }
+        }
+    }
+}

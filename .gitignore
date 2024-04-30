@@ -1,14 +1,23 @@
-# Roblox
-/Packages
-/*.rbxm
-
-# Dev
-/.vscode
-/roblox.toml
-sourcemap.json
-
-# Docs
-/assets
-/out
 /site
-/archived
+/assets
+
+/*.rbxl
+/*.rbxlx
+/*.rbxl.lock
+/*.rbxlx.lock
+/*.rbxm
+/*.rbxmx
+
+/build
+/serve
+/temp
+/NOTES.txt
+
+/node_modules
+
+.yarn
+
+/globalTypes.d.lua
+
+**/sourcemap.json
+**/darklua-sourcemap.json

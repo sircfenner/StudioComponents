@@ -1,0 +1,35 @@
+{
+    "name": "@sircfenner/studiocomponents",
+    "version": "1.0.0",
+    "description": "React components for building Roblox Studio plugins",
+    "license": "MIT",
+    "author": "sircfenner <sircfenner@users.noreply.github.com>",
+    "homepage": "https://github.com/sircfenner/studiocomponents#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/sircfenner/studiocomponents.git"
+    },
+    "main": "src/init.luau",
+    "scripts": {
+        "build-assets": "sh ./scripts/build-assets.sh",
+        "serve": "sh ./scripts/serve.sh",
+        "clean": "rm -rf node_modules build serve temp darklua-sourcemap.json",
+        "format": "stylua .",
+        "lint": "sh ./scripts/analyze.sh && selene src",
+        "lint:luau": "sh ./scripts/analyze.sh",
+        "lint:selene": "selene src",
+        "prepare": "npmluau",
+        "style-check": "stylua . --check",
+        "verify-pack": "npm pack --dry-run"
+    },
+    "dependencies": {
+        "@jsdotlua/react": "^17.1.0",
+        "@jsdotlua/react-roblox": "^17.1.0"
+    },
+    "devDependencies": {
+        "npmluau": "^0.1.1"
+    },
+    "keywords": [
+        "luau"
+    ]
+}

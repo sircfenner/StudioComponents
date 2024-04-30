@@ -1,0 +1,7 @@
+* text eol=lf
+*.luau linguist-language=Lua
+
+*.gif binary
+*.ico binary
+*.jpg binary
+*.png binary

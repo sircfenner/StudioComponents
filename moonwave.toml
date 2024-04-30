@@ -1,0 +1,30 @@
+title = "StudioComponents"
+gitRepoUrl = "https://github.com/sircfenner/StudioComponents"
+organizationName = "sircfenner"
+projectName = "StudioComponents"
+gitSourceBranch = "main"
+
+[docusaurus]
+tagline = "React components for building Roblox Studio plugins"
+
+[footer]
+copyright = "Copyright © 2024 sircfenner. Built with Moonwave and Docusaurus."
+
+[home]
+enabled = true
+includeReadme = false
+
+[[classOrder]]
+section = "General"
+collapsed = false
+classes = ["Constants", "CommonProps"]
+
+[[classOrder]]
+section = "Components"
+collapsed = false
+classes = ["Background", "Button", "Checkbox", "ColorPicker", "Dropdown", "DropShadowFrame", "Label", "LoadingDots", "MainButton", "NumberSequencePicker", "NumericInput", "PluginProvider", "ProgressBar", "RadioButton", "ScrollFrame", "Slider", "Splitter", "TabContainer", "TextInput"]
+
+[[classOrder]]
+section = "Hooks"
+collapsed = false
+classes = ["useMouseIcon", "useTheme"]

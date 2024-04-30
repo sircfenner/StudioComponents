@@ -1,0 +1,40 @@
+name: Tests
+
+"on":
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    test:
+        name: Run tests
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: Roblox/setup-foreman@v1
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: latest
+                  registry-url: https://registry.npmjs.org
+                  cache: npm
+                  cache-dependency-path: package-lock.json
+
+            - name: Install packages
+              run: npm ci
+
+            - name: Run linter
+              run: npm run lint:selene
+            # skip luau-lsp as it cannot ignore errors in node_modules
+
+            - name: Verify code style
+              run: npm run style-check
+
+            - name: Build assets
+              run: npm run build-assets

@@ -1,0 +1,7 @@
+[tools]
+darklua = { github = "seaofvoices/darklua", version = "=0.13.0"}
+luau-lsp = { github = "JohnnyMorganz/luau-lsp", version = "=1.28.1"}
+rojo = { github = "rojo-rbx/rojo", version = "=7.4.1"}
+selene = { github = "Kampfkarren/selene", version = "=0.27.1"}
+stylua = { github = "JohnnyMorganz/StyLua", version = "=0.20.0"}
+wally = { github = "UpliftGames/wally", version = "=0.3.2" }
