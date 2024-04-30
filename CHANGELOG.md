@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+-   Fixed image links in documentation
+
 ## 1.0.0
 
 Migrated from [Roact](https://github.com/Roblox/roact) to [react-lua](https://github.com/jsdotlua/react-lua)
