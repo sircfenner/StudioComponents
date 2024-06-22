@@ -20,6 +20,7 @@
 
 	Use the `Arrows` and `Slider` props to specify whether up/down arrows and a slider should be
 	included. If arrows or a slider are displayed, they will increment the value by the amount of the step. 
+	Completing a slide with a slider will call the `OnSubmitted` prop (if provided) with the latest value.
 	
 	Only decimal inputs are allowed (so, for example, hex characters a-f will not be permitted).
 ]=]
@@ -327,6 +328,7 @@ local function NumericInput(props: NumericInputProps)
 			Max = max,
 			Step = step,
 			OnChanged = props.OnValidChanged,
+			OnCompleted = props.OnSubmitted,
 			Disabled = props.Disabled,
 		}),
 	})
