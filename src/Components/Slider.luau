@@ -31,8 +31,8 @@
 	```
 
 	Optionally, an `OnCompleted` callback prop can be provided. This will be called with the latest
-	value of the Slider when sliding is finished. It is also called if the component becomes Disabled
-	via props while a slide is in progress.
+	value of the Slider when sliding is finished. It is also called if, while sliding is in progress,
+	the component becomes Disabled via props or is unmounted.
 
 	Two further props can optionally be provided:
 	1. `Border` determines whether a border is drawn around the component.
@@ -51,6 +51,8 @@ local React = require("@pkg/@jsdotlua/react")
 
 local CommonProps = require("../CommonProps")
 local Constants = require("../Constants")
+
+local useFreshCallback = require("../Hooks/useFreshCallback")
 local useMouseDrag = require("../Hooks/useMouseDrag")
 local useTheme = require("../Hooks/useTheme")
 
@@ -110,11 +112,11 @@ local function Slider(props: SliderProps)
 		end
 	end
 
-	local dragEndedCallback = function()
+	local dragEndedCallback = useFreshCallback(function()
 		if props.OnCompleted then
 			props.OnCompleted(props.Value)
 		end
-	end
+	end, { props.Value, props.OnCompleted } :: { unknown })
 
 	local dragDeps = { props.Value, props.Min, props.Max, props.Step, props.OnCompleted, onChanged } :: { unknown }
 	local drag = useMouseDrag(dragCallback, dragDeps, nil, dragEndedCallback)

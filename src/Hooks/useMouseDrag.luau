@@ -40,7 +40,7 @@ local function useMouseDrag(
 			moveConnection.current:Disconnect()
 			moveConnection.current = nil
 		end
-		if onEndedCallback then
+		if onEndedCallback and holding.current == true then
 			onEndedCallback()
 		end
 	end
