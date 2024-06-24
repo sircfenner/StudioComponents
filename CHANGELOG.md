@@ -3,6 +3,7 @@
 ## Unreleased
 
 -   Fixed image links in documentation
+-   Added OnCompleted prop to Slider
 
 ## 1.0.0
 
