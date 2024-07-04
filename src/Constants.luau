@@ -66,4 +66,9 @@ Constants.DefaultColorPickerSize = UDim2.fromOffset(260, 285)
 --- The default window size of number sequence pickers.
 Constants.DefaultNumberSequencePickerSize = UDim2.fromOffset(425, 285)
 
+--- @within Constants
+--- @prop DefaultDatePickerSize UDim2
+--- The default window size of date pickers.
+Constants.DefaultDatePickerSize = UDim2.fromOffset(202, 160)
+
 return table.freeze(Constants)
