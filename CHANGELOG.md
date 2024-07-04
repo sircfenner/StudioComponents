@@ -4,6 +4,7 @@
 
 -   Fixed image links in documentation
 -   Added OnCompleted prop to Slider
+-   Added component: DatePicker
 
 ## 1.0.0
 
