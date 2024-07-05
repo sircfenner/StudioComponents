@@ -13,7 +13,9 @@ local DEFAULT_HEIGHT = Constants.DefaultButtonHeight
 export type BaseButtonConsumerProps = CommonProps.T & {
 	AutomaticSize: Enum.AutomaticSize?,
 	OnActivated: (() -> ())?,
+	Selected: boolean?,
 	Text: string?,
+	TextTransparency: number?,
 	Icon: {
 		Image: string,
 		Size: Vector2,
@@ -25,9 +27,9 @@ export type BaseButtonConsumerProps = CommonProps.T & {
 }
 
 export type BaseButtonProps = BaseButtonConsumerProps & {
-	BackgroundColorStyle: Enum.StudioStyleGuideColor,
-	BorderColorStyle: Enum.StudioStyleGuideColor,
-	TextColorStyle: Enum.StudioStyleGuideColor,
+	BackgroundColorStyle: Enum.StudioStyleGuideColor?,
+	BorderColorStyle: Enum.StudioStyleGuideColor?,
+	TextColorStyle: Enum.StudioStyleGuideColor?,
 }
 
 local function BaseButton(props: BaseButtonProps)
@@ -51,15 +53,21 @@ local function BaseButton(props: BaseButtonProps)
 	local modifier = Enum.StudioStyleGuideModifier.Default
 	if props.Disabled then
 		modifier = Enum.StudioStyleGuideModifier.Disabled
+	elseif props.Selected then
+		modifier = Enum.StudioStyleGuideModifier.Selected
 	elseif pressed and hovered then
 		modifier = Enum.StudioStyleGuideModifier.Pressed
 	elseif hovered then
 		modifier = Enum.StudioStyleGuideModifier.Hover
 	end
 
-	local backColor = theme:GetColor(props.BackgroundColorStyle, modifier)
-	local borderColor3 = theme:GetColor(props.BorderColorStyle, modifier)
-	local textColor = theme:GetColor(props.TextColorStyle, modifier)
+	local backColorStyle = props.BackgroundColorStyle or Enum.StudioStyleGuideColor.Button
+	local borderColorStyle = props.BorderColorStyle or Enum.StudioStyleGuideColor.ButtonBorder
+	local textColorStyle = props.TextColorStyle or Enum.StudioStyleGuideColor.ButtonText
+
+	local backColor = theme:GetColor(backColorStyle, modifier)
+	local borderColor3 = theme:GetColor(borderColorStyle, modifier)
+	local textColor = theme:GetColor(textColorStyle, modifier)
 
 	local size = props.Size or UDim2.new(1, 0, 0, DEFAULT_HEIGHT)
 	local autoSize = props.AutomaticSize
@@ -123,6 +131,7 @@ local function BaseButton(props: BaseButtonProps)
 			Font = Constants.DefaultFont,
 			TextSize = Constants.DefaultTextSize,
 			Text = props.Text,
+			TextTransparency = props.TextTransparency or 0,
 			Size = UDim2.new(0, textSize.X, 1, 0),
 			BackgroundTransparency = 1,
 			LayoutOrder = 2,

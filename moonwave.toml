@@ -22,7 +22,7 @@ classes = ["Constants", "CommonProps"]
 [[classOrder]]
 section = "Components"
 collapsed = false
-classes = ["Background", "Button", "Checkbox", "ColorPicker", "Dropdown", "DropShadowFrame", "Label", "LoadingDots", "MainButton", "NumberSequencePicker", "NumericInput", "PluginProvider", "ProgressBar", "RadioButton", "ScrollFrame", "Slider", "Splitter", "TabContainer", "TextInput"]
+classes = ["Background", "Button", "Checkbox", "ColorPicker", "DatePicker", "Dropdown", "DropShadowFrame", "Label", "LoadingDots", "MainButton", "NumberSequencePicker", "NumericInput", "PluginProvider", "ProgressBar", "RadioButton", "ScrollFrame", "Slider", "Splitter", "TabContainer", "TextInput"]
 
 [[classOrder]]
 section = "Hooks"
