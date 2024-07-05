@@ -1,6 +1,6 @@
 {
     "name": "@sircfenner/studiocomponents",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "React components for building Roblox Studio plugins",
     "license": "MIT",
     "author": "sircfenner <sircfenner@users.noreply.github.com>",
