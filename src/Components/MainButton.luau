@@ -1,14 +1,14 @@
 --[=[
 	@class MainButton
 	
-	A variant of a [Button](#Button) used to indicate a primary action, for example an 'OK/Accept' button
+	A variant of a [Button] used to indicate a primary action, for example an 'OK/Accept' button
 	in a modal. 
 
 	| Dark | Light |
 	| - | - |
 	| ![Dark](/StudioComponents/components/mainbutton/dark.png) | ![Light](/StudioComponents/components/mainbutton/light.png) |
 
-	See the docs for [Button](#Button) for information about customization and usage.
+	See the docs for [Button] for information about customization and usage.
 ]=]
 
 local React = require("@pkg/@jsdotlua/react")
