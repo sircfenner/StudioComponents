@@ -28,11 +28,11 @@ studiocomponents = "sircfenner/studiocomponents@1.0.0"
 Add `studiocomponents` to your dependencies:
 
 ```bash
-npm install studiocomponents
+npm install @sircfenner/studiocomponents
 ```
 
 ```bash
-yarn add studiocomponents
+yarn add @sircfenner/studiocomponents
 ```
 
 Run `npmluau`.
