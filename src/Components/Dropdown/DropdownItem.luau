@@ -3,6 +3,8 @@ local React = require("@pkg/@jsdotlua/react")
 local Constants = require("../../Constants")
 local useTheme = require("../../Hooks/useTheme")
 
+local BaseIcon = require("../Foundation/BaseIcon")
+
 local DropdownTypes = require("./Types")
 
 type DropdownItemProps = {
@@ -27,13 +29,23 @@ local function DropdownItem(props: DropdownItemProps)
 		modifier = Enum.StudioStyleGuideModifier.Hover
 	end
 
-	local iconColor = Color3.fromRGB(255, 255, 255)
+	local iconNode: React.Node?
 	if props.Icon then
+		local iconColor = Color3.fromRGB(255, 255, 255)
 		if props.Icon.UseThemeColor then
 			iconColor = theme:GetColor(Enum.StudioStyleGuideColor.MainText)
 		elseif props.Icon.Color then
 			iconColor = props.Icon.Color
 		end
+
+		local publicIconProps = table.clone(props.Icon) :: BaseIcon.PublicIconProps
+		publicIconProps.Color = iconColor
+
+		iconNode = React.createElement(BaseIcon, {
+			Disabled = nil,
+			LayoutOrder = nil,
+			PublicIconProps = publicIconProps,
+		})
 	end
 
 	return React.createElement("Frame", {
@@ -66,15 +78,7 @@ local function DropdownItem(props: DropdownItemProps)
 				PaddingLeft = UDim.new(0, props.TextInset),
 				PaddingBottom = UDim.new(0, 2),
 			}),
-			Icon = props.Icon and React.createElement("ImageLabel", {
-				AnchorPoint = Vector2.new(0, 0.5),
-				Position = UDim2.fromScale(0, 0.5),
-				Size = UDim2.fromOffset(props.Icon.Size.X, props.Icon.Size.Y),
-				BackgroundTransparency = 1,
-				Image = props.Icon.Image,
-				ImageTransparency = props.Icon.Transparency or 0,
-				ImageColor3 = iconColor,
-			}),
+			Icon = iconNode,
 			Label = React.createElement("TextLabel", {
 				BackgroundTransparency = 1,
 				AnchorPoint = Vector2.new(1, 0),

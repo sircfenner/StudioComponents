@@ -1,3 +1,5 @@
+local BaseIcon = require("../Foundation/BaseIcon")
+
 --[=[
 	@within Dropdown
 	@type DropdownItem string | DropdownItemDetail
@@ -29,13 +31,12 @@ export type DropdownItemDetail = {
 	@field Transparency number?
 	@field Color Color3?
 	@field UseThemeColor boolean?
+	@field ResampleMode Enum.ResamplerMode?,
+	@field RectOffset Vector2?,
+	@field RectSize Vector2?,
 ]=]
 
-export type DropdownItemIcon = {
-	Image: string,
-	Size: Vector2,
-	Transparency: number?,
-	Color: Color3?,
+export type DropdownItemIcon = BaseIcon.PublicIconProps & {
 	UseThemeColor: boolean?,
 }
 
