@@ -23,8 +23,8 @@ return {
 	TextInput = require("./Components/TextInput"),
 
 	ThemeContext = require("./Contexts/ThemeContext"),
-	PluginContext = require("./Contexts/PluginContext"),
 
 	useTheme = require("./Hooks/useTheme"),
+	usePlugin = require("./Hooks/usePlugin"),
 	useMouseIcon = require("./Hooks/useMouseIcon"),
 }
