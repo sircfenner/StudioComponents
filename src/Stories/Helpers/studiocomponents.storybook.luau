@@ -1,3 +1,5 @@
+--!nocheck
+
 local React = require("@pkg/@jsdotlua/react")
 local ReactRoblox = require("@pkg/@jsdotlua/react-roblox")
 
