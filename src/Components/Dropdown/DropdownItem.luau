@@ -40,6 +40,8 @@ local function DropdownItem(props: DropdownItemProps)
 
 		local iconProps = (table.clone(props.Icon) :: any) :: BaseIcon.BaseIconProps
 		iconProps.Color = iconColor
+		iconProps.AnchorPoint = Vector2.new(0, 0.5)
+		iconProps.Position = UDim2.fromScale(0, 0.5)
 		iconProps.Size = UDim2.fromOffset(props.Icon.Size.X, props.Icon.Size.Y)
 		iconProps.Disabled = nil
 		iconProps.LayoutOrder = nil
