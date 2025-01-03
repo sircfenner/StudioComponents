@@ -27,4 +27,4 @@ classes = ["Background", "Button", "Checkbox", "ColorPicker", "DatePicker", "Dro
 [[classOrder]]
 section = "Hooks"
 collapsed = false
-classes = ["useMouseIcon", "useTheme"]
+classes = ["useMouseIcon", "useTheme", "usePlugin"]

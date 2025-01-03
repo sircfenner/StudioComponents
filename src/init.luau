@@ -25,5 +25,6 @@ return {
 	ThemeContext = require("./Contexts/ThemeContext"),
 
 	useTheme = require("./Hooks/useTheme"),
+	usePlugin = require("./Hooks/usePlugin"),
 	useMouseIcon = require("./Hooks/useMouseIcon"),
 }
