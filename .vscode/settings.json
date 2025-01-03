@@ -1,9 +1,5 @@
 {
-	"luau-lsp.require.directoryAliases": {
-		"@pkg": "node_modules/.luau-aliases"
-	},
-	"luau-lsp.require.mode": "relativeToFile",
 	"luau-lsp.completion.imports.requireStyle": "alwaysRelative",
-	"luau-lsp.types.roblox": true,
+	"luau-lsp.platform.type": "roblox",
 	"luau-lsp.sourcemap.rojoProjectFile": "model.project.json",
 }

@@ -21,7 +21,7 @@ local function EnvelopeHandle(props: {
 })
 	local theme = useTheme()
 
-	local dragStart = React.useRef(0)
+	local dragStart = React.useRef(0 :: number?)
 	local dragOffset = React.useRef(0)
 
 	local function onDragBegin(rbx: GuiObject, input: InputObject)
@@ -123,7 +123,7 @@ local function SequenceNode(props: {
 	local theme = useTheme()
 	local mouseIcon = useMouseIcon()
 
-	local nodeDragStart = React.useRef(Vector2.zero)
+	local nodeDragStart = React.useRef(Vector2.zero :: Vector2?)
 	local nodeDragOffset = React.useRef(Vector2.zero)
 	local function onNodeDragBegin(rbx: GuiObject, input: InputObject)
 		local pos = Vector2.new(input.Position.X, input.Position.Y)
