@@ -8,7 +8,7 @@ gitSourceBranch = "main"
 tagline = "React components for building Roblox Studio plugins"
 
 [footer]
-copyright = "Copyright © 2024 sircfenner. Built with Moonwave and Docusaurus."
+copyright = "Copyright © 2025 sircfenner. Built with Moonwave and Docusaurus."
 
 [home]
 enabled = true
