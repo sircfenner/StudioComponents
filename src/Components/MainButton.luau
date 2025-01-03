@@ -25,9 +25,9 @@ local BaseButton = require("./Foundation/BaseButton")
 	@field Color Color3?
 	@field UseThemeColor boolean?
 	@field Alignment HorizontalAlignment?
-	@field ResampleMode Enum.ResamplerMode?,
-	@field RectOffset Vector2?,
-	@field RectSize Vector2?,
+	@field ResampleMode Enum.ResamplerMode?
+	@field RectOffset Vector2?
+	@field RectSize Vector2?
 ]=]
 
 --[=[
