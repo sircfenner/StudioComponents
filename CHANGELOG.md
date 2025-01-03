@@ -5,6 +5,7 @@
 -   Added usePlugin hook
 -   Added RectSize, RectOffset, and ResampleMode to icon props available in Button, MainButton, and Dropdown
 -   Fixed NumberSequencePicker error when adding 21st keypoint ([#48](https://github.com/sircfenner/StudioComponents/issues/48))
+-   Bumped package and tool versions
 
 ## 1.1.0
 
