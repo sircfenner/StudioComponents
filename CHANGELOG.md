@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+-   Add usePlugin hook
+
 ## 1.1.0
 
 -   Fixed image links in documentation
