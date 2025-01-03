@@ -29,6 +29,9 @@ export type DropdownItemDetail = {
 	@field Transparency number?
 	@field Color Color3?
 	@field UseThemeColor boolean?
+	@field ResampleMode Enum.ResamplerMode?
+	@field RectOffset Vector2?
+	@field RectSize Vector2?
 ]=]
 
 export type DropdownItemIcon = {
@@ -36,6 +39,9 @@ export type DropdownItemIcon = {
 	Size: Vector2,
 	Transparency: number?,
 	Color: Color3?,
+	ResampleMode: Enum.ResamplerMode?,
+	RectOffset: Vector2?,
+	RectSize: Vector2?,
 	UseThemeColor: boolean?,
 }
 

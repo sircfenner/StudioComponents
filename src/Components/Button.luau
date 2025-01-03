@@ -46,6 +46,9 @@ local BaseButton = require("./Foundation/BaseButton")
 	@field Color Color3?
 	@field UseThemeColor boolean?
 	@field Alignment HorizontalAlignment?
+	@field ResampleMode Enum.ResamplerMode?
+	@field RectOffset Vector2?
+	@field RectSize Vector2?
 
 	The `Alignment` prop is used to configure which side of any text the icon 
 	appears on.	Left-alignment is the default and center-alignment is not supported.

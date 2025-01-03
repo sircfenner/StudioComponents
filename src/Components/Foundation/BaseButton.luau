@@ -6,9 +6,23 @@ local Constants = require("../../Constants")
 local getTextSize = require("../../getTextSize")
 local useTheme = require("../../Hooks/useTheme")
 
+local BaseIcon = require("./BaseIcon")
+
 local PADDING_X = 8
 local PADDING_Y = 4
 local DEFAULT_HEIGHT = Constants.DefaultButtonHeight
+
+export type BaseButtonIconProps = {
+	Image: string,
+	Size: Vector2,
+	Transparency: number?,
+	Color: Color3?,
+	ResampleMode: Enum.ResamplerMode?,
+	RectOffset: Vector2?,
+	RectSize: Vector2?,
+	UseThemeColor: boolean?,
+	Alignment: Enum.HorizontalAlignment?,
+}
 
 export type BaseButtonConsumerProps = CommonProps.T & {
 	AutomaticSize: Enum.AutomaticSize?,
@@ -16,14 +30,7 @@ export type BaseButtonConsumerProps = CommonProps.T & {
 	Selected: boolean?,
 	Text: string?,
 	TextTransparency: number?,
-	Icon: {
-		Image: string,
-		Size: Vector2,
-		Transparency: number?,
-		Color: Color3?,
-		UseThemeColor: boolean?,
-		Alignment: Enum.HorizontalAlignment?,
-	}?,
+	Icon: BaseButtonIconProps?,
 }
 
 export type BaseButtonProps = BaseButtonConsumerProps & {
@@ -78,6 +85,17 @@ local function BaseButton(props: BaseButtonProps)
 		size = UDim2.new(size.Width, UDim.new(0, math.max(DEFAULT_HEIGHT, contentHeight + PADDING_Y * 2)))
 	end
 
+	local iconNode: React.Node?
+	if props.Icon then
+		local iconProps = (table.clone(props.Icon) :: any) :: BaseIcon.BaseIconProps
+		iconProps.Disabled = props.Disabled
+		iconProps.Color = iconProps.Color or if props.Icon.UseThemeColor then textColor else nil
+		iconProps.LayoutOrder = if props.Icon.Alignment == Enum.HorizontalAlignment.Right then 3 else 1
+		iconProps.Size = UDim2.fromOffset(props.Icon.Size.X, props.Icon.Size.Y)
+
+		iconNode = React.createElement(BaseIcon, iconProps)
+	end
+
 	return React.createElement("TextButton", {
 		AutoButtonColor = false,
 		AnchorPoint = props.AnchorPoint,
@@ -115,17 +133,7 @@ local function BaseButton(props: BaseButtonProps)
 			HorizontalAlignment = Enum.HorizontalAlignment.Center,
 			VerticalAlignment = Enum.VerticalAlignment.Center,
 		}),
-		Icon = props.Icon and React.createElement("ImageLabel", {
-			Image = props.Icon.Image,
-			Size = UDim2.fromOffset(props.Icon.Size.X, props.Icon.Size.Y),
-			LayoutOrder = if props.Icon.Alignment == Enum.HorizontalAlignment.Right then 3 else 1,
-			BackgroundTransparency = 1,
-			ImageColor3 = if props.Icon.Color
-				then props.Icon.Color
-				elseif props.Icon.UseThemeColor then textColor
-				else nil,
-			ImageTransparency = 1 - (1 - (props.Icon.Transparency or 0)) * (1 - if props.Disabled then 0.2 else 0),
-		}),
+		Icon = iconNode,
 		Label = props.Text and React.createElement("TextLabel", {
 			TextColor3 = textColor,
 			Font = Constants.DefaultFont,
