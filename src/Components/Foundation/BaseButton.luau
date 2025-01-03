@@ -12,7 +12,14 @@ local PADDING_X = 8
 local PADDING_Y = 4
 local DEFAULT_HEIGHT = Constants.DefaultButtonHeight
 
-type Icon = BaseIcon.PublicIconProps & {
+export type BaseButtonIconProps = {
+	Image: string,
+	Size: Vector2,
+	Transparency: number?,
+	Color: Color3?,
+	ResampleMode: Enum.ResamplerMode?,
+	RectOffset: Vector2?,
+	RectSize: Vector2?,
 	UseThemeColor: boolean?,
 	Alignment: Enum.HorizontalAlignment?,
 }
@@ -23,7 +30,7 @@ export type BaseButtonConsumerProps = CommonProps.T & {
 	Selected: boolean?,
 	Text: string?,
 	TextTransparency: number?,
-	Icon: Icon?,
+	Icon: BaseButtonIconProps?,
 }
 
 export type BaseButtonProps = BaseButtonConsumerProps & {
@@ -80,17 +87,13 @@ local function BaseButton(props: BaseButtonProps)
 
 	local iconNode: React.Node?
 	if props.Icon then
-		local publicIconProps = table.clone(props.Icon) :: BaseIcon.PublicIconProps
-		publicIconProps.Color = if publicIconProps.Color
-			then publicIconProps.Color
-			elseif props.Icon.UseThemeColor then textColor
-			else nil
+		local iconProps = (table.clone(props.Icon) :: any) :: BaseIcon.BaseIconProps
+		iconProps.Disabled = props.Disabled
+		iconProps.Color = iconProps.Color or if props.Icon.UseThemeColor then textColor else nil
+		iconProps.LayoutOrder = if props.Icon.Alignment == Enum.HorizontalAlignment.Right then 3 else 1
+		iconProps.Size = UDim2.fromOffset(props.Icon.Size.X, props.Icon.Size.Y)
 
-		iconNode = React.createElement(BaseIcon, {
-			Disabled = props.Disabled,
-			LayoutOrder = if props.Icon.Alignment == Enum.HorizontalAlignment.Right then 3 else 1,
-			PublicIconProps = publicIconProps,
-		})
+		iconNode = React.createElement(BaseIcon, iconProps)
 	end
 
 	return React.createElement("TextButton", {

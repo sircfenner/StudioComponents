@@ -38,14 +38,13 @@ local function DropdownItem(props: DropdownItemProps)
 			iconColor = props.Icon.Color
 		end
 
-		local publicIconProps = table.clone(props.Icon) :: BaseIcon.PublicIconProps
-		publicIconProps.Color = iconColor
+		local iconProps = (table.clone(props.Icon) :: any) :: BaseIcon.BaseIconProps
+		iconProps.Color = iconColor
+		iconProps.Size = UDim2.fromOffset(props.Icon.Size.X, props.Icon.Size.Y)
+		iconProps.Disabled = nil
+		iconProps.LayoutOrder = nil
 
-		iconNode = React.createElement(BaseIcon, {
-			Disabled = nil,
-			LayoutOrder = nil,
-			PublicIconProps = publicIconProps,
-		})
+		iconNode = React.createElement(BaseIcon, iconProps)
 	end
 
 	return React.createElement("Frame", {

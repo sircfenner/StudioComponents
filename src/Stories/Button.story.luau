@@ -11,8 +11,8 @@ local function StoryButton(props: {
 	return React.createElement(Button, {
 		LayoutOrder = if props.Disabled then 2 else 1,
 		Icon = props.HasIcon and {
-			--Image = "rbxasset://studio_svg_textures/Shared/InsertableObjects/Dark/Standard/Part.png",
 			Image = "rbxassetid://18786011824",
+			UseThemeColor = true,
 			Size = Vector2.new(16, 16),
 			Alignment = Enum.HorizontalAlignment.Left,
 			RectOffset = Vector2.new(1000, 0),
