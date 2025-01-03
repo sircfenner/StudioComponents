@@ -254,6 +254,9 @@ local function NumberSequencePicker(props: NumberSequencePickerProps)
 	})
 
 	local function tryAddKeypoint(keypoint: NumberSequenceKeypoint)
+		if #sequence.Keypoints == 20 then
+			return
+		end
 		local newKeypoints = table.clone(sequence.Keypoints)
 		for i = 1, #sequence.Keypoints do
 			local kp0 = sequence.Keypoints[i]
