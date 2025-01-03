@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.2.0
 
 -   Added usePlugin hook
 -   Added RectSize, RectOffset, and ResampleMode to icon props available in Button, MainButton, and Dropdown
