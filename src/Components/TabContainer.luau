@@ -36,6 +36,32 @@
 	end
 	```
 
+	For situations where the tab's display title may change depending on some state, you
+	can use the `DisplayTitle` prop within each `TabContainer` child:
+	```lua
+	local function MyListComponent(props: { 
+		comments: { string } 
+	})
+		local selectedTab, setSelectedTab = React.useState("Comments")
+		local comments = #props.comments
+
+		return React.createElement(TabContainer, {
+			SelectedTab = selectedTab,
+			OnTabSelected = setSelectedTab,
+		}, {
+			["Comments"] = {
+				LayoutOrder = 1,
+				DisplayTitle = `Comments ({#commentsArray})`,
+				Content = React.createElement(...),
+			},
+			["Settings"] = {
+				LayoutOrder = 2,
+				Content = React.createElement(...),
+			}
+		})
+	end
+	```
+
 	As well as disabling the entire component via the `Disabled` [CommonProp](CommonProps), individual
 	tabs can be disabled and made unselectable by passing `Disabled` with a value of `true` inside
 	the tab's entry in the `Tabs` prop table.
@@ -60,6 +86,7 @@ local TAB_HEIGHT = 30
 	@interface Tab
 
 	@field LayoutOrder number
+	@field DisplayTitle string?
 	@field Content React.ReactNode
 	@field Disabled boolean?
 ]=]
@@ -67,6 +94,7 @@ local TAB_HEIGHT = 30
 type Tab = {
 	Content: React.ReactNode,
 	LayoutOrder: number,
+	DisplayTitle: string?,
 	Disabled: boolean?,
 }
 
@@ -185,7 +213,7 @@ local function TabContainer(props: TabContainerProps)
 		tabs[name] = React.createElement(TabButton, {
 			Size = UDim2.fromScale(1 / count, 1),
 			LayoutOrder = tab.LayoutOrder,
-			Text = name,
+			Text = tab.DisplayTitle or name,
 			Selected = isSelectedTab,
 			Disabled = tab.Disabled == true or props.Disabled == true,
 			OnActivated = function()
