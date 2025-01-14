@@ -43,7 +43,7 @@
 		comments: { string } 
 	})
 		local selectedTab, setSelectedTab = React.useState("Comments")
-		local comments = #props.comments
+		local commentsArray = props.comments
 
 		return React.createElement(TabContainer, {
 			SelectedTab = selectedTab,
