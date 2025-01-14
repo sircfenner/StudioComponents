@@ -39,7 +39,7 @@
 	For situations where the tab's display title may change depending on some state, you
 	can use the `DisplayTitle` prop within each `TabContainer` child:
 	```lua
-	local function MyListComponent(props: { 
+	local function MyPluginApp(props: { 
 		comments: { string } 
 	})
 		local selectedTab, setSelectedTab = React.useState("Comments")
