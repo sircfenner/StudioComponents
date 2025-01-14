@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.3.0
+## Unreleased
 - Added an optional `DisplayTitle` prop to `TabContainer` children tabs to allow tabs to depend on some state for its display text
 
 ## 1.2.0
