@@ -36,8 +36,8 @@
 	end
 	```
 
-	For situations where the tab's display title may change depending on some state, you
-	can use the `DisplayTitle` prop within each `TabContainer` child:
+	To override the text displayed on a tab, assign a value to the optional 
+	`DisplayTitle` field in the tab entry; see the "Comments" example below:
 	```lua
 	local function MyPluginApp(props: { 
 		comments: { string } 
