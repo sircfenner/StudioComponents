@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Added an optional `DisplayTitle` prop to `TabContainer` children tabs to allow displaying custom text on tabs
+
 ## 1.2.0
 
 -   Added usePlugin hook
